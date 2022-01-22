@@ -1,9 +1,10 @@
 import React from 'react'
+import { Container, Typography } from '@mui/material'
 
 const Wines = () => (
-  <main>
-    <header>Wines</header>
-  </main>
+  <Container component="main">
+    <Typography component="header">Wines</Typography>
+  </Container>
 )
 
 export default Wines

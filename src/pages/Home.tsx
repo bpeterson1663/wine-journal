@@ -1,9 +1,10 @@
 import React from 'react'
+import { Container, Typography } from '@mui/material'
 
 const Home = () => (
-  <main>
-    <header>Home</header>
-  </main>
+  <Container component="main">
+    <Typography component="header">Home</Typography>
+  </Container>
 )
 
 export default Home
