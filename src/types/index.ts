@@ -17,3 +17,8 @@ export interface WineT {
   sweet: number
   userId: string
 }
+
+export interface ApiResponseT {
+  message: string
+  success: boolean
+}
