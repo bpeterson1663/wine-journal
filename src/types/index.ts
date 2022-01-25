@@ -8,8 +8,21 @@ export interface WineT {
   region: string
   country: string
   vintage: string
-  hue: string
-  look: string
+  hue:
+    | 'purple'
+    | 'ruby'
+    | 'garnet'
+    | 'tawny'
+    | 'brown'
+    | 'straw'
+    | 'yellow'
+    | 'gold'
+    | 'amber'
+    | 'pink'
+    | 'salmon'
+    | 'copper'
+  color: 'red' | 'white' | 'rose'
+  intensity: 'pale' | 'medium' | 'deep'
   smell: string
   alcohol: number
   acidity: number
