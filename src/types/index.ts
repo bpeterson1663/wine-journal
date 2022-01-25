@@ -1,4 +1,5 @@
 export interface WineT {
+  id: string
   date: string
   producer: string
   classification: string

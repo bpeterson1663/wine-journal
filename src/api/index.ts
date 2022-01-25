@@ -6,9 +6,14 @@ export async function getWines() {
   try {
     const winesCol = collection(db, 'wines')
     const winesSnapshot = await getDocs(winesCol)
-    const wineList = winesSnapshot.docs.map((doc) => doc.data())
+    const wineList = winesSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }))
+    const payload = wineList.map((wine) => wine as WineT)
     return {
-      payload: wineList,
+      success: true,
+      payload,
     }
   } catch (e) {
     return {
