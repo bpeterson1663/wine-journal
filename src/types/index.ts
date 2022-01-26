@@ -24,10 +24,12 @@ export interface WineT {
   color: 'red' | 'white' | 'rose'
   intensity: 'pale' | 'medium' | 'deep'
   smell: string
+  remarks: string
   alcohol: number
   acidity: number
-  body: string
-  tannin: string
+  rating: number
+  body: number
+  tannin: number
   sweet: number
   userId: string
 }

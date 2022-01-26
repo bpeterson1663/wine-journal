@@ -1,16 +1,15 @@
-import React from 'react'
-import { useForm, Controller, SubmitHandler } from 'react-hook-form'
-import { TextField, Button, Container } from '@mui/material'
+import React, { useState } from 'react'
+import { useForm, SubmitHandler, Control } from 'react-hook-form'
+import { Box, Button, Container, Paper, Step, Stepper, StepContent, StepLabel, Typography } from '@mui/material'
 import { WineT } from '../../types'
 import { addWineEntry } from '../../api'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormControl from '@mui/material/FormControl'
-import FormLabel from '@mui/material/FormLabel'
+import { FormDetails, FormColorSmell, FormTaste, FormReview } from '../form-steps/form-steps.component'
+import { STEPS } from './form-new-wine.constants'
 
 const FormNewWine = () => {
-  const { handleSubmit, control, watch } = useForm<WineT>({
+  const [activeStep, setActiveStep] = useState(0)
+
+  const { handleSubmit, control } = useForm<WineT>({
     defaultValues: { color: 'red', intensity: 'pale', hue: 'purple' },
   })
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
@@ -18,160 +17,81 @@ const FormNewWine = () => {
     const response = await addWineEntry(data)
     console.log('response: ', response)
   }
-  const color = watch('color')
-  console.log('color: ', color)
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+  }
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  }
+
+  const handleReset = () => {
+    setActiveStep(0)
+  }
+
+  const getStepContent = (index: number, control: Control<WineT>) => {
+    switch (index) {
+      case 0:
+        return <FormDetails control={control} />
+      case 1:
+        return <FormColorSmell control={control} />
+      case 2:
+        return <FormTaste control={control} />
+      case 3:
+        return <FormReview control={control} />
+      default:
+        break
+    }
+  }
+
   return (
     <Container
       sx={{
         display: 'flex',
         flexFlow: 'column wrap',
         maxWidth: 600,
+        width: '90%',
       }}
       component="form"
       onSubmit={handleSubmit(onSubmitHandler)}
     >
-      <Controller
-        name="date"
-        defaultValue={`${new Date().toISOString().split('T')[0]}`}
-        control={control}
-        render={({ field }) => <TextField type="date" label="Date" {...field} />}
-      />
-      <Controller
-        name="producer"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Producer" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="classification"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Classification" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="variety"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Variety(ies)" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="subregion"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Subregion" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="region"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Region" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="country"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Country" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="vintage"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Vintage" variant="outlined" {...field} />}
-      />
-      <FormControl>
-        <FormLabel id="color-group-label">Color</FormLabel>
-        <Controller
-          control={control}
-          name="color"
-          defaultValue="red"
-          render={({ field }) => (
-            <RadioGroup row aria-labelledby="color-group-label" {...field}>
-              <FormControlLabel value="red" label="Red" control={<Radio />} />
-              <FormControlLabel value="white" label="White" control={<Radio />} />
-              <FormControlLabel value="rose" label="Rosé" control={<Radio />} />
-            </RadioGroup>
-          )}
-        />
-      </FormControl>
-      <FormControl>
-        <FormLabel id="intensity-group-label">Intensity</FormLabel>
-        <Controller
-          control={control}
-          name="intensity"
-          defaultValue="pale"
-          render={({ field }) => (
-            <RadioGroup row aria-labelledby="intensity-group-label" {...field}>
-              <FormControlLabel value="pale" label="Pale" control={<Radio />} />
-              <FormControlLabel value="medium" label="Medium" control={<Radio />} />
-              <FormControlLabel value="deep" label="Deep" control={<Radio />} />
-            </RadioGroup>
-          )}
-        />
-      </FormControl>
-      {color === 'red' && (
-        <FormControl>
-          <FormLabel id="hue-group-label">Hue</FormLabel>
-          <Controller
-            control={control}
-            name="hue"
-            defaultValue="purple"
-            render={({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" {...field}>
-                <FormControlLabel value="purple" label="Purple" control={<Radio />} />
-                <FormControlLabel value="ruby" label="Ruby" control={<Radio />} />
-                <FormControlLabel value="garnet" label="Garnet" control={<Radio />} />
-                <FormControlLabel value="tawny" label="Tawny" control={<Radio />} />
-                <FormControlLabel value="brown" label="Brown" control={<Radio />} />
-              </RadioGroup>
-            )}
-          />
-        </FormControl>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {STEPS.map((step, index) => (
+          <Step key={step.label}>
+            <StepLabel>{step.label}</StepLabel>
+            <StepContent>
+                <Box sx={{width: '100%'}}>
+                {getStepContent(index, control)}
+
+                </Box>
+              <Box>
+                <>
+                  {index === STEPS.length - 1 ? (
+                    <Button type="submit" variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+                      Submit
+                    </Button>
+                  ) : (
+                    <Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+                      Continue
+                    </Button>
+                  )}
+                  <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                    Back
+                  </Button>
+                </>
+              </Box>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === STEPS.length && (
+        <Paper square elevation={0} sx={{ p: 3 }}>
+          <Typography>All steps completed - you&apos;re finished</Typography>
+          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+            Reset
+          </Button>
+        </Paper>
       )}
-      {color === 'white' && (
-        <FormControl>
-          <FormLabel id="hue-group-label">Hue</FormLabel>
-          <Controller
-            control={control}
-            name="hue"
-            defaultValue="straw"
-            render={({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" {...field}>
-                <FormControlLabel value="straw" label="Straw" control={<Radio />} />
-                <FormControlLabel value="yellow" label="Yellow" control={<Radio />} />
-                <FormControlLabel value="gold" label="Gold" control={<Radio />} />
-                <FormControlLabel value="amber" label="Amber" control={<Radio />} />
-                <FormControlLabel value="brown" label="Brown" control={<Radio />} />
-              </RadioGroup>
-            )}
-          />
-        </FormControl>
-      )}
-      {color === 'rose' && (
-        <FormControl>
-          <FormLabel id="hue-group-label">Hue</FormLabel>
-          <Controller
-            control={control}
-            name="hue"
-            defaultValue="pink"
-            render={({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" {...field}>
-                <FormControlLabel value="pink" label="Pink" control={<Radio />} />
-                <FormControlLabel value="salmon" label="Salmon" control={<Radio />} />
-                <FormControlLabel value="Copper" label="Copper" control={<Radio />} />
-              </RadioGroup>
-            )}
-          />
-        </FormControl>
-      )}
-      <Controller
-        name="smell"
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <TextField multiline rows={4} id="outlined-basic" label="Smell" variant="outlined" {...field} />
-        )}
-      />
-      <Button type="submit">Submit</Button>
     </Container>
   )
 }
