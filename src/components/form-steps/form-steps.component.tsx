@@ -22,7 +22,7 @@ import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '..
 
 export const FormDetails = ({ control }: { control: Control<WineT> }) => {
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', maxWidth: 600}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller
         name="date"
         defaultValue={`${new Date().toISOString().split('T')[0]}`}
@@ -82,7 +82,7 @@ export const FormColorSmell = ({ control }: { control: Control<WineT> }) => {
     defaultValue: 'red',
   })
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', maxWidth: 600}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <FormControl>
         <FormLabel id="color-group-label">Color</FormLabel>
         <Controller
@@ -182,7 +182,7 @@ export const FormColorSmell = ({ control }: { control: Control<WineT> }) => {
 
 export const FormTaste = ({ control }: { control: Control<WineT> }) => {
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', maxWidth: 600}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <FormControl>
         <FormLabel id="body-label">Body</FormLabel>
         <Controller
@@ -317,7 +317,7 @@ export const FormReview = ({ control }: { control: Control<WineT> }) => {
   }
 
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', maxWidth: 600}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller
         name="remarks"
         control={control}

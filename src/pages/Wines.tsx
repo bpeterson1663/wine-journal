@@ -29,14 +29,9 @@ const Wines = () => {
               primary={wine.producer}
               secondary={
                 <>
-                  <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {wine.varietal}
-              </Typography>
+                  <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
+                    {wine.varietal}
+                  </Typography>
                   {` - ${wine.vintage}`}
                 </>
               }
