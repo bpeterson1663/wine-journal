@@ -55,7 +55,7 @@ const FormNewWine = () => {
       component="form"
       onSubmit={handleSubmit(onSubmitHandler)}
     >
-      <Stepper activeStep={activeStep} orientation="vertical">
+      <Stepper activeStep={activeStep} orientation="vertical" sx={{ maxWidth: 600, width: '100%', margin: '0 auto'}}>
         {STEPS.map((step, index) => (
           <Step key={step.label}>
             <StepLabel>{step.label}</StepLabel>
