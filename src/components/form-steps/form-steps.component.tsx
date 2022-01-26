@@ -42,10 +42,10 @@ export const FormDetails = ({ control }: { control: Control<WineT> }) => {
         render={({ field }) => <TextField id="outlined-basic" label="Classification" variant="outlined" {...field} />}
       />
       <Controller
-        name="variety"
+        name="varietal"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Variety(ies)" variant="outlined" {...field} />}
+        render={({ field }) => <TextField id="outlined-basic" label="Varietal(s)" variant="outlined" {...field} />}
       />
       <Controller
         name="subregion"
@@ -331,11 +331,10 @@ export const FormReview = ({ control }: { control: Control<WineT> }) => {
         <Controller
           name="rating"
           control={control}
-          defaultValue={0.05}
           render={({ field }) => (
             <Rating
               aria-labelledby="rating-label"
-              defaultValue={2}
+              defaultValue={3}
               IconContainerComponent={IconContainer}
               highlightSelectedOnly
               {...field}

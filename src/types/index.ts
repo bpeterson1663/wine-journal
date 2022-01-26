@@ -3,7 +3,7 @@ export interface WineT {
   date: string
   producer: string
   classification: string
-  variety: string
+  varietal: string
   subregion: string
   region: string
   country: string
