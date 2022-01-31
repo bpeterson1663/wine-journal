@@ -33,8 +33,27 @@ export interface WineT {
   sweet: number
   userId: string
 }
+export interface UserT {
+  _id: string
+  email: string
+  firstName: string
+  lastName: string
+}
 
 export interface ApiResponseT {
   message: string
   success: boolean
+  data?: UserT
 }
+
+export interface UserExtendT extends UserT {
+  password: string
+}
+
+export type SignUpT = Omit<UserExtendT, '_id'>
+
+export type FetchStatusT = 'idle' | 'loading' | 'success' | 'error'
+
+export type CurrentUser = UserT | null
+
+export type MessageT = string | null

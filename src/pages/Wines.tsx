@@ -19,7 +19,7 @@ const Wines = () => {
   return (
     <Container component="main">
       <Typography component="header">Wines</Typography>
-      <List>
+      <List sx={{ maxWidth: 600, margin: '0 auto' }}>
         {wines.map((wine) => (
           <ListItem alignItems="flex-start" key={wine.id}>
             <ListItemAvatar>
