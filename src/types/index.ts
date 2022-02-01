@@ -8,21 +8,9 @@ export interface WineT {
   region: string
   country: string
   vintage: string
-  hue:
-    | 'purple'
-    | 'ruby'
-    | 'garnet'
-    | 'tawny'
-    | 'brown'
-    | 'straw'
-    | 'yellow'
-    | 'gold'
-    | 'amber'
-    | 'pink'
-    | 'salmon'
-    | 'copper'
-  color: 'red' | 'white' | 'rose'
-  intensity: 'pale' | 'medium' | 'deep'
+  hue: RedHueT | WhiteHueT | RoseHueT
+  color: ColorT
+  intensity: IntensityT
   smell: string
   remarks: string
   alcohol: number
@@ -57,3 +45,13 @@ export type FetchStatusT = 'idle' | 'loading' | 'success' | 'error'
 export type CurrentUser = UserT | null
 
 export type MessageT = string | null
+
+export type ColorT = 'red' | 'white' | 'rose'
+
+export type IntensityT = 'pale' | 'medium' | 'deep'
+
+export type RedHueT = 'purple' | 'ruby' | 'garnet' | 'tawny' | 'brown'
+
+export type WhiteHueT = 'straw' | 'yellow' | 'gold' | 'amber' | 'brown'
+
+export type RoseHueT = 'pink' | 'salmon' | 'copper'

@@ -10,15 +10,58 @@ import {
   Slider,
   IconContainerProps,
   Rating,
+  Paper,
 } from '@mui/material'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
-import { Control, Controller, useWatch } from 'react-hook-form'
-import { WineT } from '../../types'
+import { Control, Controller, useWatch, UseFormSetValue } from 'react-hook-form'
+import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT } from '../../types'
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
+
+const COLOR_INDEX = {
+  'red-pale-purple': 'red',
+  'red-pale-ruby': 'orange',
+  'red-pale-garnet': 'purple',
+  'red-pale-tawny': 'brown',
+  'red-pale-brown': 'black',
+  'red-medium-purple': 'red',
+  'red-medium-ruby': 'orange',
+  'red-medium-garnet': 'purple',
+  'red-medium-tawny': 'brown',
+  'red-medium-brown': 'black',
+  'red-deep-purple': 'red',
+  'red-deep-ruby': 'orange',
+  'red-deep-garnet': 'purple',
+  'red-deep-tawny': 'brown',
+  'red-deep-brown': 'black',
+  'white-pale-straw': 'yellow',
+  'white-pale-yellow': 'gold',
+  'white-pale-gold': 'orange',
+  'white-pale-amber': 'amber',
+  'white-pale-brown': 'brown',
+  'white-medium-straw': 'yellow',
+  'white-medium-yellow': 'gold',
+  'white-medium-gold': 'orange',
+  'white-medium-amber': 'amber',
+  'white-medium-brown': 'brown',
+  'white-deep-straw': 'yellow',
+  'white-deep-yellow': 'gold',
+  'white-deep-gold': 'orange',
+  'white-deep-amber': 'amber',
+  'white-deep-brown': 'brown',
+  'rose-pale-pink': 'pink',
+  'rose-pale-salmon': 'salmon',
+  'rose-pale-copper': 'copper',
+  'rose-medium-pink': 'pink',
+  'rose-medium-salmon': 'salmon',
+  'rose-medium-copper': 'copper',
+  'rose-deep-pink': 'pink',
+  'rose-deep-salmon': 'salmon',
+  'rose-deep-copper': 'copper',
+}
 
 export const FormDetails = ({ control }: { control: Control<WineT> }) => {
   return (
@@ -75,11 +118,39 @@ export const FormDetails = ({ control }: { control: Control<WineT> }) => {
   )
 }
 
-export const FormColorSmell = ({ control }: { control: Control<WineT> }) => {
+const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHueT, intensity: IntensityT) => {
+  const backgroundColor: keyof typeof COLOR_INDEX = `${color}-${intensity}-${hue}` as keyof typeof COLOR_INDEX
+  return (
+    <Paper
+      sx={{
+        height: 100,
+        width: 100,
+        borderRadius: '50%',
+        backgroundColor: COLOR_INDEX[backgroundColor],
+      }}
+      elevation={2}
+    />
+  )
+}
+export const FormColorSmell = ({
+  control,
+  setValue,
+}: {
+  control: Control<WineT>
+  setValue: UseFormSetValue<WineT>
+}) => {
   const color = useWatch({
     control,
     name: 'color',
     defaultValue: 'red',
+  })
+  const hue = useWatch({
+    control,
+    name: 'hue',
+  })
+  const intensity = useWatch({
+    control,
+    name: 'intensity',
   })
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
@@ -90,7 +161,17 @@ export const FormColorSmell = ({ control }: { control: Control<WineT> }) => {
           name="color"
           defaultValue="red"
           render={({ field }) => (
-            <RadioGroup row aria-labelledby="color-group-label" {...field}>
+            <RadioGroup
+              row
+              aria-labelledby="color-group-label"
+              {...field}
+              onChange={(_, val) => {
+                if (val === 'red') setValue('hue', 'purple')
+                else if (val === 'white') setValue('hue', 'straw')
+                else if (val === 'rose') setValue('hue', 'pink')
+                setValue('color', val as ColorT)
+              }}
+            >
               <FormControlLabel value="red" label="Red" control={<Radio />} />
               <FormControlLabel value="white" label="White" control={<Radio />} />
               <FormControlLabel value="rose" label="Rosé" control={<Radio />} />
@@ -168,6 +249,7 @@ export const FormColorSmell = ({ control }: { control: Control<WineT> }) => {
           />
         </FormControl>
       )}
+      {getColorPalatte(color, hue, intensity)}
       <Controller
         name="smell"
         control={control}

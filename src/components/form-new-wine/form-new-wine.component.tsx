@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForm, SubmitHandler, Control } from 'react-hook-form'
+import { useForm, SubmitHandler, Control, UseFormSetValue } from 'react-hook-form'
 import { Box, Button, Container, Paper, Step, Stepper, StepContent, StepLabel, Typography } from '@mui/material'
 import { WineT } from '../../types'
 import { addWineEntry } from '../../api'
@@ -9,7 +9,7 @@ import { STEPS } from './form-new-wine.constants'
 const FormNewWine = () => {
   const [activeStep, setActiveStep] = useState(0)
 
-  const { handleSubmit, control } = useForm<WineT>({
+  const { handleSubmit, control, setValue } = useForm<WineT>({
     defaultValues: { color: 'red', intensity: 'pale', hue: 'purple' },
   })
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
@@ -29,12 +29,12 @@ const FormNewWine = () => {
     setActiveStep(0)
   }
 
-  const getStepContent = (index: number, control: Control<WineT>) => {
+  const getStepContent = (index: number, control: Control<WineT>, setValue: UseFormSetValue<WineT>) => {
     switch (index) {
       case 0:
         return <FormDetails control={control} />
       case 1:
-        return <FormColorSmell control={control} />
+        return <FormColorSmell control={control} setValue={setValue} />
       case 2:
         return <FormTaste control={control} />
       case 3:
@@ -60,7 +60,7 @@ const FormNewWine = () => {
           <Step key={step.label}>
             <StepLabel>{step.label}</StepLabel>
             <StepContent>
-              <Box sx={{ width: '100%' }}>{getStepContent(index, control)}</Box>
+              <Box sx={{ width: '100%' }}>{getStepContent(index, control, setValue)}</Box>
               <Box>
                 <>
                   {index === STEPS.length - 1 ? (
