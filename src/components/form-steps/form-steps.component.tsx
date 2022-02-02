@@ -20,48 +20,7 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import { Control, Controller, useWatch, UseFormSetValue } from 'react-hook-form'
 import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT } from '../../types'
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
-
-const COLOR_INDEX = {
-  'red-pale-purple': 'red',
-  'red-pale-ruby': 'orange',
-  'red-pale-garnet': 'purple',
-  'red-pale-tawny': 'brown',
-  'red-pale-brown': 'black',
-  'red-medium-purple': 'red',
-  'red-medium-ruby': 'orange',
-  'red-medium-garnet': 'purple',
-  'red-medium-tawny': 'brown',
-  'red-medium-brown': 'black',
-  'red-deep-purple': 'red',
-  'red-deep-ruby': 'orange',
-  'red-deep-garnet': 'purple',
-  'red-deep-tawny': 'brown',
-  'red-deep-brown': 'black',
-  'white-pale-straw': 'yellow',
-  'white-pale-yellow': 'gold',
-  'white-pale-gold': 'orange',
-  'white-pale-amber': 'amber',
-  'white-pale-brown': 'brown',
-  'white-medium-straw': 'yellow',
-  'white-medium-yellow': 'gold',
-  'white-medium-gold': 'orange',
-  'white-medium-amber': 'amber',
-  'white-medium-brown': 'brown',
-  'white-deep-straw': 'yellow',
-  'white-deep-yellow': 'gold',
-  'white-deep-gold': 'orange',
-  'white-deep-amber': 'amber',
-  'white-deep-brown': 'brown',
-  'rose-pale-pink': 'pink',
-  'rose-pale-salmon': 'salmon',
-  'rose-pale-copper': 'copper',
-  'rose-medium-pink': 'pink',
-  'rose-medium-salmon': 'salmon',
-  'rose-medium-copper': 'copper',
-  'rose-deep-pink': 'pink',
-  'rose-deep-salmon': 'salmon',
-  'rose-deep-copper': 'copper',
-}
+import { COLOR_INDEX } from './form-steps.constants'
 
 export const FormDetails = ({ control }: { control: Control<WineT> }) => {
   return (
@@ -123,12 +82,13 @@ const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHueT, int
   return (
     <Paper
       sx={{
+        margin: '0 auto',
         height: 100,
-        width: 100,
-        borderRadius: '50%',
-        backgroundColor: COLOR_INDEX[backgroundColor],
+        width: 92,
+        borderRadius: '5% 5% 50% 50%',
+        background: `radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)`
       }}
-      elevation={2}
+      elevation={1}
     />
   )
 }
@@ -243,7 +203,7 @@ export const FormColorSmell = ({
               <RadioGroup row aria-labelledby="hue-group-label" {...field}>
                 <FormControlLabel value="pink" label="Pink" control={<Radio />} />
                 <FormControlLabel value="salmon" label="Salmon" control={<Radio />} />
-                <FormControlLabel value="Copper" label="Copper" control={<Radio />} />
+                <FormControlLabel value="copper" label="Copper" control={<Radio />} />
               </RadioGroup>
             )}
           />
