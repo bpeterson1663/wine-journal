@@ -1,10 +1,23 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import Home from './pages/Home'
 import NewWine from './pages/NewWine'
 import Wines from './pages/Wines'
 import Layout from './components/layout/layout.component'
+import { useAppDispatch } from './features/hooks'
+import { authSuccess } from './features/user/userSlice'
 function App() {
+  const auth = getAuth()
+  const dispatch = useAppDispatch()
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const { email, uid } = user
+      if (email && uid) {
+        dispatch(authSuccess({ email, uid }))
+      }
+    }
+  })
   return (
     <BrowserRouter>
       <Routes>

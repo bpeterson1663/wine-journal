@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CurrentUser, SignUpT, FetchStatusT, MessageT, UserT } from '../../types'
+import { CurrentUser, SignUpT, FetchStatusT, MessageT, UserT, AuthUserT } from '../../types'
 import { RootState, AppThunk } from '../store'
 import { createAuthenticatedUser, loginUser } from '../../api'
 
@@ -22,7 +22,7 @@ export const userSlice = createSlice({
     authStart: (state) => {
       state.status = 'loading'
     },
-    authSuccess: (state, action: PayloadAction<UserT>) => {
+    authSuccess: (state, action: PayloadAction<AuthUserT>) => {
       state.status = 'success'
       state.currentUser = action.payload
       state.message = null

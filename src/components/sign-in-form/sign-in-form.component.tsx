@@ -14,13 +14,12 @@ const SignInForm = () => {
   const { handleSubmit, control } = useForm<SignInFormT>()
   const { currentUser } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-
+  if (currentUser) {
+    navigate('/wines')
+  }
   const onSubmitHandler: SubmitHandler<SignInFormT> = async (data) => {
     const { password, email } = data
     dispatch(login(email, password))
-    if (currentUser) {
-      navigate('/wines')
-    }
   }
   return (
     <Container

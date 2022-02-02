@@ -28,10 +28,15 @@ export interface UserT {
   lastName: string
 }
 
+export interface AuthUserT {
+  uid: string
+  email: string
+}
+
 export interface ApiResponseT {
   message: string
   success: boolean
-  data?: UserT
+  data?: AuthUserT
 }
 
 export interface UserExtendT extends UserT {
@@ -42,7 +47,7 @@ export type SignUpT = Omit<UserExtendT, '_id'>
 
 export type FetchStatusT = 'idle' | 'loading' | 'success' | 'error'
 
-export type CurrentUser = UserT | null
+export type CurrentUser = AuthUserT | null
 
 export type MessageT = string | null
 

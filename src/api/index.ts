@@ -42,7 +42,7 @@ export async function addWineEntry(data: WineT): Promise<ApiResponseT> {
 export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiResponseT> => {
   try {
     const auth = getAuth()
-    const { email, password, firstName, lastName } = data
+    const { email, password } = data
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
     await createUserProfile(data)
     return {
@@ -50,9 +50,7 @@ export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiRespons
       message: 'User Created Successfully',
       data: {
         email,
-        firstName,
-        lastName,
-        _id: user.uid,
+        uid: user.uid,
       },
     }
   } catch (err) {
@@ -72,9 +70,7 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
       message: 'Logged In Succesfully',
       data: {
         email,
-        firstName: 'Test',
-        lastName: 'testing',
-        _id: user.uid,
+        uid: user.uid,
       },
     }
   } catch (err) {

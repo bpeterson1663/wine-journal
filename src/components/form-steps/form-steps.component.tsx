@@ -86,7 +86,7 @@ const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHueT, int
         height: 100,
         width: 92,
         borderRadius: '5% 5% 50% 50%',
-        background: `radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)`
+        background: `radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)`,
       }}
       elevation={1}
     />
