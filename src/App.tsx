@@ -6,7 +6,7 @@ import NewWine from './pages/NewWine'
 import Wines from './pages/Wines'
 import Layout from './components/layout/layout.component'
 import { useAppDispatch } from './features/hooks'
-import { authSuccess } from './features/user/userSlice'
+import { authSuccess } from './features/auth/authSlice'
 function App() {
   const auth = getAuth()
   const dispatch = useAppDispatch()

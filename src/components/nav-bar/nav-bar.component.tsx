@@ -13,7 +13,7 @@ const NavLink = styled(Link)(() => ({
 }))
 
 const NavBar = () => {
-  const { currentUser } = useAppSelector((state) => state.user)
+  const { currentUser } = useAppSelector((state) => state.auth)
 
   return (
     <AppBar position="static">

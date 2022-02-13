@@ -15,8 +15,8 @@ const initialState: InitialUserState = {
   status: 'idle',
 }
 
-export const userSlice = createSlice({
-  name: 'user',
+export const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     authStart: (state) => {
@@ -39,7 +39,7 @@ export const userSlice = createSlice({
   },
 })
 
-export const { authStart, authSuccess, authFailure, signOut } = userSlice.actions
+export const { authStart, authSuccess, authFailure, signOut } = authSlice.actions
 
 export const signUp =
   (payload: SignUpT): AppThunk =>
@@ -74,6 +74,6 @@ export const login =
     }
   }
 
-export const userSelector = (state: RootState) => state.user
+export const authSelector = (state: RootState) => state.auth
 
-export default userSlice.reducer
+export default authSlice.reducer

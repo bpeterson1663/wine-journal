@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { Container, TextField, Button } from '@mui/material'
 import { useAppSelector, useAppDispatch } from '../../features/hooks'
-import { login } from '../../features/user/userSlice'
+import { login } from '../../features/auth/authSlice'
 interface SignInFormT {
   email: string
   password: string
@@ -12,7 +12,7 @@ interface SignInFormT {
 const SignInForm = () => {
   const navigate = useNavigate()
   const { handleSubmit, control } = useForm<SignInFormT>()
-  const { currentUser } = useAppSelector((state) => state.user)
+  const { currentUser } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
   if (currentUser) {
     navigate('/wines')

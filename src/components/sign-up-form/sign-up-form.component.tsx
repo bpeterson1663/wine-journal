@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { Container, TextField, Button } from '@mui/material'
 import { SignUpT } from '../../types'
 import { useAppDispatch } from '../../features/hooks'
-import { signUp } from '../../features/user/userSlice'
+import { signUp } from '../../features/auth/authSlice'
 interface SignUpFormT extends SignUpT {
   confirmPassword: string
 }
