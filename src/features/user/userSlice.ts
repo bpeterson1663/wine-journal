@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CurrentUser, SignUpT, FetchStatusT, MessageT, UserT, AuthUserT } from '../../types'
+import { CurrentUser, SignUpT, FetchStatusT, MessageT, AuthUserT } from '../../types'
 import { RootState, AppThunk } from '../store'
 import { createAuthenticatedUser, loginUser } from '../../api'
 

@@ -12,6 +12,7 @@ import {
   Rating,
   Paper,
 } from '@mui/material'
+import { styled } from '@mui/material/styles';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
@@ -221,18 +222,29 @@ export const FormColorSmell = ({
     </Box>
   )
 }
+const StyledSlider = styled(Slider)(() => ({
+  '& .MuiSlider-markLabel': {
+    fontSize: '12px',
+    transform: 'rotate(-45deg)',
+    marginLeft: '-20px'
+  },
+ }))
+
+ const StyledFormControl = styled(FormControl)(() => ({
+   margin: '10px',
+ }))
 
 export const FormTaste = ({ control }: { control: Control<WineT> }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
-      <FormControl>
+      <StyledFormControl>
         <FormLabel id="body-label">Body</FormLabel>
         <Controller
           name="body"
           control={control}
           defaultValue={1}
           render={({ field }) => (
-            <Slider
+            <StyledSlider
               valueLabelDisplay="off"
               max={5}
               min={1}
@@ -243,15 +255,15 @@ export const FormTaste = ({ control }: { control: Control<WineT> }) => {
             />
           )}
         />
-      </FormControl>
-      <FormControl>
+      </StyledFormControl>
+      <StyledFormControl>
         <FormLabel id="tannin-label">Tannin</FormLabel>
         <Controller
           name="tannin"
           control={control}
           defaultValue={1}
           render={({ field }) => (
-            <Slider
+            <StyledSlider
               valueLabelDisplay="off"
               max={5}
               min={1}
@@ -262,15 +274,15 @@ export const FormTaste = ({ control }: { control: Control<WineT> }) => {
             />
           )}
         />
-      </FormControl>
-      <FormControl>
+      </StyledFormControl>
+      <StyledFormControl>
         <FormLabel id="acidity-label">Acidity</FormLabel>
         <Controller
           name="acidity"
           control={control}
           defaultValue={1}
           render={({ field }) => (
-            <Slider
+            <StyledSlider
               valueLabelDisplay="off"
               max={5}
               min={1}
@@ -281,15 +293,15 @@ export const FormTaste = ({ control }: { control: Control<WineT> }) => {
             />
           )}
         />
-      </FormControl>
-      <FormControl>
+      </StyledFormControl>
+      <StyledFormControl>
         <FormLabel id="alcohol-label">Alcohol(%)</FormLabel>
         <Controller
           name="alcohol"
           control={control}
           defaultValue={1}
           render={({ field }) => (
-            <Slider
+            <StyledSlider
               valueLabelDisplay="off"
               max={5}
               min={1}
@@ -300,15 +312,15 @@ export const FormTaste = ({ control }: { control: Control<WineT> }) => {
             />
           )}
         />
-      </FormControl>
-      <FormControl>
+      </StyledFormControl>
+      <StyledFormControl>
         <FormLabel id="sweet-label">Sweet</FormLabel>
         <Controller
           name="sweet"
           control={control}
           defaultValue={1}
           render={({ field }) => (
-            <Slider
+            <StyledSlider
               valueLabelDisplay="off"
               max={5}
               min={1}
@@ -319,7 +331,7 @@ export const FormTaste = ({ control }: { control: Control<WineT> }) => {
             />
           )}
         />
-      </FormControl>
+      </StyledFormControl>
     </Box>
   )
 }

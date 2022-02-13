@@ -65,19 +65,19 @@ export const ALCOHOL_MARKS = [
   },
   {
     value: 2,
-    label: '10-11.5',
+    label: '10 - 11.5',
   },
   {
     value: 3,
-    label: '11.5-13.5',
+    label: '11.5 - 13.5',
   },
   {
     value: 4,
-    label: '13.5-15',
+    label: '13.5 - 15',
   },
   {
     value: 5,
-    label: '> 15',
+    label: '15 +',
   },
 ]
 
