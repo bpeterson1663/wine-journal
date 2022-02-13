@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import authReducer from './auth/authSlice'
+import wineReducer from './wine/wineSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    wine: wineReducer,
   },
 })
 

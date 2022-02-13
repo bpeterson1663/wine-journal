@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Container, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material'
-import { getWines } from '../api'
-import { WineT } from '../types'
+import { fetchWineListStart } from '../features/wine/wineSlice'
+import { useAppDispatch, useAppSelector } from '../features/hooks'
 
 const Wines = () => {
-  const [wines, setWines] = useState<WineT[]>([])
-  const getAllWines = async () => {
-    const { payload, success } = await getWines()
-    const wines: WineT[] = []
-    if (success) {
-      payload?.forEach((wine: WineT) => wines.push(wine))
-    }
-    setWines(wines)
-  }
+  const dispatch = useAppDispatch()
+  const { wineList } = useAppSelector((state) => state.wine)
   useEffect(() => {
-    getAllWines()
-  }, [])
+    dispatch(fetchWineListStart('1'))
+  }, [dispatch])
   return (
     <Container component="main">
       <Typography component="header">Wines</Typography>
       <List sx={{ maxWidth: 600, margin: '0 auto' }}>
-        {wines.map((wine) => (
+        {wineList.map((wine) => (
           <ListItem alignItems="flex-start" key={wine.id}>
             <ListItemAvatar>
               <Avatar alt={`${wine.producer}`} src="/static/images/avatar/1.jpg" />

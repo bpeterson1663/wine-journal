@@ -12,7 +12,7 @@ import {
   Rating,
   Paper,
 } from '@mui/material'
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
@@ -226,13 +226,13 @@ const StyledSlider = styled(Slider)(() => ({
   '& .MuiSlider-markLabel': {
     fontSize: '12px',
     transform: 'rotate(-45deg)',
-    marginLeft: '-20px'
+    marginLeft: '-20px',
   },
- }))
+}))
 
- const StyledFormControl = styled(FormControl)(() => ({
-   margin: '10px',
- }))
+const StyledFormControl = styled(FormControl)(() => ({
+  margin: '10px',
+}))
 
 export const FormTaste = ({ control }: { control: Control<WineT> }) => {
   return (

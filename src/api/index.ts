@@ -3,7 +3,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 import { db } from '../firebase'
 import { WineT, ApiResponseT, SignUpT } from '../types'
 
-export async function getWines() {
+export async function getWines(userId: string) {
   try {
     const winesCol = collection(db, 'wines')
     const winesSnapshot = await getDocs(winesCol)
@@ -11,10 +11,11 @@ export async function getWines() {
       ...doc.data(),
       id: doc.id,
     }))
-    const payload = wineList.map((wine) => wine as WineT)
+    const data = wineList.map((wine) => wine as WineT)
     return {
       success: true,
-      payload,
+      message: '',
+      data,
     }
   } catch (e) {
     return {
