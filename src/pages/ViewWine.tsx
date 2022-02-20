@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+
 import { Container, Box, Typography, Card, CardActions, CardContent, CardHeader, Button } from '@mui/material'
 import { getColorPalatte } from '../components/form-steps/form-steps.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
-import { fetchWineStart } from '../features/wine/wineSlice'
+import { fetchWineDeleteStart, fetchWineStart } from '../features/wine/wineSlice'
 import {
   ALCOHOL_MARKS,
   BODY_MARKS,
@@ -18,11 +19,11 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 const ViewWine = () => {
   const { id } = useParams<{ id: string }>()
   const dispatch = useAppDispatch()
-
+  const navigate = useNavigate()
   useEffect(() => {
     dispatch(fetchWineStart(id))
   }, [dispatch, id])
-  const { viewWine } = useAppSelector((state) => state.wine)
+  const { viewWine, status, message } = useAppSelector((state) => state.wine)
   if (!viewWine) return <div>...loading</div>
 
   const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEET', value: number) => {
@@ -62,10 +63,16 @@ const ViewWine = () => {
         return <SentimentSatisfiedIcon fontSize="large" />
     }
   }
- 
+
+  const handleDeleteWine = () => {
+    dispatch(fetchWineDeleteStart(viewWine.id))
+    if (status === 'success' && message === 'Wine Deleted Successfully') {
+      navigate('/wines')
+    }
+  }
   return (
     <Container>
-      <Card sx={{margin: '10px 0'}}>
+      <Card sx={{ margin: '10px 0' }}>
         <CardHeader title={viewWine.producer} subheader={viewWine.date} />
         <CardContent>
           <Box>
@@ -119,6 +126,9 @@ const ViewWine = () => {
         </CardContent>
         <CardActions>
           <Button size="small">Edit</Button>
+          <Button onClick={handleDeleteWine} size="small">
+            Delete
+          </Button>
         </CardActions>
       </Card>
     </Container>

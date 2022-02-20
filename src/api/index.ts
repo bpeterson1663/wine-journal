@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, doc, getDoc } from 'firebase/firestore/lite'
+import { addDoc, collection, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { db } from '../firebase'
 import { WineT, ApiResponseT, SignUpT, WineApiResponseT } from '../types'
@@ -33,7 +33,10 @@ export async function getWineById(id: string): Promise<WineApiResponseT> {
     return {
       success: true,
       message: '',
-      data: docSnap.data(),
+      data: {
+        ...docSnap.data(),
+        id: docSnap.id,
+      },
     }
   } else {
     return {
@@ -54,6 +57,21 @@ export async function addWineEntry(data: WineT): Promise<ApiResponseT> {
     return {
       success: false,
       message: `Error creating wine ${e}`,
+    }
+  }
+}
+
+export async function deleteWineEntry(id: string): Promise<ApiResponseT> {
+  try {
+    deleteDoc(doc(db, 'wines', id))
+    return {
+      success: true,
+      message: 'Wine Deleted Successfully',
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: `Error deleting wine ${e}`,
     }
   }
 }
