@@ -4,6 +4,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import Home from './pages/Home'
 import NewWine from './pages/NewWine'
 import Wines from './pages/Wines'
+import ViewWine from './pages/ViewWine'
 import Layout from './components/layout/layout.component'
 import { useAppDispatch } from './features/hooks'
 import { authSuccess } from './features/auth/authSlice'
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="wines" element={<Wines />} />
           <Route path="new" element={<NewWine />} />
+          <Route path="wine/:id" element={<ViewWine />} />
         </Route>
       </Routes>
     </BrowserRouter>

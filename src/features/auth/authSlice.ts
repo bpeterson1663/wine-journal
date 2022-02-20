@@ -48,7 +48,7 @@ export const signUp =
       dispatch(authStart())
       const response = await createAuthenticatedUser(payload)
       const { success, data, message } = response
-      if (success && data) {
+      if (success && data?.email) {
         dispatch(authSuccess(data))
       } else {
         dispatch(authFailure(message))

@@ -78,7 +78,7 @@ export const FormDetails = ({ control }: { control: Control<WineT> }) => {
   )
 }
 
-const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHueT, intensity: IntensityT) => {
+export const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHueT, intensity: IntensityT) => {
   const backgroundColor: keyof typeof COLOR_INDEX = `${color}-${intensity}-${hue}` as keyof typeof COLOR_INDEX
   return (
     <Paper

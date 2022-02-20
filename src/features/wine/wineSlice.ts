@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { FetchStatusT, MessageT, WineT } from '../../types'
 import { RootState, AppThunk } from '../store'
-import { getWines, addWineEntry } from '../../api'
+import { getWines, addWineEntry, getWineById } from '../../api'
 
 interface InitialWineState {
   message: MessageT
   status: FetchStatusT
   wineList: WineT[]
+  viewWine: WineT | null
 }
 const initialState: InitialWineState = {
   message: null,
   status: 'idle',
   wineList: [],
+  viewWine: null,
 }
 
 export const wineSlice = createSlice({
@@ -35,10 +37,15 @@ export const wineSlice = createSlice({
       state.message = action.payload.message
       state.wineList = [...state.wineList, action.payload.wine]
     },
+    wineFetchSuccess: (state, action: PayloadAction<WineT>) => {
+      state.status = 'success'
+      state.viewWine = action.payload
+    },
   },
 })
 
-export const { wineFetchStart, wineListFetchSuccess, wineFetchFailure, wineCreateFetchSuccess } = wineSlice.actions
+export const { wineFetchStart, wineListFetchSuccess, wineFetchFailure, wineCreateFetchSuccess, wineFetchSuccess } =
+  wineSlice.actions
 
 export const fetchWineListStart =
   (userId: string): AppThunk =>
@@ -51,6 +58,27 @@ export const fetchWineListStart =
         dispatch(wineListFetchSuccess(data))
       } else {
         dispatch(wineFetchFailure(message))
+      }
+    } catch (err) {
+      dispatch(wineFetchFailure(`error ${err}`))
+    }
+  }
+
+export const fetchWineStart =
+  (id: string | undefined): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(wineFetchStart())
+      if (!id) {
+        dispatch(wineFetchFailure('id does not exist'))
+      } else {
+        const response = await getWineById(id)
+        const { data, success, message } = response
+        if (success && data) {
+          dispatch(wineFetchSuccess(data as WineT))
+        } else {
+          dispatch(wineFetchFailure(message))
+        }
       }
     } catch (err) {
       dispatch(wineFetchFailure(`error ${err}`))

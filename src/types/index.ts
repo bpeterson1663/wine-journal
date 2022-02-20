@@ -1,3 +1,5 @@
+import { DocumentData } from 'firebase/firestore/lite'
+
 export interface WineT {
   id: string
   date: string
@@ -37,6 +39,12 @@ export interface ApiResponseT {
   message: string
   success: boolean
   data?: AuthUserT
+}
+
+export interface WineApiResponseT {
+  message: string
+  success: boolean
+  data?: DocumentData
 }
 
 export interface UserExtendT extends UserT {

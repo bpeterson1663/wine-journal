@@ -1,7 +1,7 @@
-import { addDoc, collection, getDocs } from 'firebase/firestore/lite'
+import { addDoc, collection, getDocs, doc, getDoc } from 'firebase/firestore/lite'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { db } from '../firebase'
-import { WineT, ApiResponseT, SignUpT } from '../types'
+import { WineT, ApiResponseT, SignUpT, WineApiResponseT } from '../types'
 
 export async function getWines(userId: string) {
   try {
@@ -21,6 +21,24 @@ export async function getWines(userId: string) {
     return {
       success: false,
       message: `Error creating wine ${e}`,
+    }
+  }
+}
+
+export async function getWineById(id: string): Promise<WineApiResponseT> {
+  const docRef = doc(db, 'wines', id)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    return {
+      success: true,
+      message: '',
+      data: docSnap.data(),
+    }
+  } else {
+    return {
+      success: false,
+      message: 'Document does not exist',
     }
   }
 }
