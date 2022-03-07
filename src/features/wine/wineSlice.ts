@@ -43,6 +43,7 @@ export const wineSlice = createSlice({
     },
     wineDeleteSuccess: (state, action: PayloadAction<string>) => {
       state.status = 'success'
+      state.message = 'Wine Deleted Successfully'
       state.wineList = state.wineList.filter((wine) => wine.id !== action.payload)
     },
   },

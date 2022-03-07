@@ -1,7 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-
-import { Container, Box, Typography, Card, CardActions, CardContent, CardHeader, Button } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material'
 import { getColorPalatte } from '../components/form-steps/form-steps.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { fetchWineDeleteStart, fetchWineStart } from '../features/wine/wineSlice'
@@ -20,10 +33,11 @@ const ViewWine = () => {
   const { id } = useParams<{ id: string }>()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   useEffect(() => {
     dispatch(fetchWineStart(id))
   }, [dispatch, id])
-  const { viewWine, status, message } = useAppSelector((state) => state.wine)
+  const { viewWine, status } = useAppSelector((state) => state.wine)
   if (!viewWine) return <div>...loading</div>
 
   const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEET', value: number) => {
@@ -66,12 +80,32 @@ const ViewWine = () => {
 
   const handleDeleteWine = () => {
     dispatch(fetchWineDeleteStart(viewWine.id))
-    if (status === 'success' && message === 'Wine Deleted Successfully') {
+    if (status === 'success') {
       navigate('/wines')
     }
   }
+  const handleConfirmDeleteClose = () => {
+    setIsConfirmOpen(false)
+  }
+  const ConfirmDeleteDialog = () => (
+    <Dialog open={isConfirmOpen} onClose={handleConfirmDeleteClose} aria-labelledby="delete-dialog-title">
+      <DialogTitle id="delete-dialog-title">Delete Wine</DialogTitle>
+      <DialogContent>
+        <DialogContentText>Are you sure you want to delete this wine?</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleConfirmDeleteClose}>
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteWine} autoFocus>
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
   return (
     <Container>
+      <ConfirmDeleteDialog />
       <Card sx={{ margin: '10px 0', maxWidth: 400 }}>
         <CardHeader title={viewWine.producer} subheader={viewWine.date} />
         <CardContent>
@@ -126,7 +160,7 @@ const ViewWine = () => {
         </CardContent>
         <CardActions>
           <Button size="small">Edit</Button>
-          <Button onClick={handleDeleteWine} size="small">
+          <Button onClick={() => setIsConfirmOpen(true)} size="small">
             Delete
           </Button>
         </CardActions>
