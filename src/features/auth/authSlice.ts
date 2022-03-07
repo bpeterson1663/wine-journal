@@ -3,13 +3,13 @@ import { CurrentUser, SignUpT, FetchStatusT, MessageT, AuthUserT } from '../../t
 import { RootState, AppThunk } from '../store'
 import { createAuthenticatedUser, loginUser } from '../../api'
 
-interface InitialUserState {
+interface InitialAuthState {
   currentUser: CurrentUser
   status: FetchStatusT
   message: MessageT
 }
 
-const initialState: InitialUserState = {
+const initialState: InitialAuthState = {
   currentUser: null,
   message: null,
   status: 'idle',

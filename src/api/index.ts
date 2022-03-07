@@ -1,7 +1,7 @@
-import { addDoc, collection, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore/lite'
+import { addDoc, collection, getDocs, doc, getDoc, deleteDoc, query, where } from 'firebase/firestore/lite'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { db } from '../firebase'
-import { WineT, ApiResponseT, SignUpT, WineApiResponseT } from '../types'
+import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT } from '../types'
 
 export async function getWines(userId: string) {
   try {
@@ -25,7 +25,7 @@ export async function getWines(userId: string) {
   }
 }
 
-export async function getWineById(id: string): Promise<WineApiResponseT> {
+export async function getWineById(id: string): Promise<FirebaseApiResponseT> {
   const docRef = doc(db, 'wines', id)
   const docSnap = await getDoc(docRef)
 
@@ -81,7 +81,7 @@ export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiRespons
     const auth = getAuth()
     const { email, password } = data
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
-    await createUserProfile(data)
+
     return {
       success: true,
       message: 'User Created Successfully',
@@ -118,10 +118,10 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
   }
 }
 
-export async function createUserProfile(data: SignUpT): Promise<ApiResponseT> {
+export async function createUserProfile(data: UserProfileT): Promise<ApiResponseT> {
   try {
-    const { email, firstName, lastName } = data
-    addDoc(collection(db, 'users'), { email, firstName, lastName })
+    const { firstName, lastName, userId } = data
+    addDoc(collection(db, 'users'), { firstName, lastName, userId })
     return {
       success: true,
       message: 'User profile created',
@@ -130,6 +130,39 @@ export async function createUserProfile(data: SignUpT): Promise<ApiResponseT> {
     return {
       success: false,
       message: `Error in creating user profile ${e}`,
+    }
+  }
+}
+
+export async function getUserProfileById(id: string): Promise<FirebaseApiResponseT> {
+  const q = query(collection(db, 'users'), where('userId', '==', id))
+  const querySnapshot = await getDocs(q)
+
+  let userProfile: UserProfileT = {
+    firstName: '',
+    lastName: '',
+    userId: id,
+  }
+  querySnapshot.forEach((doc) => {
+    if (doc.exists()) {
+      const data = doc.data()
+      userProfile = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        userId: id,
+      }
+    }
+  })
+  if (userProfile.firstName) {
+    return {
+      success: true,
+      message: '',
+      data: userProfile,
+    }
+  } else {
+    return {
+      success: false,
+      message: 'Document does not exist',
     }
   }
 }

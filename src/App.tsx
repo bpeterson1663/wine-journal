@@ -8,6 +8,8 @@ import ViewWine from './pages/ViewWine'
 import Layout from './components/layout/layout.component'
 import { useAppDispatch } from './features/hooks'
 import { authSuccess } from './features/auth/authSlice'
+import { fetchUserStart } from './features/user/userSlice'
+
 function App() {
   const auth = getAuth()
   const dispatch = useAppDispatch()
@@ -16,6 +18,7 @@ function App() {
       const { email, uid } = user
       if (email && uid) {
         dispatch(authSuccess({ email, uid }))
+        dispatch(fetchUserStart(uid))
       }
     }
   })

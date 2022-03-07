@@ -14,7 +14,7 @@ const NavLink = styled(Link)(() => ({
 
 const NavBar = () => {
   const { currentUser } = useAppSelector((state) => state.auth)
-
+  const { userProfile } = useAppSelector((state) => state.user)
   return (
     <AppBar position="static">
       <Toolbar>
@@ -26,6 +26,7 @@ const NavBar = () => {
             <NavLink to="/wines">
               <NavButton variant="text">Wines</NavButton>
             </NavLink>
+            <span>Hello, {userProfile?.firstName}</span>
           </>
         )}
       </Toolbar>

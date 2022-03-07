@@ -23,6 +23,13 @@ export interface WineT {
   sweet: number
   userId: string
 }
+
+export interface UserProfileT {
+  firstName: string
+  lastName: string
+  userId: string
+}
+
 export interface UserT {
   _id: string
   email: string
@@ -41,7 +48,7 @@ export interface ApiResponseT {
   data?: AuthUserT
 }
 
-export interface WineApiResponseT {
+export interface FirebaseApiResponseT {
   message: string
   success: boolean
   data?: DocumentData
