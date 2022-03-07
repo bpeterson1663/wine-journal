@@ -26,9 +26,6 @@ const NavBar = () => {
             <NavLink to="/wines">
               <NavButton variant="text">Wines</NavButton>
             </NavLink>
-            <NavLink to="/new">
-              <NavButton variant="text">New Wine</NavButton>
-            </NavLink>
           </>
         )}
       </Toolbar>
