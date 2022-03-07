@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForm, SubmitHandler, Control, UseFormSetValue } from 'react-hook-form'
+import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineCreateStart } from '../../features/wine/wineSlice'
 import {
@@ -11,7 +11,6 @@ import {
   Stepper,
   StepContent,
   StepLabel,
-  Typography,
   Snackbar,
 } from '@mui/material'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
@@ -24,9 +23,11 @@ const FormNewWine = () => {
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
   const { message } = useAppSelector((state) => state.wine)
-  const { handleSubmit, control, setValue } = useForm<WineT>({
-    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple' },
+  const methods = useForm<WineT>({
+    mode: 'all',
+    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3 },
   })
+
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
     console.log(data)
     dispatch(fetchWineCreateStart(data))
@@ -42,18 +43,19 @@ const FormNewWine = () => {
 
   const handleReset = () => {
     setActiveStep(0)
+    methods.reset()
   }
 
-  const getStepContent = (index: number, control: Control<WineT>, setValue: UseFormSetValue<WineT>) => {
+  const getStepContent = (index: number) => {
     switch (index) {
       case 0:
-        return <FormDetails control={control} />
+        return <FormDetails />
       case 1:
-        return <FormColorSmell control={control} setValue={setValue} />
+        return <FormColorSmell />
       case 2:
-        return <FormTaste control={control} />
+        return <FormTaste />
       case 3:
-        return <FormReview control={control} />
+        return <FormReview />
       default:
         break
     }
@@ -68,57 +70,91 @@ const FormNewWine = () => {
 
     setOpen(false)
   }
+
+  const disableContinue = (): boolean => {
+    const { formState } = methods
+    const { errors, touchedFields } = formState
+
+    if (activeStep === 0) {
+      if (
+        !touchedFields.producer ||
+        !touchedFields.country ||
+        !touchedFields.region ||
+        !touchedFields.vintage ||
+        !touchedFields.varietal
+      ) {
+        return true
+      }
+    } else if (activeStep === 1) {
+      if (!touchedFields.smell) {
+        return true
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        flexFlow: 'column wrap',
-        maxWidth: 600,
-        width: '90%',
-      }}
-      component="form"
-      onSubmit={handleSubmit(onSubmitHandler)}
-    >
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          {message}
-        </Alert>
-      </Snackbar>
-      <Stepper activeStep={activeStep} orientation="vertical" sx={{ maxWidth: 600, width: '100%', margin: '0 auto' }}>
-        {STEPS.map((step, index) => (
-          <Step key={step.label}>
-            <StepLabel>{step.label}</StepLabel>
-            <StepContent>
-              <Box sx={{ width: '100%' }}>{getStepContent(index, control, setValue)}</Box>
-              <Box>
-                <>
-                  {index === STEPS.length - 1 ? (
-                    <Button type="submit" variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-                      Submit
+    <FormProvider {...methods}>
+      <Container
+        sx={{
+          display: 'flex',
+          flexFlow: 'column wrap',
+          maxWidth: 600,
+          width: '90%',
+        }}
+        component="form"
+        onSubmit={methods.handleSubmit(onSubmitHandler)}
+      >
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            {message}
+          </Alert>
+        </Snackbar>
+        <Stepper activeStep={activeStep} orientation="vertical" sx={{ maxWidth: 600, width: '100%', margin: '0 auto' }}>
+          {STEPS.map((step, index) => (
+            <Step key={step.label}>
+              <StepLabel>{step.label}</StepLabel>
+              <StepContent>
+                <Box sx={{ width: '100%' }}>{getStepContent(index)}</Box>
+                <Box>
+                  <>
+                    {index === STEPS.length - 1 ? (
+                      <Button type="submit" variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+                        Submit
+                      </Button>
+                    ) : (
+                      <Button
+                        disabled={disableContinue()}
+                        variant="contained"
+                        onClick={handleNext}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
+                        Continue
+                      </Button>
+                    )}
+                    <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                      Back
                     </Button>
-                  ) : (
-                    <Button variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-                      Continue
-                    </Button>
-                  )}
-                  <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                    Back
-                  </Button>
-                </>
-              </Box>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === STEPS.length && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reset
-          </Button>
-        </Paper>
-      )}
-    </Container>
+                  </>
+                </Box>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === STEPS.length && (
+          <Paper square elevation={0} sx={{ p: 3 }}>
+            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+              Add Another Wine
+            </Button>
+          </Paper>
+        )}
+      </Container>
+    </FormProvider>
   )
 }
 

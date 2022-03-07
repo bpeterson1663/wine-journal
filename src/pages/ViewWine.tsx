@@ -72,7 +72,7 @@ const ViewWine = () => {
   }
   return (
     <Container>
-      <Card sx={{ margin: '10px 0' }}>
+      <Card sx={{ margin: '10px 0', maxWidth: 400 }}>
         <CardHeader title={viewWine.producer} subheader={viewWine.date} />
         <CardContent>
           <Box>

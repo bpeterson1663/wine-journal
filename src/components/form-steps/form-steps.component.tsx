@@ -18,61 +18,134 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
-import { Control, Controller, useWatch, UseFormSetValue } from 'react-hook-form'
+import { Controller, useWatch, useFormContext } from 'react-hook-form'
 import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT } from '../../types'
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
 import { COLOR_INDEX } from './form-steps.constants'
 
-export const FormDetails = ({ control }: { control: Control<WineT> }) => {
+export const FormDetails = () => {
+  const { formState, control } = useFormContext<WineT>()
+  const { errors } = formState
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller
         name="date"
         defaultValue={`${new Date().toISOString().split('T')[0]}`}
         control={control}
-        render={({ field }) => <TextField type="date" label="Date" {...field} />}
+        rules={{
+          required: 'Enter a date',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            type="date"
+            label="Date"
+            error={!!errors.date}
+            helperText={errors.date ? errors.date?.message : ''}
+          />
+        )}
       />
       <Controller
         name="producer"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Producer" variant="outlined" {...field} />}
+        rules={{
+          required: 'The producer is required',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-basic"
+            label="Producer"
+            variant="outlined"
+            error={!!errors.producer}
+            helperText={errors.producer ? errors.producer?.message : ''}
+          />
+        )}
       />
       <Controller
         name="classification"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Classification" variant="outlined" {...field} />}
+        render={({ field }) => <TextField {...field} id="outlined-basic" label="Classification" variant="outlined" />}
       />
       <Controller
         name="varietal"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Varietal(s)" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="subregion"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Subregion" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="region"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Region" variant="outlined" {...field} />}
-      />
-      <Controller
-        name="country"
-        control={control}
-        defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Country" variant="outlined" {...field} />}
+        rules={{
+          required: 'At least one varietal is required',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-basic"
+            label="Varietal(s)"
+            variant="outlined"
+            error={!!errors.varietal}
+            helperText={errors.varietal ? errors.varietal?.message : ''}
+          />
+        )}
       />
       <Controller
         name="vintage"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Vintage" variant="outlined" {...field} />}
+        rules={{
+          required: 'Enter the vintage of the wine or N/V if non vintage',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-basic"
+            label="Vintage"
+            variant="outlined"
+            error={!!errors.vintage}
+            helperText={errors.vintage ? errors.vintage?.message : ''}
+          />
+        )}
+      />
+      <Controller
+        name="country"
+        control={control}
+        defaultValue=""
+        rules={{
+          required: 'Enter the country the wine is from',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-basic"
+            label="Country"
+            variant="outlined"
+            error={!!errors.country}
+            helperText={errors.country ? errors.country?.message : ''}
+          />
+        )}
+      />
+      <Controller
+        name="region"
+        control={control}
+        defaultValue=""
+        rules={{
+          required: 'Enter the region the wine is from',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-basic"
+            label="Region"
+            variant="outlined"
+            error={!!errors.region}
+            helperText={errors.region ? errors.region?.message : ''}
+          />
+        )}
+      />
+      <Controller
+        name="subregion"
+        control={control}
+        defaultValue=""
+        render={({ field }) => <TextField {...field} id="outlined-basic" label="Subregion" variant="outlined" />}
       />
     </Box>
   )
@@ -83,7 +156,7 @@ export const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHu
   return (
     <Paper
       sx={{
-        margin: '0 auto',
+        margin: '5px 10px',
         height: 100,
         width: 92,
         borderRadius: '5% 5% 50% 50%',
@@ -93,13 +166,9 @@ export const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHu
     />
   )
 }
-export const FormColorSmell = ({
-  control,
-  setValue,
-}: {
-  control: Control<WineT>
-  setValue: UseFormSetValue<WineT>
-}) => {
+export const FormColorSmell = () => {
+  const { setValue, control, formState } = useFormContext<WineT>()
+  const { errors } = formState
   const color = useWatch({
     control,
     name: 'color',
@@ -215,8 +284,20 @@ export const FormColorSmell = ({
         name="smell"
         control={control}
         defaultValue=""
+        rules={{
+          required: 'Enter some descriptors of what the wine smells like',
+        }}
         render={({ field }) => (
-          <TextField multiline rows={4} id="outlined-basic" label="Smell" variant="outlined" {...field} />
+          <TextField
+            {...field}
+            multiline
+            rows={4}
+            id="outlined-basic"
+            label="Smell"
+            variant="outlined"
+            error={!!errors.smell}
+            helperText={errors.smell ? errors.smell?.message : ''}
+          />
         )}
       />
     </Box>
@@ -234,7 +315,8 @@ const StyledFormControl = styled(FormControl)(() => ({
   margin: '10px',
 }))
 
-export const FormTaste = ({ control }: { control: Control<WineT> }) => {
+export const FormTaste = () => {
+  const { control } = useFormContext<WineT>()
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <StyledFormControl>
@@ -336,7 +418,8 @@ export const FormTaste = ({ control }: { control: Control<WineT> }) => {
   )
 }
 
-export const FormReview = ({ control }: { control: Control<WineT> }) => {
+export const FormReview = () => {
+  const { control } = useFormContext<WineT>()
   const customIcons: {
     [index: string]: {
       icon: React.ReactElement
@@ -385,13 +468,13 @@ export const FormReview = ({ control }: { control: Control<WineT> }) => {
         <Controller
           name="rating"
           control={control}
+          defaultValue={3}
           render={({ field }) => (
             <Rating
+              {...field}
               aria-labelledby="rating-label"
-              defaultValue={3}
               IconContainerComponent={IconContainer}
               highlightSelectedOnly
-              {...field}
             />
           )}
         />
