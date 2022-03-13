@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CurrentUser, SignUpT, FetchStatusT, MessageT, AuthUserT } from '../../types'
 import { RootState, AppThunk } from '../store'
 import { createAuthenticatedUser, loginUser } from '../../api'
-
+import { fetchUserCreateStart } from '../user/userSlice'
 interface InitialAuthState {
   currentUser: CurrentUser
   status: FetchStatusT
@@ -49,7 +49,7 @@ export const signUp =
       const response = await createAuthenticatedUser(payload)
       const { success, data, message } = response
       if (success && data?.email) {
-        dispatch(authSuccess(data))
+        dispatch(fetchUserCreateStart({ firstName: payload.firstName, lastName: payload.lastName, userId: data.uid }))
       } else {
         dispatch(authFailure(message))
       }

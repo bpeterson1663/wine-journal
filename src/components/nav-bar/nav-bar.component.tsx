@@ -26,7 +26,7 @@ const NavBar = () => {
             <NavLink to="/wines">
               <NavButton variant="text">Wines</NavButton>
             </NavLink>
-            <span>Hello, {userProfile?.firstName}</span>
+            {userProfile?.firstName && <span>Hello, {userProfile?.firstName}</span>}
           </>
         )}
       </Toolbar>

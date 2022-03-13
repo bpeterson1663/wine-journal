@@ -118,13 +118,14 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
   }
 }
 
-export async function createUserProfile(data: UserProfileT): Promise<ApiResponseT> {
+export async function createUserProfile(data: UserProfileT): Promise<FirebaseApiResponseT> {
   try {
     const { firstName, lastName, userId } = data
     addDoc(collection(db, 'users'), { firstName, lastName, userId })
     return {
       success: true,
       message: 'User profile created',
+      data,
     }
   } catch (e) {
     return {

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState, AppThunk } from '../store'
 import { FetchStatusT, MessageT, UserProfileT } from '../../types'
-import { getUserProfileById } from '../../api'
+import { createUserProfile, getUserProfileById } from '../../api'
 
 interface InitialUserState {
   userProfile: UserProfileT | null
@@ -42,6 +42,23 @@ export const fetchUserStart =
     try {
       dispatch(userStart())
       const response = await getUserProfileById(id)
+      const { success, message, data } = response
+      if (success) {
+        dispatch(userFetchSuccess(data as UserProfileT))
+      } else {
+        dispatch(userFetchFailure(message))
+      }
+    } catch (err) {
+      dispatch(userFetchFailure(`error ${err}`))
+    }
+  }
+
+export const fetchUserCreateStart =
+  (profile: UserProfileT): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(userStart())
+      const response = await createUserProfile(profile)
       const { success, message, data } = response
       if (success) {
         dispatch(userFetchSuccess(data as UserProfileT))
