@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CurrentUser, SignUpT, FetchStatusT, MessageT, AuthUserT } from '../../types'
 import { RootState, AppThunk } from '../store'
-import { createAuthenticatedUser, loginUser } from '../../api'
+import { createAuthenticatedUser, loginUser, logoutUser } from '../../api'
 import { fetchUserCreateStart } from '../user/userSlice'
 interface InitialAuthState {
   currentUser: CurrentUser
@@ -27,6 +27,11 @@ export const authSlice = createSlice({
       state.currentUser = action.payload
       state.message = null
     },
+    logoutSuccess: (state, action: PayloadAction<MessageT>) => {
+      state.status = 'success'
+      state.currentUser = null
+      state.message = action.payload
+    },
     authFailure: (state, action: PayloadAction<MessageT>) => {
       state.status = 'error'
       state.currentUser = null
@@ -39,7 +44,7 @@ export const authSlice = createSlice({
   },
 })
 
-export const { authStart, authSuccess, authFailure, signOut } = authSlice.actions
+export const { authStart, authSuccess, authFailure, signOut, logoutSuccess } = authSlice.actions
 
 export const signUp =
   (payload: SignUpT): AppThunk =>
@@ -57,6 +62,17 @@ export const signUp =
       dispatch(authFailure(`error ${err}`))
     }
   }
+
+export const logout = (): AppThunk => async (dispatch) => {
+  try {
+    dispatch(authStart())
+    const response = await logoutUser()
+    const { success, message } = response
+    if (success) {
+      dispatch(logoutSuccess(message))
+    }
+  } catch (err) {}
+}
 
 export const login =
   (email: string, password: string): AppThunk =>

@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs, doc, getDoc, deleteDoc, query, where } from 'firebase/firestore/lite'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { db } from '../firebase'
 import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT } from '../types'
 
@@ -104,7 +104,7 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
     const { user } = await signInWithEmailAndPassword(auth, email, password)
     return {
       success: true,
-      message: 'Logged In Succesfully',
+      message: 'Logged in successfully',
       data: {
         email,
         uid: user.uid,
@@ -118,6 +118,22 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
   }
 }
 
+export async function logoutUser(): Promise<ApiResponseT> {
+  try {
+    const auth = getAuth()
+    await signOut(auth)
+    return {
+      success: true,
+      message: 'Logged out successfully',
+    }
+  } catch (err) {
+    return {
+      success: false,
+      message: `Error trying to log out ${err}`,
+    }
+  }
+}
+
 export async function createUserProfile(data: UserProfileT): Promise<FirebaseApiResponseT> {
   try {
     const { firstName, lastName, userId } = data
@@ -127,10 +143,10 @@ export async function createUserProfile(data: UserProfileT): Promise<FirebaseApi
       message: 'User profile created',
       data,
     }
-  } catch (e) {
+  } catch (err) {
     return {
       success: false,
-      message: `Error in creating user profile ${e}`,
+      message: `Error in creating user profile ${err}`,
     }
   }
 }

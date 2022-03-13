@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { Container, TextField, Button } from '@mui/material'
@@ -14,9 +14,12 @@ const SignInForm = () => {
   const { handleSubmit, control } = useForm<SignInFormT>()
   const { currentUser } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
-  if (currentUser) {
-    navigate('/wines')
-  }
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/wines')
+    }
+  }, [currentUser, navigate])
+
   const onSubmitHandler: SubmitHandler<SignInFormT> = async (data) => {
     const { password, email } = data
     dispatch(login(email, password))
