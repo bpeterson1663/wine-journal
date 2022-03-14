@@ -13,14 +13,14 @@ const FormNewWine = () => {
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
   const { message } = useAppSelector((state) => state.wine)
+  const { currentUser } = useAppSelector((state) => state.auth)
   const methods = useForm<WineT>({
     mode: 'all',
     defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3 },
   })
 
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
-    console.log(data)
-    dispatch(fetchWineCreateStart(data))
+    dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
   }
   const handleNext = () => {

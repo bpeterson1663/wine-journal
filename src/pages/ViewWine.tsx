@@ -120,7 +120,7 @@ const ViewWine = () => {
               {viewWine.varietal} - {viewWine.vintage}
             </Typography>
             <Typography variant="body2">
-              {viewWine.country} / {viewWine.region} / {viewWine.subregion}
+              {viewWine.country} / {viewWine.region} {viewWine.subregion && `/ ${viewWine.subregion}`}
             </Typography>
           </Box>
           <Box sx={{ marginTop: '4px' }}>

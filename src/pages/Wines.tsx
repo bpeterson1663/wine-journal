@@ -8,10 +8,11 @@ import { useAppDispatch, useAppSelector } from '../features/hooks'
 const Wines = () => {
   const dispatch = useAppDispatch()
   const { wineList } = useAppSelector((state) => state.wine)
+  const { currentUser } = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
   useEffect(() => {
-    dispatch(fetchWineListStart('1'))
-  }, [dispatch])
+    dispatch(fetchWineListStart(currentUser?.uid ?? ''))
+  }, [dispatch, currentUser?.uid])
   const NavLink = styled(Link)(() => ({
     textDecoration: 'none',
   }))

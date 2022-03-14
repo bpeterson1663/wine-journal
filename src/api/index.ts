@@ -5,8 +5,9 @@ import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT } from
 
 export async function getWines(userId: string) {
   try {
-    const winesCol = collection(db, 'wines')
-    const winesSnapshot = await getDocs(winesCol)
+    const q = query(collection(db, 'wines'), where('userId', '==', userId))
+    const winesSnapshot = await getDocs(q)
+
     const wineList = winesSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,

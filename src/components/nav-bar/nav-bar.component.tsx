@@ -19,9 +19,8 @@ const NavBar = () => {
   const { userProfile } = useAppSelector((state) => state.user)
   const handleLogout = () => {
     dispatch(logout())
-    if(!currentUser) {
+    if (!currentUser) {
       navigate('/')
-
     }
   }
   return (
