@@ -1,10 +1,15 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AppBar, Toolbar, Button } from '@mui/material'
+import { AppBar, Toolbar, Button, IconButton } from '@mui/material'
 import { styled } from '@mui/system'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { logout } from '../../features/auth/authSlice'
+import HomeIcon from '@mui/icons-material/Home';
 const NavButton = styled(Button)(() => ({
+  color: 'white',
+}))
+
+const Icon = styled(IconButton)(() => ({
   color: 'white',
 }))
 
@@ -29,7 +34,7 @@ const NavBar = () => {
         {currentUser && (
           <>
             <NavLink to="/wines">
-              <NavButton variant="text">Home</NavButton>
+              <Icon aria-label="home button"><HomeIcon /></Icon>
             </NavLink>
             <div
               style={{
