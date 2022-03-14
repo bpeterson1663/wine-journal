@@ -22,6 +22,7 @@ const FormNewWine = () => {
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
     dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
+    setTimeout(() => setOpen(false), 5000)
   }
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -137,7 +138,7 @@ const FormNewWine = () => {
           ))}
         </Stepper>
         {activeStep === STEPS.length && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
+          <Paper square elevation={0} sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
             <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
               Add Another Wine
             </Button>
