@@ -1,11 +1,35 @@
 import { DocumentData } from 'firebase/firestore/lite'
+import { NestedValue } from 'react-hook-form'
 
 export interface WineT {
   id: string
   date: string
   producer: string
   classification: string
-  varietal: string
+  varietal: string[]
+  subregion: string
+  region: string
+  country: string
+  vintage: string
+  hue: RedHueT | WhiteHueT | RoseHueT
+  color: ColorT
+  intensity: IntensityT
+  smell: string
+  remarks: string
+  alcohol: number
+  acidity: number
+  rating: number
+  body: number
+  tannin: number
+  sweet: number
+  userId: string
+}
+export interface WineFormT {
+  id: string
+  date: string
+  producer: string
+  classification: string
+  varietal: NestedValue<string[]>
   subregion: string
   region: string
   country: string

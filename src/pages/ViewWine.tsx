@@ -117,7 +117,8 @@ const ViewWine = () => {
               {viewWine.classification}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              {viewWine.varietal} - {viewWine.vintage}
+            {viewWine.vintage} - {viewWine.varietal.map( (item, i) => `${item}`).join(", ")}
+
             </Typography>
             <Typography variant="body2">
               {viewWine.country} / {viewWine.region} {viewWine.subregion && `/ ${viewWine.subregion}`}

@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Autocomplete,
   Box,
   TextField,
   FormControl,
@@ -19,13 +20,14 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Controller, useWatch, useFormContext } from 'react-hook-form'
-import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT } from '../../types'
+import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT, WineFormT } from '../../types'
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
-import { COLOR_INDEX } from './form-steps.constants'
+import { COLOR_INDEX, VARIETALS } from './form-steps.constants'
 
 export const FormDetails = () => {
-  const { formState, control } = useFormContext<WineT>()
+  const { formState, control, setValue } = useFormContext<WineFormT>()
   const { errors } = formState
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller
@@ -72,18 +74,23 @@ export const FormDetails = () => {
       <Controller
         name="varietal"
         control={control}
-        defaultValue=""
+        defaultValue={[]}
         rules={{
           required: 'At least one varietal is required',
         }}
         render={({ field }) => (
-          <TextField
-            {...field}
-            id="outlined-basic"
-            label="Varietal(s)"
-            variant="outlined"
+          <Autocomplete
+            defaultValue={[]}
+            multiple
+            freeSolo
+            filterSelectedOptions
+            options={VARIETALS}
+            onChange={(_, option) => setValue('varietal', option)}
+            getOptionLabel={(option: string) => option}
+            renderInput={params => <TextField {...field} {...params} label="Varietal(s)"
             error={!!errors.varietal}
             helperText={errors.varietal ? errors.varietal?.message : ''}
+             />}
           />
         )}
       />

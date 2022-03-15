@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineCreateStart } from '../../features/wine/wineSlice'
 import { Box, Button, Container, Paper, Step, Stepper, StepContent, StepLabel, Snackbar } from '@mui/material'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
-import { WineT } from '../../types'
+import { WineFormT, WineT } from '../../types'
 import { FormDetails, FormColorSmell, FormTaste, FormReview } from '../form-steps/form-steps.component'
 import { STEPS } from './form-new-wine.constants'
 
@@ -14,9 +14,9 @@ const FormNewWine = () => {
   const dispatch = useAppDispatch()
   const { message } = useAppSelector((state) => state.wine)
   const { currentUser } = useAppSelector((state) => state.auth)
-  const methods = useForm<WineT>({
+  const methods = useForm<WineFormT>({
     mode: 'all',
-    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3 },
+    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, varietal: [] },
   })
 
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
