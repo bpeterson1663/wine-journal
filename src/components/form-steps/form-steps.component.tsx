@@ -87,10 +87,15 @@ export const FormDetails = () => {
             options={VARIETALS}
             onChange={(_, option) => setValue('varietal', option)}
             getOptionLabel={(option: string) => option}
-            renderInput={params => <TextField {...field} {...params} label="Varietal(s)"
-            error={!!errors.varietal}
-            helperText={errors.varietal ? errors.varietal?.message : ''}
-             />}
+            renderInput={(params) => (
+              <TextField
+                {...field}
+                {...params}
+                label="Varietal(s)"
+                error={!!errors.varietal}
+                helperText={errors.varietal ? errors.varietal?.message : ''}
+              />
+            )}
           />
         )}
       />

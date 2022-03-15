@@ -40,8 +40,4 @@ export const COLOR_INDEX = {
   'rose-deep-copper': '#DC5827',
 }
 
-
-export const VARIETALS = [
-  'Cabernet Sauvignon',
-  'Chardonnay'
-]
+export const VARIETALS = ['Cabernet Sauvignon', 'Chardonnay']

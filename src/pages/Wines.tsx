@@ -44,7 +44,7 @@ const Wines = () => {
                   secondary={
                     <>
                       <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                        {wine.varietal.map( (item, i) => `${item}` ).join(", ")}
+                        {wine.varietal.map((item, i) => `${item}`).join(', ')}
                       </Typography>
                       {` - ${wine.vintage}`}
                     </>
