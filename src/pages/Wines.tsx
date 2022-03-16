@@ -1,67 +1,279 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { styled } from '@mui/system'
 import {
+  Box,
   Card,
   Container,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
   Button,
   CardHeader,
+  IconButton,
   TableContainer,
   Table,
   TableHead,
   TableRow,
+  TablePagination,
   TableCell,
   TableBody,
+  TableSortLabel,
+  Toolbar,
+  Tooltip,
+  Typography,
   Paper,
 } from '@mui/material'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import { WineT } from '../types'
 import { fetchWineListStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
+import { visuallyHidden } from '@mui/utils'
+
+type Order = 'asc' | 'desc'
+
+interface EnhancedTableProps {
+  onRequestSort: (event: MouseEvent<unknown>, property: keyof WineT) => void
+  onSelectAllClick: (event: ChangeEvent<HTMLInputElement>) => void
+  order: Order
+  orderBy: string
+  rowCount: number
+}
+
+interface HeadCell {
+  disablePadding: boolean
+  id: keyof WineT
+  label: string
+  numeric: boolean
+}
 
 const Wines = () => {
   const dispatch = useAppDispatch()
   const { wineList } = useAppSelector((state) => state.wine)
   const { currentUser } = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
+
+  const [order, setOrder] = useState<Order>('asc')
+  const [orderBy, setOrderBy] = useState<keyof WineT>('date')
+  const [selected, setSelected] = useState<readonly string[]>([])
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+
   useEffect(() => {
     dispatch(fetchWineListStart(currentUser?.uid ?? ''))
   }, [dispatch, currentUser?.uid])
+
+  const headCells: readonly HeadCell[] = [
+    {
+      id: 'date',
+      numeric: false,
+      disablePadding: true,
+      label: 'Date',
+    },
+    {
+      id: 'producer',
+      numeric: false,
+      disablePadding: false,
+      label: 'Producer',
+    },
+    {
+      id: 'vintage',
+      numeric: false,
+      disablePadding: false,
+      label: 'Vintage',
+    },
+    {
+      id: 'varietal',
+      numeric: false,
+      disablePadding: false,
+      label: 'Varietal(s)',
+    },
+    {
+      id: 'rating',
+      numeric: true,
+      disablePadding: false,
+      label: 'Rating',
+    },
+  ]
+
+  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1
+    }
+    return 0
+  }
+
+  function getComparator<Key extends keyof any>(
+    order: Order,
+    orderBy: Key,
+  ): (a: { [key in Key]: number | string | string[] }, b: { [key in Key]: number | string | string[] }) => number {
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy)
+  }
+
+  function EnhancedTableHead(props: EnhancedTableProps) {
+    const { order, orderBy, onRequestSort } = props
+    const createSortHandler = (property: keyof WineT) => (event: MouseEvent<unknown>) => {
+      onRequestSort(event, property)
+    }
+
+    return (
+      <TableHead>
+        <TableRow>
+          {headCells.map((headCell) => (
+            <TableCell
+              key={headCell.id}
+              align={headCell.id === 'date' ? 'left' : 'right'}
+              padding={headCell.disablePadding ? 'none' : 'normal'}
+              sortDirection={orderBy === headCell.id ? order : false}
+            >
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    )
+  }
+
+  const EnhancedTableToolbar = () => {
+    return (
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+        }}
+      >
+        <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
+          Your Wines
+        </Typography>
+
+        <Tooltip title="Filter list">
+          <IconButton>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      </Toolbar>
+    )
+  }
+
+  const handleRequestSort = (_: MouseEvent<unknown>, property: keyof WineT) => {
+    const isAsc = orderBy === property && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(property)
+  }
+
+  const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelecteds = wineList.map((n) => n.producer)
+      setSelected(newSelecteds)
+      return
+    }
+    setSelected([])
+  }
+
+  const handleClick = (_: MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name)
+    let newSelected: readonly string[] = []
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name)
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1))
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1))
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
+    }
+
+    setSelected(newSelected)
+  }
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - wineList.length) : 0
+
   const NavLink = styled(Link)(() => ({
     textDecoration: 'none',
   }))
+
   const WineListTable = () => {
     return (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="wine list table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell align="right">Producer</TableCell>
-              <TableCell align="right">Vintage</TableCell>
-              <TableCell align="right">Varietal(s)</TableCell>
-              <TableCell align="right">Rating</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {wineList.map((row) => (
-              <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {row.date}
-                </TableCell>
-                <TableCell align="right">
-                  <NavLink to={`/wine/${row.id}`}>{row.producer}</NavLink>
-                </TableCell>
-                <TableCell align="right">{row.vintage}</TableCell>
-                <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
-                <TableCell align="right">{row.rating}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+          <EnhancedTableToolbar />
+          <TableContainer>
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={wineList.length}
+              />
+              <TableBody>
+                {wineList
+                  .slice()
+                  .sort(getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`
+
+                    return (
+                      <TableRow hover onClick={(event) => handleClick(event, row.producer)} tabIndex={-1} key={row.id}>
+                        <TableCell component="th" id={labelId} scope="row" padding="none">
+                          {row.date}
+                        </TableCell>
+                        <TableCell align="right">
+                          <NavLink to={`/wine/${row.id}`}>{row.producer}</NavLink>
+                        </TableCell>
+                        <TableCell align="right">{row.vintage}</TableCell>
+                        <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
+                        <TableCell align="right">{row.rating}</TableCell>
+                      </TableRow>
+                    )
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: 53 * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 20, 30]}
+            component="div"
+            count={wineList.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
     )
   }
   return (
