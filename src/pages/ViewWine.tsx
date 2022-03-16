@@ -14,7 +14,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  IconButton,
 } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { getColorPalatte } from '../components/form-steps/form-steps.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { fetchWineDeleteStart, fetchWineStart } from '../features/wine/wineSlice'
@@ -160,9 +162,9 @@ const ViewWine = () => {
         </CardContent>
         <CardActions>
           <Button size="small">Edit</Button>
-          <Button onClick={() => setIsConfirmOpen(true)} size="small">
-            Delete
-          </Button>
+          <IconButton onClick={() => setIsConfirmOpen(true)}>
+            <DeleteIcon />
+          </IconButton>
         </CardActions>
       </Card>
     </Container>
