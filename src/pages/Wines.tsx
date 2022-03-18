@@ -1,13 +1,13 @@
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { styled } from '@mui/system'
 import {
   Box,
   Card,
-  Container,
   Button,
   CardHeader,
-  IconButton,
+  Container,
   TableContainer,
   Table,
   TableHead,
@@ -17,15 +17,20 @@ import {
   TableBody,
   TableSortLabel,
   Toolbar,
-  Tooltip,
+  TextField,
   Typography,
   Paper,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
-import FilterListIcon from '@mui/icons-material/FilterList'
+import SearchIcon from '@mui/icons-material/Search'
 import { WineT } from '../types'
 import { fetchWineListStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { visuallyHidden } from '@mui/utils'
+import { FieldValue } from 'firebase/firestore/lite'
 
 type Order = 'asc' | 'desc'
 
@@ -44,12 +49,20 @@ interface HeadCell {
   numeric: boolean
 }
 
+type SearchKey = 'producer' | 'vintage' | 'varietal'
+interface SearchFormT {
+  searchKey: 'producer' | 'vintage' | 'varietal'
+  searchValue: string
+}
+
 const Wines = () => {
   const dispatch = useAppDispatch()
   const { wineList } = useAppSelector((state) => state.wine)
   const { currentUser } = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
-
+  const { handleSubmit, control } = useForm<SearchFormT>()
+  const [searchKey, setSearchKey] = useState<SearchKey>('producer')
+  const [searchValue, setSearchValue] = useState('')
   const [order, setOrder] = useState<Order>('asc')
   const [orderBy, setOrderBy] = useState<keyof WineT>('date')
   const [selected, setSelected] = useState<readonly string[]>([])
@@ -147,6 +160,10 @@ const Wines = () => {
     )
   }
 
+  const applySearchSubmit: SubmitHandler<SearchFormT> = (data) => {
+    setSearchKey(data.searchKey)
+    setSearchValue(data.searchValue)
+  }
   const EnhancedTableToolbar = () => {
     return (
       <Toolbar
@@ -157,12 +174,39 @@ const Wines = () => {
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
           Your Wines
         </Typography>
+        <SearchIcon />
 
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <Container
+          component="form"
+          sx={{
+            display: 'flex',
+            flexFlow: 'row',
+          }}
+          onSubmit={handleSubmit(applySearchSubmit)}
+        >
+          <Controller
+            name="searchKey"
+            control={control}
+            defaultValue="producer"
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel id="filter-by-select-label">Filter By</InputLabel>
+                <Select {...field} labelId="filter-by-select-label" id="filter-by-select" label="By">
+                  <MenuItem value="producer">Producer</MenuItem>
+                  <MenuItem value="vintage">Vintage</MenuItem>
+                  <MenuItem value="varietal">Varietal</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+          />
+          <Controller
+            name="searchValue"
+            control={control}
+            defaultValue=""
+            render={({ field }) => <TextField id="outlined-basic" type="search" label="Search" {...field} />}
+          />
+          <Button type="submit">Apply</Button>
+        </Container>
       </Toolbar>
     )
   }
@@ -207,7 +251,19 @@ const Wines = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
+  const filterWines = (val: WineT) => {
+    if (searchKey === 'varietal') {
+      let isMatch = false
+      val.varietal.forEach((item) => {
+        if (item.toLowerCase().includes(searchValue.toLowerCase())) {
+          isMatch = true
+        }
+      })
+      return isMatch
+    } else {
+      return val[searchKey].toLowerCase().includes(searchValue.toLowerCase())
+    }
+  }
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - wineList.length) : 0
 
@@ -227,11 +283,12 @@ const Wines = () => {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={wineList.length}
+                rowCount={wineList.filter(filterWines).length}
               />
               <TableBody>
                 {wineList
                   .slice()
+                  .filter(filterWines)
                   .sort(getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
@@ -266,7 +323,7 @@ const Wines = () => {
           <TablePagination
             rowsPerPageOptions={[10, 20, 30]}
             component="div"
-            count={wineList.length}
+            count={wineList.filter(filterWines).length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
