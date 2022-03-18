@@ -189,9 +189,9 @@ const Wines = () => {
             control={control}
             defaultValue="producer"
             render={({ field }) => (
-              <FormControl fullWidth>
+              <FormControl sx={{ width: 300 }}>
                 <InputLabel id="filter-by-select-label">Filter By</InputLabel>
-                <Select {...field} labelId="filter-by-select-label" id="filter-by-select" label="By">
+                <Select {...field} sx={{ height: 40 }} labelId="filter-by-select-label" id="filter-by-select" label="By">
                   <MenuItem value="producer">Producer</MenuItem>
                   <MenuItem value="vintage">Vintage</MenuItem>
                   <MenuItem value="varietal">Varietal</MenuItem>
@@ -203,9 +203,9 @@ const Wines = () => {
             name="searchValue"
             control={control}
             defaultValue=""
-            render={({ field }) => <TextField id="outlined-basic" type="search" label="Search" {...field} />}
+            render={({ field }) => <TextField size="small" id="outlined-basic" type="search" label="Search" {...field} />}
           />
-          <Button type="submit">Apply</Button>
+          <Button type="submit" sx={{height: 40}}>Apply</Button>
         </Container>
       </Toolbar>
     )
