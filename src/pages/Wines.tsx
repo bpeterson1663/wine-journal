@@ -8,6 +8,11 @@ import {
   CardHeader,
   Collapse,
   Container,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
   IconButton,
   TableContainer,
   Table,
@@ -28,9 +33,10 @@ import {
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { WineT } from '../types'
-import { fetchWineListStart } from '../features/wine/wineSlice'
+import { fetchWineListStart, fetchWineDeleteStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { visuallyHidden } from '@mui/utils'
+import DeleteIcon from '@mui/icons-material/Delete'
 import RatingIcon from '../components/rating/raiting.component'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
@@ -60,8 +66,13 @@ interface SearchFormT {
 }
 
 const Row = ({ row, labelId }: { row: WineT; labelId: string }) => {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { status } = useAppSelector((state) => state.wine)
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<readonly string[]>([])
+  const [itemToDelete, setItemToDelete] = useState('')
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
   const handleClick = (_: MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name)
@@ -79,8 +90,40 @@ const Row = ({ row, labelId }: { row: WineT; labelId: string }) => {
 
     setSelected(newSelected)
   }
+  const handleConfirmDeleteOpen = (id: string) => {
+    setItemToDelete(id)
+    setIsConfirmOpen(true)
+  }
+  const handleConfirmDeleteClose = () => {
+    setItemToDelete('')
+    setIsConfirmOpen(false)
+  }
+  const handleDeleteWine = () => {
+    dispatch(fetchWineDeleteStart(itemToDelete))
+    if (status === 'success') {
+      navigate('/wines')
+    }
+  }
+  const ConfirmDeleteDialog = () => (
+    <Dialog open={isConfirmOpen} onClose={handleConfirmDeleteClose} aria-labelledby="delete-dialog-title">
+      <DialogTitle id="delete-dialog-title">Delete Wine</DialogTitle>
+      <DialogContent>
+        <DialogContentText>Are you sure you want to delete this wine?</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleConfirmDeleteClose}>
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteWine} autoFocus>
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
   return (
     <>
+      <ConfirmDeleteDialog />
+
       <TableRow hover onClick={(event) => handleClick(event, row.producer)} tabIndex={-1} key={row.id}>
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -95,6 +138,11 @@ const Row = ({ row, labelId }: { row: WineT; labelId: string }) => {
         <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
         <TableCell align="right">
           <RatingIcon rating={row.rating} fontSize="medium" />
+        </TableCell>
+        <TableCell>
+          <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
+            <DeleteIcon />
+          </IconButton>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -165,7 +213,7 @@ const Wines = () => {
   const { handleSubmit, control } = useForm<SearchFormT>()
   const [searchKey, setSearchKey] = useState<SearchKey>('producer')
   const [searchValue, setSearchValue] = useState('')
-  const [order, setOrder] = useState<Order>('asc')
+  const [order, setOrder] = useState<Order>('desc')
   const [orderBy, setOrderBy] = useState<keyof WineT>('date')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -257,6 +305,7 @@ const Wines = () => {
               </TableSortLabel>
             </TableCell>
           ))}
+          <TableCell />
         </TableRow>
       </TableHead>
     )
