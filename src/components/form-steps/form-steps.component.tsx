@@ -11,7 +11,6 @@ import {
   Slider,
   IconContainerProps,
   Rating,
-  Paper,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
@@ -20,9 +19,10 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Controller, useWatch, useFormContext } from 'react-hook-form'
-import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT, WineFormT } from '../../types'
+import { WineT, ColorT, WineFormT } from '../../types'
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
-import { COLOR_INDEX, VARIETALS } from './form-steps.constants'
+import { VARIETALS } from './form-steps.constants'
+import ColorPalette from '../../components/color-palette/color-palette.component'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',
@@ -171,21 +171,6 @@ export const FormDetails = () => {
   )
 }
 
-export const getColorPalatte = (color: ColorT, hue: RedHueT | WhiteHueT | RoseHueT, intensity: IntensityT) => {
-  const backgroundColor: keyof typeof COLOR_INDEX = `${color}-${intensity}-${hue}` as keyof typeof COLOR_INDEX
-  return (
-    <Paper
-      sx={{
-        margin: '5px 10px',
-        height: 100,
-        width: 92,
-        borderRadius: '5% 5% 50% 50%',
-        background: `radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)`,
-      }}
-      elevation={1}
-    />
-  )
-}
 export const FormColorSmell = () => {
   const { setValue, control, formState } = useFormContext<WineT>()
   const { errors } = formState
@@ -299,7 +284,7 @@ export const FormColorSmell = () => {
           />
         </FormControl>
       )}
-      {getColorPalatte(color, hue, intensity)}
+      <ColorPalette color={color} hue={hue} intensity={intensity} />
       <Controller
         name="smell"
         control={control}

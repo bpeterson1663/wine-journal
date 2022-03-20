@@ -17,16 +17,11 @@ import {
   IconButton,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { getColorPalatte } from '../components/form-steps/form-steps.component'
+import ColorPalette from '../components/color-palette/color-palette.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { fetchWineDeleteStart, fetchWineStart } from '../features/wine/wineSlice'
-import {
-  ALCOHOL_MARKS,
-  BODY_MARKS,
-  SWEET_MARKS,
-  TANNIN_ACIDITY_MARKS,
-} from '../components/form-new-wine/form-new-wine.constants'
 import RatingIcon from '../components/rating/raiting.component'
+import { getLabel } from '../helpers'
 
 const ViewWine = () => {
   const { id } = useParams<{ id: string }>()
@@ -38,28 +33,6 @@ const ViewWine = () => {
   }, [dispatch, id])
   const { viewWine, status } = useAppSelector((state) => state.wine)
   if (!viewWine) return <div>...loading</div>
-
-  const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEET', value: number) => {
-    switch (type) {
-      case 'BODY':
-        const body = BODY_MARKS.find((mark) => mark.value === value)
-        if (body) return body.label
-        break
-      case 'TANNIN':
-      case 'ACIDITY':
-        const tanninAcidity = TANNIN_ACIDITY_MARKS.find((mark) => mark.value === value)
-        if (tanninAcidity) return tanninAcidity.label
-        break
-      case 'ALCOHOL':
-        const alcohol = ALCOHOL_MARKS.find((mark) => mark.value === value)
-        if (alcohol) return alcohol.label
-        break
-      case 'SWEET':
-        const sweet = SWEET_MARKS.find((mark) => mark.value === value)
-        if (sweet) return sweet.label
-        break
-    }
-  }
 
   const handleDeleteWine = () => {
     dispatch(fetchWineDeleteStart(viewWine.id))
@@ -110,7 +83,7 @@ const ViewWine = () => {
             <Typography variant="h6" component="div">
               Color and Smell
             </Typography>
-            {getColorPalatte(viewWine.color, viewWine.hue, viewWine.intensity)}
+            <ColorPalette color={viewWine.color} hue={viewWine.hue} intensity={viewWine.intensity} />
             <Typography variant="body2">{viewWine?.smell}</Typography>
           </Box>
           <Box sx={{ marginTop: '4px' }}>

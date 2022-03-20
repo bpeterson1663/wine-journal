@@ -1,13 +1,14 @@
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { styled } from '@mui/system'
 import {
   Box,
   Card,
   Button,
   CardHeader,
+  Collapse,
   Container,
+  IconButton,
   TableContainer,
   Table,
   TableHead,
@@ -31,12 +32,15 @@ import { fetchWineListStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { visuallyHidden } from '@mui/utils'
 import RatingIcon from '../components/rating/raiting.component'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import ColorPalette from '../components/color-palette/color-palette.component'
+import { getLabel } from '../helpers'
 
 type Order = 'asc' | 'desc'
 
 interface EnhancedTableProps {
   onRequestSort: (event: MouseEvent<unknown>, property: keyof WineT) => void
-  onSelectAllClick: (event: ChangeEvent<HTMLInputElement>) => void
   order: Order
   orderBy: string
   rowCount: number
@@ -55,6 +59,104 @@ interface SearchFormT {
   searchValue: string
 }
 
+const Row = ({ row, labelId }: { row: WineT; labelId: string }) => {
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState<readonly string[]>([])
+
+  const handleClick = (_: MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name)
+    let newSelected: readonly string[] = []
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name)
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1))
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1))
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
+    }
+
+    setSelected(newSelected)
+  }
+  return (
+    <>
+      <TableRow hover onClick={(event) => handleClick(event, row.producer)} tabIndex={-1} key={row.id}>
+        <TableCell>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" id={labelId} scope="row" padding="none">
+          {row.date}
+        </TableCell>
+        <TableCell align="right">{row.producer}</TableCell>
+        <TableCell align="right">{row.vintage}</TableCell>
+        <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
+        <TableCell align="right">
+          <RatingIcon rating={row.rating} fontSize="medium" />
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Container sx={{ display: 'flex', flexFlow: 'row wrap', justifyContent: 'space-between' }}>
+              <Box>
+                <Typography variant="h6" component="div">
+                  Details
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {row.classification}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {row.vintage} - {row.varietal.map((item) => `${item}`).join(', ')}
+                </Typography>
+                <Typography variant="body2">
+                  {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
+                </Typography>
+              </Box>
+              <Box sx={{ marginTop: '4px' }}>
+                <Typography variant="h6" component="div">
+                  Color and Smell
+                </Typography>
+                <ColorPalette color={row.color} hue={row.hue} intensity={row.intensity} />
+                <Typography variant="body2">{row.smell}</Typography>
+              </Box>
+              <Box sx={{ marginTop: '4px' }}>
+                <Typography variant="h6" component="div">
+                  Taste
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {getLabel('BODY', row.body)} Body
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {getLabel('TANNIN', row.tannin)} Tannin
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {getLabel('ACIDITY', row.acidity)} Acidity
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {getLabel('ALCOHOL', row.alcohol)}% Alcohol
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {getLabel('SWEET', row.sweet)}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="h6" component="div">
+                  Remarks and Review
+                </Typography>
+                <RatingIcon rating={row.rating} />
+                <Typography variant="body2">{row.remarks}</Typography>
+              </Box>
+            </Container>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
+  )
+}
+
 const Wines = () => {
   const dispatch = useAppDispatch()
   const { wineList } = useAppSelector((state) => state.wine)
@@ -65,7 +167,6 @@ const Wines = () => {
   const [searchValue, setSearchValue] = useState('')
   const [order, setOrder] = useState<Order>('asc')
   const [orderBy, setOrderBy] = useState<keyof WineT>('date')
-  const [selected, setSelected] = useState<readonly string[]>([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
@@ -134,6 +235,7 @@ const Wines = () => {
     return (
       <TableHead>
         <TableRow>
+          <TableCell />
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.id}
@@ -227,32 +329,6 @@ const Wines = () => {
     setOrderBy(property)
   }
 
-  const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = wineList.map((n) => n.producer)
-      setSelected(newSelecteds)
-      return
-    }
-    setSelected([])
-  }
-
-  const handleClick = (_: MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected: readonly string[] = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
-    }
-
-    setSelected(newSelected)
-  }
-
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage)
   }
@@ -277,10 +353,6 @@ const Wines = () => {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - wineList.length) : 0
 
-  const NavLink = styled(Link)(() => ({
-    textDecoration: 'none',
-  }))
-
   const WineListTable = () => {
     return (
       <Box sx={{ width: '100%' }}>
@@ -291,7 +363,6 @@ const Wines = () => {
               <EnhancedTableHead
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={wineList.filter(filterWines).length}
               />
@@ -303,22 +374,7 @@ const Wines = () => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`
-
-                    return (
-                      <TableRow hover onClick={(event) => handleClick(event, row.producer)} tabIndex={-1} key={row.id}>
-                        <TableCell component="th" id={labelId} scope="row" padding="none">
-                          {row.date}
-                        </TableCell>
-                        <TableCell align="right">
-                          <NavLink to={`/wine/${row.id}`}>{row.producer}</NavLink>
-                        </TableCell>
-                        <TableCell align="right">{row.vintage}</TableCell>
-                        <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
-                        <TableCell align="right">
-                          <RatingIcon rating={row.rating} fontSize="medium" />
-                        </TableCell>
-                      </TableRow>
-                    )
+                    return <Row row={row} labelId={labelId} />
                   })}
                 {emptyRows > 0 && (
                   <TableRow
