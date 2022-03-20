@@ -30,7 +30,7 @@ import { WineT } from '../types'
 import { fetchWineListStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { visuallyHidden } from '@mui/utils'
-import { FieldValue } from 'firebase/firestore/lite'
+import RatingIcon from '../components/rating/raiting.component'
 
 type Order = 'asc' | 'desc'
 
@@ -191,7 +191,13 @@ const Wines = () => {
             render={({ field }) => (
               <FormControl sx={{ width: 300 }}>
                 <InputLabel id="filter-by-select-label">Filter By</InputLabel>
-                <Select {...field} sx={{ height: 40 }} labelId="filter-by-select-label" id="filter-by-select" label="By">
+                <Select
+                  {...field}
+                  sx={{ height: 40 }}
+                  labelId="filter-by-select-label"
+                  id="filter-by-select"
+                  label="By"
+                >
                   <MenuItem value="producer">Producer</MenuItem>
                   <MenuItem value="vintage">Vintage</MenuItem>
                   <MenuItem value="varietal">Varietal</MenuItem>
@@ -203,9 +209,13 @@ const Wines = () => {
             name="searchValue"
             control={control}
             defaultValue=""
-            render={({ field }) => <TextField size="small" id="outlined-basic" type="search" label="Search" {...field} />}
+            render={({ field }) => (
+              <TextField size="small" id="outlined-basic" type="search" label="Search" {...field} />
+            )}
           />
-          <Button type="submit" sx={{height: 40}}>Apply</Button>
+          <Button type="submit" sx={{ height: 40 }}>
+            Apply
+          </Button>
         </Container>
       </Toolbar>
     )
@@ -304,7 +314,9 @@ const Wines = () => {
                         </TableCell>
                         <TableCell align="right">{row.vintage}</TableCell>
                         <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
-                        <TableCell align="right">{row.rating}</TableCell>
+                        <TableCell align="right">
+                          <RatingIcon rating={row.rating} fontSize="medium" />
+                        </TableCell>
                       </TableRow>
                     )
                   })}
@@ -340,7 +352,7 @@ const Wines = () => {
           sx={{ flexDirection: 'end' }}
           action={
             <Button sx={{ margin: '0 5px ' }} onClick={() => navigate('/new')}>
-              New Wine
+              New Entry
             </Button>
           }
         />

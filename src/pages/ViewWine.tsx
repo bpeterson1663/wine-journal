@@ -26,11 +26,8 @@ import {
   SWEET_MARKS,
   TANNIN_ACIDITY_MARKS,
 } from '../components/form-new-wine/form-new-wine.constants'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
+import RatingIcon from '../components/rating/raiting.component'
+
 const ViewWine = () => {
   const { id } = useParams<{ id: string }>()
   const dispatch = useAppDispatch()
@@ -61,22 +58,6 @@ const ViewWine = () => {
         const sweet = SWEET_MARKS.find((mark) => mark.value === value)
         if (sweet) return sweet.label
         break
-    }
-  }
-  const getRatingIcon = (rating: number): JSX.Element => {
-    switch (rating * 1) {
-      case 1:
-        return <SentimentVeryDissatisfiedIcon fontSize="large" />
-      case 2:
-        return <SentimentDissatisfiedIcon fontSize="large" />
-      case 3:
-        return <SentimentSatisfiedIcon fontSize="large" />
-      case 4:
-        return <SentimentSatisfiedAltIcon fontSize="large" />
-      case 5:
-        return <SentimentVerySatisfiedIcon fontSize="large" />
-      default:
-        return <SentimentSatisfiedIcon fontSize="large" />
     }
   }
 
@@ -156,7 +137,7 @@ const ViewWine = () => {
             <Typography variant="h6" component="div">
               Remarks and Review
             </Typography>
-            {getRatingIcon(viewWine.rating)}
+            <RatingIcon rating={viewWine.rating} />
             <Typography variant="body2">{viewWine.remarks}</Typography>
           </Box>
         </CardContent>
