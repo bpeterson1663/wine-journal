@@ -24,6 +24,10 @@ import { WineT, ColorT, IntensityT, RedHueT, WhiteHueT, RoseHueT, WineFormT } fr
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
 import { COLOR_INDEX, VARIETALS } from './form-steps.constants'
 
+const StyledTextField = styled(TextField)({
+  margin: '5px 0',
+})
+
 export const FormDetails = () => {
   const { formState, control, setValue } = useFormContext<WineFormT>()
   const { errors } = formState
@@ -38,8 +42,9 @@ export const FormDetails = () => {
           required: 'Enter a date',
         }}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
+            id="date"
             type="date"
             label="Date"
             error={!!errors.date}
@@ -57,7 +62,7 @@ export const FormDetails = () => {
         render={({ field }) => (
           <TextField
             {...field}
-            id="outlined-basic"
+            id="producer"
             label="Producer"
             variant="outlined"
             error={!!errors.producer}
@@ -69,7 +74,9 @@ export const FormDetails = () => {
         name="classification"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField {...field} id="outlined-basic" label="Classification" variant="outlined" />}
+        render={({ field }) => (
+          <StyledTextField {...field} id="classification" label="Classification" variant="outlined" />
+        )}
       />
       <Controller
         name="varietal"
@@ -88,9 +95,10 @@ export const FormDetails = () => {
             onChange={(_, option) => setValue('varietal', option)}
             getOptionLabel={(option: string) => option}
             renderInput={(params) => (
-              <TextField
+              <StyledTextField
                 {...field}
                 {...params}
+                id="varietal"
                 label="Varietal(s)"
                 error={!!errors.varietal}
                 helperText={errors.varietal ? errors.varietal?.message : ''}
@@ -107,9 +115,9 @@ export const FormDetails = () => {
           required: 'Enter the vintage of the wine or N/V if non vintage',
         }}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
-            id="outlined-basic"
+            id="vinatge"
             label="Vintage"
             variant="outlined"
             error={!!errors.vintage}
@@ -125,9 +133,9 @@ export const FormDetails = () => {
           required: 'Enter the country the wine is from',
         }}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
-            id="outlined-basic"
+            id="country"
             label="Country"
             variant="outlined"
             error={!!errors.country}
@@ -143,9 +151,9 @@ export const FormDetails = () => {
           required: 'Enter the region the wine is from',
         }}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
-            id="outlined-basic"
+            id="region"
             label="Region"
             variant="outlined"
             error={!!errors.region}
@@ -157,7 +165,7 @@ export const FormDetails = () => {
         name="subregion"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField {...field} id="outlined-basic" label="Subregion" variant="outlined" />}
+        render={({ field }) => <StyledTextField {...field} id="subregion" label="Subregion" variant="outlined" />}
       />
     </Box>
   )
