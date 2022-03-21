@@ -6,14 +6,7 @@ import {
   Card,
   Button,
   CardHeader,
-  Collapse,
   Container,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  IconButton,
   TableContainer,
   Table,
   TableHead,
@@ -33,16 +26,10 @@ import {
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { WineT } from '../types'
-import { fetchWineListStart, fetchWineDeleteStart } from '../features/wine/wineSlice'
+import { fetchWineListStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { visuallyHidden } from '@mui/utils'
-import DeleteIcon from '@mui/icons-material/Delete'
-import RatingIcon from '../components/rating/raiting.component'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import ColorPalette from '../components/color-palette/color-palette.component'
-import { getLabel } from '../helpers'
-
+import WineRow from '../components/wine-row/wine-row.component'
 type Order = 'asc' | 'desc'
 
 interface EnhancedTableProps {
@@ -63,146 +50,6 @@ type SearchKey = 'producer' | 'vintage' | 'varietal'
 interface SearchFormT {
   searchKey: 'producer' | 'vintage' | 'varietal'
   searchValue: string
-}
-
-const Row = ({ row, labelId }: { row: WineT; labelId: string }) => {
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const { status } = useAppSelector((state) => state.wine)
-  const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<readonly string[]>([])
-  const [itemToDelete, setItemToDelete] = useState('')
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-
-  const handleClick = (_: MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected: readonly string[] = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
-    }
-
-    setSelected(newSelected)
-  }
-  const handleConfirmDeleteOpen = (id: string) => {
-    setItemToDelete(id)
-    setIsConfirmOpen(true)
-  }
-  const handleConfirmDeleteClose = () => {
-    setItemToDelete('')
-    setIsConfirmOpen(false)
-  }
-  const handleDeleteWine = () => {
-    dispatch(fetchWineDeleteStart(itemToDelete))
-    if (status === 'success') {
-      navigate('/wines')
-    }
-  }
-  const ConfirmDeleteDialog = () => (
-    <Dialog open={isConfirmOpen} onClose={handleConfirmDeleteClose} aria-labelledby="delete-dialog-title">
-      <DialogTitle id="delete-dialog-title">Delete Wine</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Are you sure you want to delete this wine?</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={handleConfirmDeleteClose}>
-          Cancel
-        </Button>
-        <Button onClick={handleDeleteWine} autoFocus>
-          Delete
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
-  return (
-    <>
-      <ConfirmDeleteDialog />
-
-      <TableRow hover onClick={(event) => handleClick(event, row.producer)} tabIndex={-1} key={row.id}>
-        <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" id={labelId} scope="row" padding="none">
-          {row.date}
-        </TableCell>
-        <TableCell align="right">{row.producer}</TableCell>
-        <TableCell align="right">{row.vintage}</TableCell>
-        <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
-        <TableCell align="right">
-          <RatingIcon rating={row.rating} fontSize="medium" />
-        </TableCell>
-        <TableCell>
-          <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Container sx={{ display: 'flex', flexFlow: 'row wrap', justifyContent: 'space-between' }}>
-              <Box>
-                <Typography variant="h6" component="div">
-                  Details
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {row.classification}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {row.vintage} - {row.varietal.map((item) => `${item}`).join(', ')}
-                </Typography>
-                <Typography variant="body2">
-                  {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
-                </Typography>
-              </Box>
-              <Box sx={{ marginTop: '4px' }}>
-                <Typography variant="h6" component="div">
-                  Color and Smell
-                </Typography>
-                <ColorPalette color={row.color} hue={row.hue} intensity={row.intensity} />
-                <Typography variant="body2">{row.smell}</Typography>
-              </Box>
-              <Box sx={{ marginTop: '4px' }}>
-                <Typography variant="h6" component="div">
-                  Taste
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('BODY', row.body)} Body
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('TANNIN', row.tannin)} Tannin
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('ACIDITY', row.acidity)} Acidity
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('ALCOHOL', row.alcohol)}% Alcohol
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('SWEET', row.sweet)}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="h6" component="div">
-                  Remarks and Review
-                </Typography>
-                <RatingIcon rating={row.rating} />
-                <Typography variant="body2">{row.remarks}</Typography>
-              </Box>
-            </Container>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </>
-  )
 }
 
 const Wines = () => {
@@ -402,54 +249,6 @@ const Wines = () => {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - wineList.length) : 0
 
-  const WineListTable = () => {
-    return (
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <EnhancedTableToolbar />
-          <TableContainer>
-            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
-              <EnhancedTableHead
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={handleRequestSort}
-                rowCount={wineList.filter(filterWines).length}
-              />
-              <TableBody>
-                {wineList
-                  .slice()
-                  .filter(filterWines)
-                  .sort(getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
-                    const labelId = `enhanced-table-checkbox-${index}`
-                    return <Row row={row} labelId={labelId} />
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: 53 * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 20, 30]}
-            component="div"
-            count={wineList.filter(filterWines).length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </Box>
-    )
-  }
   return (
     <Container component="main">
       <Card sx={{ margin: '10px auto', display: 'flex', flexFlow: 'column wrap' }}>
@@ -461,7 +260,50 @@ const Wines = () => {
             </Button>
           }
         />
-        <WineListTable />
+        <Box sx={{ width: '100%' }}>
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            <EnhancedTableToolbar />
+            <TableContainer>
+              <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
+                <EnhancedTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}
+                  rowCount={wineList.filter(filterWines).length}
+                />
+                <TableBody>
+                  {wineList
+                    .slice()
+                    .filter(filterWines)
+                    .sort(getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      const labelId = `enhanced-table-checkbox-${index}`
+                      return <WineRow row={row} labelId={labelId} />
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: 53 * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 20, 30]}
+              component="div"
+              count={wineList.filter(filterWines).length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </Box>
       </Card>
     </Container>
   )
