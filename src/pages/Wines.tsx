@@ -1,4 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import {
@@ -6,7 +8,9 @@ import {
   Card,
   Button,
   CardHeader,
+  Chip,
   Container,
+  Drawer,
   TableContainer,
   Table,
   TableHead,
@@ -23,8 +27,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  IconButton,
 } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import { WineT } from '../types'
 import { fetchWineListStart } from '../features/wine/wineSlice'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
@@ -44,26 +49,36 @@ interface HeadCell {
   id: keyof WineT
   label: string
   numeric: boolean
+  mobileOnly: boolean
 }
 
-type SearchKey = 'producer' | 'vintage' | 'varietal'
-interface SearchFormT {
-  searchKey: 'producer' | 'vintage' | 'varietal'
-  searchValue: string
+type FilterKey = 'producer' | 'vintage' | 'varietal'
+interface FilterFormT {
+  filterKey: 'producer' | 'vintage' | 'varietal'
+  filterValue: string
 }
+
+const FILTERS = [
+  { value: 'producer', label: 'Producer' },
+  { value: 'varietal', label: 'Varietal' },
+  { value: 'vintage', label: 'Vintage' },
+]
 
 const Wines = () => {
   const dispatch = useAppDispatch()
   const { wineList } = useAppSelector((state) => state.wine)
   const { currentUser } = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
-  const { handleSubmit, control } = useForm<SearchFormT>()
-  const [searchKey, setSearchKey] = useState<SearchKey>('producer')
-  const [searchValue, setSearchValue] = useState('')
+  const { handleSubmit, control } = useForm<FilterFormT>()
+  const [filterKey, setFilterKey] = useState<FilterKey>('producer')
+  const [filterValue, setFilterValue] = useState('')
   const [order, setOrder] = useState<Order>('desc')
   const [orderBy, setOrderBy] = useState<keyof WineT>('date')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [showFilterMenu, setShowFilterMenu] = useState(false)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
     dispatch(fetchWineListStart(currentUser?.uid ?? ''))
@@ -75,30 +90,35 @@ const Wines = () => {
       numeric: false,
       disablePadding: true,
       label: 'Date',
+      mobileOnly: true,
     },
     {
       id: 'producer',
       numeric: false,
       disablePadding: false,
       label: 'Producer',
+      mobileOnly: true,
     },
     {
       id: 'vintage',
       numeric: false,
       disablePadding: false,
       label: 'Vintage',
+      mobileOnly: false,
     },
     {
       id: 'varietal',
       numeric: false,
       disablePadding: false,
       label: 'Varietal(s)',
+      mobileOnly: false,
     },
     {
       id: 'rating',
       numeric: true,
       disablePadding: false,
       label: 'Rating',
+      mobileOnly: false,
     },
   ]
 
@@ -131,37 +151,48 @@ const Wines = () => {
       <TableHead>
         <TableRow>
           <TableCell />
-          {headCells.map((headCell) => (
-            <TableCell
-              key={headCell.id}
-              align={headCell.id === 'date' ? 'left' : 'right'}
-              padding={headCell.disablePadding ? 'none' : 'normal'}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
+          {headCells
+            .filter((headCell) => (isMobile ? headCell.mobileOnly : headCell))
+            .map((headCell) => (
+              <TableCell
+                key={headCell.id}
+                align={headCell.id === 'date' ? 'left' : 'right'}
+                padding={headCell.disablePadding ? 'none' : 'normal'}
+                sortDirection={orderBy === headCell.id ? order : false}
               >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          ))}
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : 'asc'}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              </TableCell>
+            ))}
           <TableCell />
         </TableRow>
       </TableHead>
     )
   }
 
-  const applySearchSubmit: SubmitHandler<SearchFormT> = (data) => {
-    setSearchKey(data.searchKey)
-    setSearchValue(data.searchValue)
+  const applyFilterSubmit: SubmitHandler<FilterFormT> = (data) => {
+    setFilterKey(data.filterKey)
+    setFilterValue(data.filterValue)
+    setShowFilterMenu(false)
   }
+
+  const resetFilter = () => {
+    setFilterKey('producer')
+    setFilterValue('')
+  }
+
+  const getFilterLabel = (value: FilterKey) => FILTERS.find((filter) => filter.value === value)?.label
+
   const EnhancedTableToolbar = () => {
     return (
       <Toolbar
@@ -172,49 +203,60 @@ const Wines = () => {
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
           Your Wines
         </Typography>
-        <SearchIcon />
+        {filterValue ? (
+          <Chip label={`${getFilterLabel(filterKey)}: ${filterValue}`} onDelete={resetFilter} />
+        ) : (
+          <IconButton onClick={() => setShowFilterMenu(!showFilterMenu)}>
+            <FilterListIcon />
+          </IconButton>
+        )}
 
-        <Container
-          component="form"
-          sx={{
-            display: 'flex',
-            flexFlow: 'row',
-          }}
-          onSubmit={handleSubmit(applySearchSubmit)}
-        >
-          <Controller
-            name="searchKey"
-            control={control}
-            defaultValue="producer"
-            render={({ field }) => (
-              <FormControl sx={{ width: 300 }}>
-                <InputLabel id="filter-by-select-label">Filter By</InputLabel>
-                <Select
-                  {...field}
-                  sx={{ height: 40 }}
-                  labelId="filter-by-select-label"
-                  id="filter-by-select"
-                  label="By"
-                >
-                  <MenuItem value="producer">Producer</MenuItem>
-                  <MenuItem value="vintage">Vintage</MenuItem>
-                  <MenuItem value="varietal">Varietal</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-          <Controller
-            name="searchValue"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField size="small" id="outlined-basic" type="search" label="Search" {...field} />
-            )}
-          />
-          <Button type="submit" sx={{ height: 40 }}>
-            Apply
-          </Button>
-        </Container>
+        <Drawer anchor="right" open={showFilterMenu} onClose={() => setShowFilterMenu(false)}>
+          <Box sx={{ width: 250 }}>
+            <Container
+              component="form"
+              sx={{
+                display: 'flex',
+                flexFlow: 'column',
+                marginTop: 10,
+              }}
+              onSubmit={handleSubmit(applyFilterSubmit)}
+            >
+              <Controller
+                name="filterKey"
+                control={control}
+                defaultValue="producer"
+                render={({ field }) => (
+                  <FormControl sx={{ width: '100%', marginBottom: '20px' }}>
+                    <InputLabel id="filter-by-select-label">Filter By</InputLabel>
+                    <Select
+                      {...field}
+                      sx={{ height: 40 }}
+                      labelId="filter-by-select-label"
+                      id="filter-by-select"
+                      label="Filter By"
+                    >
+                      {FILTERS.map((filter) => (
+                        <MenuItem value={filter.value}>{filter.label}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="filterValue"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField size="small" id="outlined-basic" type="filter" label="Filter For" {...field} />
+                )}
+              />
+              <Button type="submit" sx={{ height: 40 }}>
+                Apply
+              </Button>
+            </Container>
+          </Box>
+        </Drawer>
       </Toolbar>
     )
   }
@@ -234,16 +276,16 @@ const Wines = () => {
     setPage(0)
   }
   const filterWines = (val: WineT) => {
-    if (searchKey === 'varietal') {
+    if (filterKey === 'varietal') {
       let isMatch = false
       val.varietal.forEach((item) => {
-        if (item.toLowerCase().includes(searchValue.toLowerCase())) {
+        if (item.toLowerCase().includes(filterValue.toLowerCase())) {
           isMatch = true
         }
       })
       return isMatch
     } else {
-      return val[searchKey].toLowerCase().includes(searchValue.toLowerCase())
+      return val[filterKey].toLowerCase().includes(filterValue.toLowerCase())
     }
   }
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -264,7 +306,7 @@ const Wines = () => {
           <Paper sx={{ width: '100%', mb: 2 }}>
             <EnhancedTableToolbar />
             <TableContainer>
-              <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
+              <Table aria-labelledby="tableTitle" size="medium">
                 <EnhancedTableHead
                   order={order}
                   orderBy={orderBy}
@@ -279,7 +321,7 @@ const Wines = () => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`
-                      return <WineRow row={row} labelId={labelId} />
+                      return <WineRow row={row} labelId={labelId} isMobile={isMobile} />
                     })}
                   {emptyRows > 0 && (
                     <TableRow

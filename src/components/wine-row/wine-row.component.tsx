@@ -25,7 +25,7 @@ import ColorPalette from '../../components/color-palette/color-palette.component
 import { getLabel } from '../../helpers'
 import { WineT } from '../../types'
 
-const WineRow = ({ row, labelId }: { row: WineT; labelId: string }) => {
+const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMobile: boolean }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { status } = useAppSelector((state) => state.wine)
@@ -90,15 +90,26 @@ const WineRow = ({ row, labelId }: { row: WineT; labelId: string }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" id={labelId} scope="row" padding="none">
-          {row.date}
-        </TableCell>
-        <TableCell align="right">{row.producer}</TableCell>
-        <TableCell align="right">{row.vintage}</TableCell>
-        <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
-        <TableCell align="right">
-          <RatingIcon rating={row.rating} fontSize="medium" />
-        </TableCell>
+        {isMobile ? (
+          <>
+            <TableCell component="th" id={labelId} scope="row" padding="none">
+              {row.date}
+            </TableCell>
+            <TableCell align="right">{row.producer}</TableCell>
+          </>
+        ) : (
+          <>
+            <TableCell component="th" id={labelId} scope="row" padding="none">
+              {row.date}
+            </TableCell>
+            <TableCell align="right">{row.producer}</TableCell>
+            <TableCell align="right">{row.vintage}</TableCell>
+            <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
+            <TableCell align="right">
+              <RatingIcon rating={row.rating} fontSize="medium" />
+            </TableCell>
+          </>
+        )}
         <TableCell>
           <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
             <DeleteIcon />
@@ -108,10 +119,20 @@ const WineRow = ({ row, labelId }: { row: WineT; labelId: string }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Container sx={{ display: 'flex', flexFlow: 'row wrap', justifyContent: 'space-between' }}>
-              <Box>
+            <Container
+              sx={{
+                display: 'flex',
+                flexFlow: isMobile ? 'column' : 'row wrap',
+                justifyContent: 'space-between',
+                paddingBottom: '10px',
+              }}
+            >
+              <Box sx={{ width: isMobile ? '100%' : '25%' }}>
                 <Typography variant="h6" component="div">
                   Details
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {row.producer}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   {row.classification}
@@ -123,14 +144,14 @@ const WineRow = ({ row, labelId }: { row: WineT; labelId: string }) => {
                   {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
                 </Typography>
               </Box>
-              <Box sx={{ marginTop: '4px' }}>
+              <Box sx={{ maxWidth: isMobile ? '100%' : '25%' }}>
                 <Typography variant="h6" component="div">
                   Color and Smell
                 </Typography>
                 <ColorPalette color={row.color} hue={row.hue} intensity={row.intensity} />
                 <Typography variant="body2">{row.smell}</Typography>
               </Box>
-              <Box sx={{ marginTop: '4px' }}>
+              <Box sx={{ maxWidth: isMobile ? '100%' : '25%' }}>
                 <Typography variant="h6" component="div">
                   Taste
                 </Typography>
@@ -150,7 +171,7 @@ const WineRow = ({ row, labelId }: { row: WineT; labelId: string }) => {
                   {getLabel('SWEET', row.sweet)}
                 </Typography>
               </Box>
-              <Box>
+              <Box sx={{ maxWidth: isMobile ? '100%' : '25%' }}>
                 <Typography variant="h6" component="div">
                   Remarks and Review
                 </Typography>
