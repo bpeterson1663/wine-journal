@@ -33,7 +33,11 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
   const [selected, setSelected] = useState<readonly string[]>([])
   const [itemToDelete, setItemToDelete] = useState('')
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-
+  const InfoStyle = {
+    width: isMobile ? '100%' : '23%',
+    margin: '5px 0',
+    padding: '0 5px',
+  }
   const handleClick = (_: MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name)
     let newSelected: readonly string[] = []
@@ -117,7 +121,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={isMobile ? 4 : 7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Container
               sx={{
@@ -127,7 +131,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                 paddingBottom: '10px',
               }}
             >
-              <Box sx={{ width: isMobile ? '100%' : '25%' }}>
+              <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">
                   Details
                 </Typography>
@@ -144,14 +148,14 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
                 </Typography>
               </Box>
-              <Box sx={{ maxWidth: isMobile ? '100%' : '25%' }}>
+              <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">
                   Color and Smell
                 </Typography>
                 <ColorPalette color={row.color} hue={row.hue} intensity={row.intensity} />
                 <Typography variant="body2">{row.smell}</Typography>
               </Box>
-              <Box sx={{ maxWidth: isMobile ? '100%' : '25%' }}>
+              <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">
                   Taste
                 </Typography>
@@ -171,7 +175,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   {getLabel('SWEET', row.sweet)}
                 </Typography>
               </Box>
-              <Box sx={{ maxWidth: isMobile ? '100%' : '25%' }}>
+              <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">
                   Remarks and Review
                 </Typography>
