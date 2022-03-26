@@ -297,7 +297,7 @@ export const FormColorSmell = () => {
             {...field}
             multiline
             rows={4}
-            id="outlined-basic"
+            id="smell"
             label="Smell"
             variant="outlined"
             error={!!errors.smell}
@@ -465,7 +465,7 @@ export const FormReview = () => {
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <TextField multiline rows={4} id="outlined-basic" label="Remarks" variant="outlined" {...field} />
+          <TextField multiline rows={4} id="remarks" label="Remarks" variant="outlined" {...field} />
         )}
       />
       <FormControl>

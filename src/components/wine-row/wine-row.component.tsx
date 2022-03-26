@@ -18,6 +18,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineDeleteStart } from '../../features/wine/wineSlice'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import RatingIcon from '../../components/rating/raiting.component'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
@@ -96,14 +97,14 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
         </TableCell>
         {isMobile ? (
           <>
-            <TableCell component="th" id={labelId} scope="row" padding="none">
+            <TableCell component="td" id={labelId} scope="row" padding="none">
               {row.date}
             </TableCell>
             <TableCell align="right">{row.producer}</TableCell>
           </>
         ) : (
           <>
-            <TableCell component="th" id={labelId} scope="row" padding="none">
+            <TableCell component="td" id={labelId} scope="row" padding="none">
               {row.date}
             </TableCell>
             <TableCell align="right">{row.producer}</TableCell>
@@ -114,15 +115,20 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
             </TableCell>
           </>
         )}
-        <TableCell>
-          <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={isMobile ? 4 : 7}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={open} timeout="auto" unmountOnExit sx={{ display: 'flex', flexFlow: 'column' }}>
+            {!isMobile && (
+              <Container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton>
+                  <EditIcon />
+                </IconButton>
+                <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Container>
+            )}
             <Container
               sx={{
                 display: 'flex',
@@ -132,20 +138,33 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
               }}
             >
               <Box sx={InfoStyle}>
-                <Typography variant="h6" component="div">
-                  Details
+                {isMobile ? (
+                  <Container sx={{ display: 'flex', justifyContent: 'space-between', paddingLeft: 0, paddingRight: 0 }}>
+                    <Typography variant="h6" component="div">
+                      Details
+                    </Typography>
+                    <div>
+                      <IconButton>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  </Container>
+                ) : (
+                  <Typography variant="h6" component="div">
+                    Details
+                  </Typography>
+                )}
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  {row.producer} {row.classification && `/ ${row.classification}`}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {row.producer}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {row.classification}
+                  {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   {row.vintage} - {row.varietal.map((item) => `${item}`).join(', ')}
-                </Typography>
-                <Typography variant="body2">
-                  {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
                 </Typography>
               </Box>
               <Box sx={InfoStyle}>
@@ -160,19 +179,19 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   Taste
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('BODY', row.body)} Body
+                  Body: {getLabel('BODY', row.body)}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('TANNIN', row.tannin)} Tannin
+                  Tannin: {getLabel('TANNIN', row.tannin)}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('ACIDITY', row.acidity)} Acidity
+                  Acidity: {getLabel('ACIDITY', row.acidity)}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('ALCOHOL', row.alcohol)}% Alcohol
+                  Alcohol: {getLabel('ALCOHOL', row.alcohol)}%
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {getLabel('SWEET', row.sweet)}
+                  Sweet: {getLabel('SWEET', row.sweet)}
                 </Typography>
               </Box>
               <Box sx={InfoStyle}>

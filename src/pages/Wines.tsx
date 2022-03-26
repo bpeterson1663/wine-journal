@@ -174,7 +174,6 @@ const Wines = () => {
                 </TableSortLabel>
               </TableCell>
             ))}
-          <TableCell />
         </TableRow>
       </TableHead>
     )
@@ -237,7 +236,9 @@ const Wines = () => {
                       label="Filter By"
                     >
                       {FILTERS.map((filter) => (
-                        <MenuItem value={filter.value}>{filter.label}</MenuItem>
+                        <MenuItem key={filter.value} value={filter.value}>
+                          {filter.label}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -248,7 +249,7 @@ const Wines = () => {
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                  <TextField size="small" id="outlined-basic" type="filter" label="Filter For" {...field} />
+                  <TextField size="small" id="filterFor" type="filter" label="Filter For" {...field} />
                 )}
               />
               <Button type="submit" sx={{ height: 40 }}>
@@ -321,7 +322,7 @@ const Wines = () => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`
-                      return <WineRow row={row} labelId={labelId} isMobile={isMobile} />
+                      return <WineRow key={row.id} row={row} labelId={labelId} isMobile={isMobile} />
                     })}
                   {emptyRows > 0 && (
                     <TableRow
@@ -336,6 +337,7 @@ const Wines = () => {
               </Table>
             </TableContainer>
             <TablePagination
+              sx={{ width: '100%' }}
               rowsPerPageOptions={[10, 20, 30]}
               component="div"
               count={wineList.filter(filterWines).length}

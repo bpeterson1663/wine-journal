@@ -35,31 +35,35 @@ const SignUpForm = () => {
         name="firstName"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="First Name" {...field} />}
+        render={({ field }) => <TextField id="firstName" label="First Name" {...field} />}
       />
       <Controller
         name="lastName"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" label="Last Name" {...field} />}
+        render={({ field }) => <TextField id="lastName" label="Last Name" {...field} />}
       />
       <Controller
         name="email"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" type="email" label="Email" {...field} />}
+        render={({ field }) => <TextField id="email" type="email" label="Email" {...field} />}
       />
       <Controller
         name="password"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" type="password" label="Password" {...field} />}
+        render={({ field }) => (
+          <TextField autoComplete="on" id="password" type="password" label="Password" {...field} />
+        )}
       />
       <Controller
         name="confirmPassword"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" type="password" label="Confirm Password" {...field} />}
+        render={({ field }) => (
+          <TextField autoComplete="on" id="confirmPassword" type="password" label="Confirm Password" {...field} />
+        )}
       />
       <Button type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
         Submit

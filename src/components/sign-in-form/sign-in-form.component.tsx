@@ -39,13 +39,15 @@ const SignInForm = () => {
         name="email"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" type="email" label="Email" {...field} />}
+        render={({ field }) => <TextField id="signInEmail" type="email" label="Email" {...field} />}
       />
       <Controller
         name="password"
         control={control}
         defaultValue=""
-        render={({ field }) => <TextField id="outlined-basic" type="password" label="Password" {...field} />}
+        render={({ field }) => (
+          <TextField id="signInPassword" autoComplete="on" type="password" label="Password" {...field} />
+        )}
       />
       <Button type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
         Submit
