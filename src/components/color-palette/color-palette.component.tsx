@@ -16,7 +16,7 @@ const ColorPalette = ({
   return (
     <Paper
       sx={{
-        margin: '5px 10px',
+        margin: '10px',
         height: 100,
         width: 92,
         borderRadius: '5% 5% 50% 50%',

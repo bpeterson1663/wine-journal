@@ -62,7 +62,7 @@ export const FormDetails = () => {
           required: 'The producer is required',
         }}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
             id="producer"
             label="Producer"
@@ -301,6 +301,7 @@ export const FormColorSmell = () => {
         render={({ field }) => (
           <TextField
             {...field}
+            sx={{ marginTop: '5px' }}
             multiline
             rows={4}
             id="smell"
