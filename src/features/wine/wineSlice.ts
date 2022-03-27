@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { FetchStatusT, MessageT, WineT } from '../../types'
 import { RootState, AppThunk } from '../store'
-import { getWines, addWineEntry, getWineById, deleteWineEntry } from '../../api'
+import { getWines, addWineEntry, getWineById, deleteWineEntry, updateWineEntry } from '../../api'
 
 interface InitialWineState {
   message: MessageT
   status: FetchStatusT
   wineList: WineT[]
-  viewWine: WineT | null
+  editWine: WineT | null
 }
 const initialState: InitialWineState = {
   message: null,
   status: 'idle',
   wineList: [],
-  viewWine: null,
+  editWine: null,
 }
 
 export const wineSlice = createSlice({
@@ -37,14 +37,21 @@ export const wineSlice = createSlice({
       state.message = action.payload.message
       state.wineList = [...state.wineList, action.payload.wine]
     },
+    wineEditFetchSuccess: (state, action: PayloadAction<string>) => {
+      state.status = 'success'
+      state.message = action.payload
+    },
     wineFetchSuccess: (state, action: PayloadAction<WineT>) => {
       state.status = 'success'
-      state.viewWine = action.payload
+      state.editWine = action.payload
     },
     wineDeleteSuccess: (state, action: PayloadAction<string>) => {
       state.status = 'success'
       state.message = 'Wine Deleted Successfully'
       state.wineList = state.wineList.filter((wine) => wine.id !== action.payload)
+    },
+    wineSetEdit: (state, action: PayloadAction<WineT>) => {
+      state.editWine = action.payload
     },
   },
 })
@@ -54,8 +61,10 @@ export const {
   wineListFetchSuccess,
   wineFetchFailure,
   wineCreateFetchSuccess,
+  wineEditFetchSuccess,
   wineFetchSuccess,
   wineDeleteSuccess,
+  wineSetEdit,
 } = wineSlice.actions
 
 export const fetchWineListStart =
@@ -76,7 +85,7 @@ export const fetchWineListStart =
   }
 
 export const fetchWineStart =
-  (id: string | undefined): AppThunk =>
+  (id: string): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(wineFetchStart())
@@ -113,6 +122,23 @@ export const fetchWineCreateStart =
     }
   }
 
+export const fetchWineEditStart =
+  (payload: WineT): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(wineFetchStart())
+      const response = await updateWineEntry(payload)
+      const { success, message } = response
+      if (success) {
+        dispatch(wineEditFetchSuccess(message))
+      } else {
+        dispatch(wineFetchFailure(message))
+      }
+    } catch (err) {
+      dispatch(wineFetchFailure(`error ${err}`))
+    }
+  }
+
 export const fetchWineDeleteStart =
   (payload: string): AppThunk =>
   async (dispatch) => {
@@ -129,6 +155,7 @@ export const fetchWineDeleteStart =
       dispatch(wineFetchFailure(`error ${err}`))
     }
   }
+
 export const wineListSelector = (state: RootState) => state.wine
 
 export default wineSlice.reducer

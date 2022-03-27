@@ -1,29 +1,28 @@
 import React, { useState } from 'react'
-import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
+import { Container, Stepper, Step, StepLabel, StepContent, Box, Button, Paper, Snackbar } from '@mui/material'
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchWineCreateStart } from '../../features/wine/wineSlice'
-import { Box, Button, Container, Paper, Step, Stepper, StepContent, StepLabel, Snackbar } from '@mui/material'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
-import { WineFormT, WineT } from '../../types'
+import { fetchWineEditStart } from '../../features/wine/wineSlice'
+import { WineT, WineFormT } from '../../types'
 import { FormDetails, FormColorSmell, FormTaste, FormReview } from '../form-steps/form-steps.component'
-import { STEPS } from './form-new-wine.constants'
+import { STEPS } from './form-wine.constants'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 
-const FormNewWine = () => {
+const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
   const { message } = useAppSelector((state) => state.wine)
-  const { currentUser } = useAppSelector((state) => state.auth)
   const methods = useForm<WineFormT>({
     mode: 'all',
-    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, varietal: [] },
+    defaultValues: { ...editWine },
   })
-
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
-    dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
+    dispatch(fetchWineEditStart(data))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)
   }
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
@@ -37,6 +36,27 @@ const FormNewWine = () => {
     methods.reset()
   }
 
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+  })
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
+
+  const disableContinue = (): boolean => {
+    const { formState } = methods
+    const { errors } = formState
+
+    if (Object.keys(errors).length > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
   const getStepContent = (index: number) => {
     switch (index) {
       case 0:
@@ -51,44 +71,6 @@ const FormNewWine = () => {
         break
     }
   }
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-  })
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpen(false)
-  }
-
-  const disableContinue = (): boolean => {
-    const { formState } = methods
-    const { errors, touchedFields } = formState
-
-    if (activeStep === 0) {
-      if (
-        !touchedFields.producer ||
-        !touchedFields.country ||
-        !touchedFields.region ||
-        !touchedFields.vintage ||
-        !touchedFields.varietal
-      ) {
-        return true
-      }
-    } else if (activeStep === 1) {
-      if (!touchedFields.smell) {
-        return true
-      }
-    }
-
-    if (Object.keys(errors).length > 0) {
-      return true
-    } else {
-      return false
-    }
-  }
-
   return (
     <FormProvider {...methods}>
       <Container
@@ -116,7 +98,7 @@ const FormNewWine = () => {
                   <>
                     {index === STEPS.length - 1 ? (
                       <Button type="submit" variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
-                        Submit
+                        Save
                       </Button>
                     ) : (
                       <Button
@@ -149,4 +131,4 @@ const FormNewWine = () => {
   )
 }
 
-export default FormNewWine
+export default EditWineForm

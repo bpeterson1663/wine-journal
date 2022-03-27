@@ -3,7 +3,7 @@ import {
   BODY_MARKS,
   SWEET_MARKS,
   TANNIN_ACIDITY_MARKS,
-} from '../components/form-new-wine/form-new-wine.constants'
+} from '../components/form-wine/form-wine.constants'
 
 export const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEET', value: number) => {
   switch (type) {

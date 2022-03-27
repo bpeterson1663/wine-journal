@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, doc, getDoc, deleteDoc, query, where } from 'firebase/firestore/lite'
+import { addDoc, updateDoc, collection, getDocs, doc, getDoc, deleteDoc, query, where } from 'firebase/firestore/lite'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { db } from '../firebase'
 import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT } from '../types'
@@ -53,6 +53,22 @@ export async function addWineEntry(data: WineT): Promise<ApiResponseT> {
     return {
       success: true,
       message: 'Wine Created Successfully',
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: `Error creating wine ${e}`,
+    }
+  }
+}
+
+export async function updateWineEntry(data: WineT): Promise<ApiResponseT> {
+  try {
+    const wineRef = doc(db, 'wines', data.id)
+    updateDoc(wineRef, { ...data })
+    return {
+      success: true,
+      message: 'Wine Updated Successfully',
     }
   } catch (e) {
     return {

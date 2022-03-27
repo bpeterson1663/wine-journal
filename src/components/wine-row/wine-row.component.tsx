@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchWineDeleteStart } from '../../features/wine/wineSlice'
+import { fetchWineDeleteStart, wineSetEdit } from '../../features/wine/wineSlice'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import RatingIcon from '../../components/rating/raiting.component'
@@ -69,6 +69,12 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
       navigate('/wines')
     }
   }
+
+  const handleEditWineClick = (wine: WineT) => {
+    dispatch(wineSetEdit(wine))
+    navigate('/edit')
+  }
+
   const ConfirmDeleteDialog = () => (
     <Dialog open={isConfirmOpen} onClose={handleConfirmDeleteClose} aria-labelledby="delete-dialog-title">
       <DialogTitle id="delete-dialog-title">Delete Wine</DialogTitle>
@@ -121,7 +127,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
           <Collapse in={open} timeout="auto" unmountOnExit sx={{ display: 'flex', flexFlow: 'column' }}>
             {!isMobile && (
               <Container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <IconButton>
+                <IconButton onClick={() => handleEditWineClick(row)}>
                   <EditIcon />
                 </IconButton>
                 <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
@@ -144,7 +150,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                       Details
                     </Typography>
                     <div>
-                      <IconButton>
+                      <IconButton onClick={() => handleEditWineClick(row)}>
                         <EditIcon />
                       </IconButton>
                       <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>

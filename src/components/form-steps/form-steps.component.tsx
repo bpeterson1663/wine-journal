@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   Autocomplete,
   Box,
@@ -20,7 +21,8 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Controller, useWatch, useFormContext } from 'react-hook-form'
 import { WineT, ColorT, WineFormT } from '../../types'
-import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-new-wine/form-new-wine.constants'
+import { useAppSelector } from '../../features/hooks'
+import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-wine/form-wine.constants'
 import { VARIETALS } from './form-steps.constants'
 import ColorPalette from '../../components/color-palette/color-palette.component'
 
@@ -87,6 +89,7 @@ export const FormDetails = () => {
         }}
         render={({ field }) => (
           <Autocomplete
+            {...field}
             defaultValue={[]}
             multiple
             freeSolo
@@ -96,7 +99,6 @@ export const FormDetails = () => {
             getOptionLabel={(option: string) => option}
             renderInput={(params) => (
               <StyledTextField
-                {...field}
                 {...params}
                 id="varietal"
                 label="Varietal(s)"
@@ -172,12 +174,15 @@ export const FormDetails = () => {
 }
 
 export const FormColorSmell = () => {
+  const location = useLocation()
   const { setValue, control, formState } = useFormContext<WineT>()
   const { errors } = formState
+  const { editWine } = useAppSelector((state) => state.wine)
+
   const color = useWatch({
     control,
     name: 'color',
-    defaultValue: 'red',
+    defaultValue: location.pathname === '/edit' && editWine ? editWine.color : 'red',
   })
   const hue = useWatch({
     control,
@@ -187,6 +192,7 @@ export const FormColorSmell = () => {
     control,
     name: 'intensity',
   })
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <FormControl>
