@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Container, Box, Button, Snackbar } from '@mui/material'
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
@@ -10,6 +11,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { message } = useAppSelector((state) => state.wine)
   const methods = useForm<WineFormT>({
     mode: 'all',
@@ -75,6 +77,9 @@ const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
         <Box>
           <Button disabled={disableSave()} type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
             Save
+          </Button>
+          <Button onClick={() => navigate('/wines')} variant="outlined" sx={{ mt: 1, mr: 1 }}>
+            Cancel
           </Button>
         </Box>
       </Container>
