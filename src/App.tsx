@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import Home from './pages/Home'
 import NewWine from './pages/NewWine'
 import Wines from './pages/Wines'
+import Varietals from './pages/Varietals'
 import EditWine from './pages/EditWine'
 import Layout from './components/layout/layout.component'
 import { useAppDispatch, useAppSelector } from './features/hooks'
@@ -78,6 +79,14 @@ function App() {
               element={
                 <RequireAuth>
                   <EditWine />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/varietals"
+              element={
+                <RequireAuth>
+                  <Varietals />
                 </RequireAuth>
               }
             />

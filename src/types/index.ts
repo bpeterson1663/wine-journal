@@ -24,28 +24,28 @@ export interface WineT {
   sweet: number
   userId: string
 }
-export interface WineFormT {
-  id: string
-  date: string
-  producer: string
-  classification: string
+
+type WineForm = Omit<WineT, 'varietal'>
+
+export interface WineFormT extends WineForm {
   varietal: NestedValue<string[]>
-  subregion: string
-  region: string
-  country: string
-  vintage: string
-  hue: RedHueT | WhiteHueT | RoseHueT
-  color: ColorT
-  intensity: IntensityT
-  smell: string
-  remarks: string
-  alcohol: number
-  acidity: number
-  rating: number
+}
+
+export interface VarietalT {
+  id: string
+  name: string
+  description: string
+  pairing: string
+  style: string
+  flavors: string
   body: number
+  sweetness: number
+  acidity: number
+  alcohol: number
   tannin: number
-  sweet: number
-  userId: string
+  decantTime: number
+  regionsGrown: string
+  servingTemp: string
 }
 
 export interface UserProfileT {

@@ -1,7 +1,7 @@
 import { addDoc, updateDoc, collection, getDocs, doc, getDoc, deleteDoc, query, where } from 'firebase/firestore/lite'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { db } from '../firebase'
-import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT } from '../types'
+import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT, VarietalT } from '../types'
 
 export async function getWines(userId: string) {
   try {
@@ -21,7 +21,7 @@ export async function getWines(userId: string) {
   } catch (e) {
     return {
       success: false,
-      message: `Error creating wine ${e}`,
+      message: `Error fetching wines ${e}`,
     }
   }
 }
@@ -89,6 +89,44 @@ export async function deleteWineEntry(id: string): Promise<ApiResponseT> {
     return {
       success: false,
       message: `Error deleting wine ${e}`,
+    }
+  }
+}
+
+export async function getVarietals() {
+  try {
+    const q = collection(db, 'varietals')
+    const varietalSnapshot = await getDocs(q)
+
+    const varietalList = varietalSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }))
+    const data = varietalList.map((varietal) => varietal as VarietalT)
+    return {
+      success: true,
+      message: '',
+      data,
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: `Error fetching varietals ${e}`,
+    }
+  }
+}
+
+export async function addVarietal(data: VarietalT): Promise<ApiResponseT> {
+  try {
+    addDoc(collection(db, 'varietals'), data)
+    return {
+      success: true,
+      message: 'Varietal Created Successfully',
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: `Error creating varietal ${e}`,
     }
   }
 }
