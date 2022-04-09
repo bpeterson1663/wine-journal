@@ -4,7 +4,6 @@ import { AppBar, Toolbar, Button, IconButton } from '@mui/material'
 import { styled } from '@mui/system'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { logout } from '../../features/auth/authSlice'
-import HomeIcon from '@mui/icons-material/Home'
 const NavButton = styled(Button)(() => ({
   color: 'white',
 }))
@@ -35,7 +34,12 @@ const NavBar = () => {
           <>
             <NavLink to="/wines">
               <Icon aria-label="home button">
-                <HomeIcon />
+                <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
+              </Icon>
+            </NavLink>
+            <NavLink to="/varietals">
+              <Icon aria-label="home button">
+                <span className="iconify" data-icon="mdi:fruit-grapes"></span>
               </Icon>
             </NavLink>
             <div
