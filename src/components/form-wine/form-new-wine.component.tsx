@@ -110,19 +110,26 @@ const FormNewWine = () => {
         <Stepper activeStep={activeStep} orientation="vertical" sx={{ maxWidth: 600, width: '100%', margin: '0 auto' }}>
           {STEPS.map((step, index) => (
             <Step key={step.label}>
-              <StepLabel>{step.label}</StepLabel>
+              <StepLabel color="secondary">{step.label}</StepLabel>
               <StepContent>
                 <Box sx={{ width: '100%' }}>{getStepContent(index)}</Box>
                 <Box>
                   <>
                     {index === STEPS.length - 1 ? (
-                      <Button type="submit" variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+                      <Button
+                        color="secondary"
+                        type="submit"
+                        variant="contained"
+                        onClick={handleNext}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
                         Submit
                       </Button>
                     ) : (
                       <Button
                         disabled={disableContinue()}
                         variant="contained"
+                        color="secondary"
                         onClick={handleNext}
                         sx={{ mt: 1, mr: 1 }}
                       >
@@ -140,8 +147,8 @@ const FormNewWine = () => {
         </Stepper>
         {activeStep === STEPS.length && (
           <Paper square elevation={0} sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
-            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Add Another Wine
+            <Button color="secondary" variant="contained" onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+              Add Another Entry
             </Button>
           </Paper>
         )}

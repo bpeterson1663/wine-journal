@@ -298,7 +298,7 @@ const Wines = () => {
         <CardHeader
           sx={{ flexDirection: 'end' }}
           action={
-            <Button sx={{ margin: '0 5px ' }} onClick={() => navigate('/new')}>
+            <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new')}>
               New Entry
             </Button>
           }

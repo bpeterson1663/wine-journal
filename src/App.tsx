@@ -1,4 +1,6 @@
 import React from 'react'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { grey, red } from '@mui/material/colors'
 import { BrowserRouter, Route, Routes, useLocation, Navigate } from 'react-router-dom'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import Home from './pages/Home'
@@ -14,6 +16,19 @@ function App() {
   const auth = getAuth()
   const dispatch = useAppDispatch()
   const { userProfile } = useAppSelector((state) => state.user)
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: grey[800],
+      },
+      secondary: {
+        main: red[900],
+      },
+    },
+    typography: {
+      fontFamily: 'Lexend Deca',
+    },
+  })
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const { email, uid } = user
@@ -37,37 +52,39 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route
-            path="/wines"
-            element={
-              <RequireAuth>
-                <Wines />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/new"
-            element={
-              <RequireAuth>
-                <NewWine />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/edit"
-            element={
-              <RequireAuth>
-                <EditWine />
-              </RequireAuth>
-            }
-          />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route
+              path="/wines"
+              element={
+                <RequireAuth>
+                  <Wines />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/new"
+              element={
+                <RequireAuth>
+                  <NewWine />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit"
+              element={
+                <RequireAuth>
+                  <EditWine />
+                </RequireAuth>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
