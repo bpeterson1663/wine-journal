@@ -8,7 +8,7 @@ const Home = () => {
   const { currentUser, status } = useAppSelector((state) => state.auth)
   return (
     <Container component="main">
-      {(status === 'loading' || status === 'idle') && !currentUser?.uid ? (
+      {status === 'loading' && !currentUser?.uid ? (
         <Skeleton animation="wave" width="80%" style={{ marginBottom: 6 }} />
       ) : (
         <>
