@@ -1,10 +1,12 @@
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import {
   Box,
   Card,
+  CardHeader,
   Button,
   Chip,
   Container,
@@ -64,6 +66,7 @@ const FILTERS = [
 
 const Varietals = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { varietalList } = useAppSelector((state) => state.varietal)
   const { handleSubmit, control } = useForm<FilterFormT>()
   const [filterKey, setFilterKey] = useState<FilterKey>('name')
@@ -284,6 +287,19 @@ const Varietals = () => {
   return (
     <Container component="main">
       <Card sx={{ margin: '10px auto', display: 'flex', flexFlow: 'column wrap' }}>
+        <CardHeader
+          sx={{ flexDirection: 'end' }}
+          action={
+            <Button
+              color="secondary"
+              variant="contained"
+              sx={{ margin: '0 5px ' }}
+              onClick={() => navigate('/new-varietal')}
+            >
+              New Varietal
+            </Button>
+          }
+        />
         <Box sx={{ width: '100%' }}>
           <Paper sx={{ width: '100%', mb: 2 }}>
             <EnhancedTableToolbar />

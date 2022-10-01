@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   Autocomplete,
@@ -23,17 +23,28 @@ import { Controller, useWatch, useFormContext } from 'react-hook-form'
 import { WineT, ColorT, WineFormT } from '../../types'
 import { useAppSelector } from '../../features/hooks'
 import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-wine/form-wine.constants'
-import { VARIETALS } from './form-steps.constants'
 import ColorPalette from '../../components/color-palette/color-palette.component'
+import { fetchVarietalListStart } from '../../features/varietal/varietalSlice'
+import { useAppDispatch } from '../../features/hooks'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',
 })
 
 export const FormDetails = () => {
+  const dispatch = useAppDispatch()
+  const { varietalList } = useAppSelector((state) => state.varietal)
   const { formState, control, setValue } = useFormContext<WineFormT>()
   const { errors } = formState
+  const varietals: string[] = []
 
+  useEffect(() => {
+    dispatch(fetchVarietalListStart())
+  }, [dispatch])
+
+  varietalList.forEach((varietal) => varietals.push(varietal.name))
+  varietals.sort((a, b) => a.localeCompare(b))
+  console.log(varietalList)
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller
@@ -94,7 +105,7 @@ export const FormDetails = () => {
             multiple
             freeSolo
             filterSelectedOptions
-            options={VARIETALS}
+            options={varietals}
             onChange={(_, option) => setValue('varietal', option)}
             getOptionLabel={(option: string) => option}
             renderInput={(params) => (

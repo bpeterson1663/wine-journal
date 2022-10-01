@@ -20,7 +20,6 @@ const FormNewWine = () => {
   })
 
   const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
-    console.log(data)
     dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)

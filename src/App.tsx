@@ -8,6 +8,7 @@ import NewWine from './pages/NewWine'
 import Wines from './pages/Wines'
 import Varietals from './pages/Varietals'
 import EditWine from './pages/EditWine'
+import NewVarietal from './pages/NewVarietal'
 import Layout from './components/layout/layout.component'
 import { useAppDispatch, useAppSelector } from './features/hooks'
 import { authSuccess } from './features/auth/authSlice'
@@ -87,6 +88,14 @@ function App() {
               element={
                 <RequireAuth>
                   <Varietals />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/new-varietal"
+              element={
+                <RequireAuth>
+                  <NewVarietal />
                 </RequireAuth>
               }
             />
