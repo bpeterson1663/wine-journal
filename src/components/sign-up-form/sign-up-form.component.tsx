@@ -1,9 +1,8 @@
-import React from 'react'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { Container, TextField, Button } from '@mui/material'
-import { SignUpT } from '../../types'
-import { useAppDispatch } from '../../features/hooks'
+import { Button, Container, TextField } from '@mui/material'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { signUp } from '../../features/auth/authSlice'
+import { useAppDispatch } from '../../features/hooks'
+import { SignUpT } from '../../types'
 interface SignUpFormT extends SignUpT {
   confirmPassword: string
 }

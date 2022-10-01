@@ -1,7 +1,7 @@
-import { addDoc, updateDoc, collection, getDocs, doc, getDoc, deleteDoc, query, where } from 'firebase/firestore/lite'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore/lite'
 import { db } from '../firebase'
-import { WineT, ApiResponseT, SignUpT, FirebaseApiResponseT, UserProfileT, VarietalT } from '../types'
+import { ApiResponseT, FirebaseApiResponseT, SignUpT, UserProfileT, VarietalT, WineT } from '../types'
 
 export async function getWines(userId: string) {
   try {

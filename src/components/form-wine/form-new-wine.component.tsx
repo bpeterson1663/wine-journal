@@ -1,11 +1,11 @@
+import { Box, Button, Container, Paper, Snackbar, Step, StepContent, StepLabel, Stepper } from '@mui/material'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import React, { useState } from 'react'
-import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineCreateStart } from '../../features/wine/wineSlice'
-import { Box, Button, Container, Paper, Step, Stepper, StepContent, StepLabel, Snackbar } from '@mui/material'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import { WineFormT, WineT } from '../../types'
-import { FormDetails, FormColorSmell, FormTaste, FormReview } from '../form-steps/form-steps.component'
+import { FormColorSmell, FormDetails, FormReview, FormTaste } from '../form-steps/form-steps.component'
 import { STEPS } from './form-wine.constants'
 
 const FormNewWine = () => {

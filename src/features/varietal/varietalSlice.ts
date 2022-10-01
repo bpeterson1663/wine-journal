@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getVarietals, addVarietal } from '../../api'
+import { addVarietal, getVarietals } from '../../api'
 import { FetchStatusT, MessageT, VarietalT } from '../../types'
-import { RootState, AppThunk } from '../store'
+import { AppThunk, RootState } from '../store'
 
 interface InitialVarietalState {
   message: MessageT

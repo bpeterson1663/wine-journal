@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CurrentUser, SignUpT, FetchStatusT, MessageT, AuthUserT } from '../../types'
-import { RootState, AppThunk } from '../store'
 import { createAuthenticatedUser, loginUser, logoutUser } from '../../api'
+import { AuthUserT, CurrentUser, FetchStatusT, MessageT, SignUpT } from '../../types'
+import { AppThunk, RootState } from '../store'
 import { fetchUserCreateStart } from '../user/userSlice'
 interface InitialAuthState {
   currentUser: CurrentUser

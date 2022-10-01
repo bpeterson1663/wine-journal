@@ -1,31 +1,30 @@
-import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import {
-  Autocomplete,
-  Box,
-  TextField,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Slider,
-  IconContainerProps,
-  Rating,
-} from '@mui/material'
-import { styled } from '@mui/material/styles'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
-import { Controller, useWatch, useFormContext } from 'react-hook-form'
-import { WineT, ColorT, WineFormT } from '../../types'
-import { useAppSelector } from '../../features/hooks'
-import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-wine/form-wine.constants'
+import {
+  Autocomplete,
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  IconContainerProps,
+  Radio,
+  RadioGroup,
+  Rating,
+  Slider,
+  TextField,
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
+import React, { useEffect } from 'react'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { useLocation } from 'react-router-dom'
 import ColorPalette from '../../components/color-palette/color-palette.component'
+import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchVarietalListStart } from '../../features/varietal/varietalSlice'
-import { useAppDispatch } from '../../features/hooks'
+import { ColorT, WineFormT, WineT } from '../../types'
+import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-wine/form-wine.constants'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',

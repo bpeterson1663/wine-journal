@@ -1,7 +1,7 @@
-import React, { useState, MouseEvent } from 'react'
-import { Box, Collapse, Container, IconButton, TableRow, TableCell, Typography } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { Box, Collapse, Container, IconButton, TableCell, TableRow, Typography } from '@mui/material'
+import { MouseEvent, useState } from 'react'
 import { getLabel } from '../../helpers'
 import { VarietalT } from '../../types'
 

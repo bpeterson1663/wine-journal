@@ -1,40 +1,40 @@
-import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
-import { useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useNavigate } from 'react-router-dom'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import {
   Box,
+  Button,
   Card,
   CardHeader,
-  Button,
   Chip,
   Container,
   Drawer,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TablePagination,
-  TableCell,
-  TableBody,
-  TableSortLabel,
-  Toolbar,
-  TextField,
-  Typography,
-  Paper,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  TextField,
+  Toolbar,
+  Typography,
 } from '@mui/material'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import { VarietalT } from '../types'
-import { fetchVarietalListStart } from '../features/varietal/varietalSlice'
-import { useAppDispatch, useAppSelector } from '../features/hooks'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { visuallyHidden } from '@mui/utils'
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import VarietalRow from '../components/varietal-row/varietal-row.component'
+import { useAppDispatch, useAppSelector } from '../features/hooks'
+import { fetchVarietalListStart } from '../features/varietal/varietalSlice'
+import { VarietalT } from '../types'
 
 type Order = 'asc' | 'desc'
 

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState, AppThunk } from '../store'
-import { FetchStatusT, MessageT, UserProfileT } from '../../types'
 import { createUserProfile, getUserProfileById } from '../../api'
+import { FetchStatusT, MessageT, UserProfileT } from '../../types'
+import { AppThunk, RootState } from '../store'
 
 interface InitialUserState {
   userProfile: UserProfileT | null

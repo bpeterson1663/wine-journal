@@ -1,12 +1,12 @@
-import { Button, Box, Container, TextField, FormLabel, Slider, FormControl, Snackbar } from '@mui/material'
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { VarietalT } from '../../types'
-import { styled } from '@mui/material/styles'
-import { BODY_MARKS, TANNIN_ACIDITY_MARKS, ALCOHOL_MARKS, SWEET_MARKS } from '../form-wine/form-wine.constants'
-import { fetchVarietalCreateStart } from '../../features/varietal/varietalSlice'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import React, { useState } from 'react'
+import { Box, Button, Container, FormControl, FormLabel, Slider, Snackbar, TextField } from '@mui/material'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import { styled } from '@mui/material/styles'
+import React, { useState } from 'react'
+import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useAppDispatch, useAppSelector } from '../../features/hooks'
+import { fetchVarietalCreateStart } from '../../features/varietal/varietalSlice'
+import { VarietalT } from '../../types'
+import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-wine/form-wine.constants'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',
@@ -25,7 +25,7 @@ const StyledFormControl = styled(FormControl)(() => ({
 
 const NewVarietal = () => {
   const dispatch = useAppDispatch()
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const { message } = useAppSelector((state) => state.varietal)
 
   const methods = useForm<VarietalT>({
@@ -33,7 +33,7 @@ const NewVarietal = () => {
   })
   const onSubmitHandler: SubmitHandler<VarietalT> = (data) => {
     console.log(data)
-    dispatch(fetchVarietalCreateStart({...data}))
+    dispatch(fetchVarietalCreateStart({ ...data }))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)
   }

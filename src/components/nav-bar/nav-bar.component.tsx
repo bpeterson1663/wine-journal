@@ -1,9 +1,8 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { AppBar, Toolbar, Button, IconButton } from '@mui/material'
+import { AppBar, Button, IconButton, Toolbar } from '@mui/material'
 import { styled } from '@mui/system'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
+import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../features/auth/authSlice'
+import { useAppDispatch, useAppSelector } from '../../features/hooks'
 const NavButton = styled(Button)(() => ({
   color: 'white',
 }))

@@ -1,6 +1,5 @@
-import React from 'react'
 import { Paper } from '@mui/material'
-import { IntensityT, RedHueT, WhiteHueT, RoseHueT, ColorT } from '../../types'
+import { ColorT, IntensityT, RedHueT, RoseHueT, WhiteHueT } from '../../types'
 import { COLOR_INDEX } from './color-palette.constant'
 
 const ColorPalette = ({

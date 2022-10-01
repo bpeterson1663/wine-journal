@@ -1,12 +1,12 @@
+import { Box, Button, Container, Snackbar } from '@mui/material'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import React, { useState } from 'react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { Container, Box, Button, Snackbar } from '@mui/material'
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineEditStart } from '../../features/wine/wineSlice'
-import { WineT, WineFormT } from '../../types'
-import { FormDetails, FormColorSmell, FormTaste, FormReview } from '../form-steps/form-steps.component'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import { WineFormT, WineT } from '../../types'
+import { FormColorSmell, FormDetails, FormReview, FormTaste } from '../form-steps/form-steps.component'
 
 const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
   const [open, setOpen] = useState(false)

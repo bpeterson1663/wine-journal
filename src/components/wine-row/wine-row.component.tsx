@@ -1,28 +1,28 @@
-import React, { useState, MouseEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import {
   Box,
   Button,
   Collapse,
   Container,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
+  DialogTitle,
   IconButton,
-  TableRow,
   TableCell,
+  TableRow,
   Typography,
 } from '@mui/material'
+import { MouseEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import ColorPalette from '../../components/color-palette/color-palette.component'
+import RatingIcon from '../../components/rating/raiting.component'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineDeleteStart, wineSetEdit } from '../../features/wine/wineSlice'
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
-import RatingIcon from '../../components/rating/raiting.component'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import ColorPalette from '../../components/color-palette/color-palette.component'
 import { getLabel } from '../../helpers'
 import { WineT } from '../../types'
 
