@@ -28,7 +28,7 @@ export interface WineT {
 type WineForm = Omit<WineT, 'varietal'>
 
 export interface WineFormT extends WineForm {
-  varietal: NestedValue<string[]>
+  varietal: string[]
 }
 
 export interface VarietalT {
