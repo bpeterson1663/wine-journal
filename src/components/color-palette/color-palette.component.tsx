@@ -21,6 +21,7 @@ const ColorPalette = ({
         borderRadius: '5% 5% 50% 50%',
         background: `radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)`,
       }}
+      data-testid={`${color}-${intensity}-${hue}`}
       elevation={1}
     />
   )

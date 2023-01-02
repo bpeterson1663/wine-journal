@@ -1,5 +1,4 @@
 import { DocumentData } from 'firebase/firestore/lite'
-import { NestedValue } from 'react-hook-form'
 
 export interface WineT {
   id: string
