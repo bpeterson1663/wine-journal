@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineEditStart } from '../../features/wine/wineSlice'
 import { WineFormT, WineT } from '../../types'
-import { FormColorSmell, FormDetails, FormReview, FormTaste } from '../form-steps/form-steps.component'
+import { ColorSmell, Details, Review, Taste } from '../form-steps/'
 
-const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
+export const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -63,16 +63,16 @@ const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
           </Alert>
         </Snackbar>
         <Box sx={{ width: '100%', maxWidth: 600, margin: '10px auto' }}>
-          <FormDetails />
+          <Details />
         </Box>
         <Box sx={{ width: '100%', maxWidth: 600, margin: '10px auto' }}>
-          <FormColorSmell />
+          <ColorSmell />
         </Box>
         <Box sx={{ width: '100%', maxWidth: 600, margin: '10px auto' }}>
-          <FormTaste />
+          <Taste />
         </Box>
         <Box sx={{ width: '100%', maxWidth: 600, margin: '10px auto' }}>
-          <FormReview />
+          <Review />
         </Box>
         <Box>
           <Button disabled={disableSave()} type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
@@ -86,5 +86,3 @@ const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
     </FormProvider>
   )
 }
-
-export default EditWineForm

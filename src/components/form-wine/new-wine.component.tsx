@@ -5,10 +5,10 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineCreateStart } from '../../features/wine/wineSlice'
 import { WineFormT, WineT } from '../../types'
-import { FormColorSmell, FormDetails, FormReview, FormTaste } from '../form-steps/form-steps.component'
+import { ColorSmell, Details, Review, Taste } from '../form-steps'
 import { STEPS } from './form-wine.constants'
 
-const FormNewWine = () => {
+export const FormNewWine = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
@@ -40,13 +40,13 @@ const FormNewWine = () => {
   const getStepContent = (index: number) => {
     switch (index) {
       case 0:
-        return <FormDetails />
+        return <Details />
       case 1:
-        return <FormColorSmell />
+        return <ColorSmell />
       case 2:
-        return <FormTaste />
+        return <Taste />
       case 3:
-        return <FormReview />
+        return <Review />
       default:
         break
     }
@@ -155,5 +155,3 @@ const FormNewWine = () => {
     </FormProvider>
   )
 }
-
-export default FormNewWine

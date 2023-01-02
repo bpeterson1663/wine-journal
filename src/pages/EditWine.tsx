@@ -1,6 +1,6 @@
 import { Container } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import EditWineForm from '../components/form-wine/form-edit-wine.component'
+import { EditWineForm } from '../components/form-wine/edit-wine.component'
 import { useAppSelector } from '../features/hooks'
 
 const EditWine = () => {

@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import FormNewWine from '../components/form-wine/form-new-wine.component'
+import { FormNewWine } from '../components/form-wine/new-wine.component'
 
 const NewWine = () => (
   <Container component="main">
