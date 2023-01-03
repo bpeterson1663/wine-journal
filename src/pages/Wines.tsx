@@ -31,11 +31,11 @@ import { visuallyHidden } from '@mui/utils'
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { getComparator, Order } from '../components/table/helpers'
 import WineRow from '../components/wine-row/wine-row.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { fetchWineListStart } from '../features/wine/wineSlice'
 import { WineT } from '../types'
-type Order = 'asc' | 'desc'
 
 interface EnhancedTableProps {
   onRequestSort: (event: MouseEvent<unknown>, property: keyof WineT) => void
@@ -121,25 +121,6 @@ const Wines = () => {
       mobileOnly: false,
     },
   ]
-
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1
-    }
-    return 0
-  }
-
-  function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key,
-  ): (a: { [key in Key]: number | string | string[] }, b: { [key in Key]: number | string | string[] }) => number {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy)
-  }
 
   function EnhancedTableHead(props: EnhancedTableProps) {
     const { order, orderBy, onRequestSort } = props
