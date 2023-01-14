@@ -32,7 +32,6 @@ const NewVarietal = () => {
     mode: 'all',
   })
   const onSubmitHandler: SubmitHandler<VarietalT> = (data) => {
-    console.log(data)
     dispatch(fetchVarietalCreateStart({ ...data }))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)

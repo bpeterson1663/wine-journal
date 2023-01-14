@@ -26,3 +26,7 @@ export const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEE
       break
   }
 }
+
+export const uppercaseFirstLetter = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

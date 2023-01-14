@@ -23,7 +23,6 @@ export const Details = () => {
 
   varietalList.forEach((varietal) => varietals.push(varietal.name))
   varietals.sort((a, b) => a.localeCompare(b))
-  console.log(varietalList)
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller

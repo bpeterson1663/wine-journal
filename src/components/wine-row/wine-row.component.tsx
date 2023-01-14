@@ -23,7 +23,7 @@ import ColorPalette from '../../components/color-palette/color-palette.component
 import RatingIcon from '../../components/rating/raiting.component'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineDeleteStart, wineSetEdit } from '../../features/wine/wineSlice'
-import { getLabel } from '../../helpers'
+import { getLabel, uppercaseFirstLetter } from '../../helpers'
 import { WineT } from '../../types'
 
 const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMobile: boolean }) => {
@@ -163,13 +163,13 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                     Details
                   </Typography>
                 )}
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   {row.producer} {row.classification && `/ ${row.classification}`}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   {row.country} / {row.region} {row.subregion && `/ ${row.subregion}`}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   {row.vintage} - {row.varietal.map((item) => `${item}`).join(', ')}
                 </Typography>
               </Box>
@@ -177,26 +177,29 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                 <Typography variant="h6" component="div">
                   Color and Smell
                 </Typography>
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+                  {uppercaseFirstLetter(row.color)} / {uppercaseFirstLetter(row.intensity)} / {uppercaseFirstLetter(row.hue)}
+                </Typography>
                 <ColorPalette color={row.color} hue={row.hue} intensity={row.intensity} />
-                <Typography variant="body2">{row.smell}</Typography>
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">{row.smell}</Typography>
               </Box>
               <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">
                   Taste
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   Body: {getLabel('BODY', row.body)}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   Tannin: {getLabel('TANNIN', row.tannin)}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   Acidity: {getLabel('ACIDITY', row.acidity)}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   Alcohol: {getLabel('ALCOHOL', row.alcohol)}%
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   Sweetness: {getLabel('SWEET', row.sweet)}
                 </Typography>
               </Box>
@@ -205,7 +208,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   Remarks and Review
                 </Typography>
                 <RatingIcon rating={row.rating} />
-                <Typography variant="body2">{row.remarks}</Typography>
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">{row.remarks}</Typography>
               </Box>
             </Container>
           </Collapse>
