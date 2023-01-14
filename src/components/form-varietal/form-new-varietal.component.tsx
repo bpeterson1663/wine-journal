@@ -191,7 +191,7 @@ const NewVarietal = () => {
             />
           </StyledFormControl>
           <StyledFormControl>
-            <FormLabel id="sweet-label">Sweet</FormLabel>
+            <FormLabel id="sweet-label">Sweetness</FormLabel>
             <Controller
               name="sweetness"
               control={methods.control}

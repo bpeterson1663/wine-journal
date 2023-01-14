@@ -108,7 +108,7 @@ const VarietalRow = ({ row, labelId, isMobile }: { row: VarietalT; labelId: stri
                   Alcohol: {getLabel('ALCOHOL', row.alcohol)}%
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Sweet: {getLabel('SWEET', row.sweetness)}
+                  Sweetness: {getLabel('SWEET', row.sweetness)}
                 </Typography>
               </Box>
               <Box sx={InfoStyle}>

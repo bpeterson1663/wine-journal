@@ -197,7 +197,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   Alcohol: {getLabel('ALCOHOL', row.alcohol)}%
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Sweet: {getLabel('SWEET', row.sweet)}
+                  Sweetness: {getLabel('SWEET', row.sweet)}
                 </Typography>
               </Box>
               <Box sx={InfoStyle}>
