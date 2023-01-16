@@ -178,10 +178,13 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   Color and Smell
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-                  {uppercaseFirstLetter(row.color)} / {uppercaseFirstLetter(row.intensity)} / {uppercaseFirstLetter(row.hue)}
+                  {uppercaseFirstLetter(row.color)} / {uppercaseFirstLetter(row.intensity)} /{' '}
+                  {uppercaseFirstLetter(row.hue)}
                 </Typography>
                 <ColorPalette color={row.color} hue={row.hue} intensity={row.intensity} />
-                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">{row.smell}</Typography>
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+                  {row.smell}
+                </Typography>
               </Box>
               <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">
@@ -208,7 +211,9 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                   Remarks and Review
                 </Typography>
                 <RatingIcon rating={row.rating} />
-                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">{row.remarks}</Typography>
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+                  {row.remarks}
+                </Typography>
               </Box>
             </Container>
           </Collapse>
