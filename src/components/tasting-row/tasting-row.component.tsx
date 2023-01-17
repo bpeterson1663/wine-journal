@@ -19,12 +19,12 @@ import {
 } from '@mui/material'
 import { MouseEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ColorPalette from '../color-palette/color-palette.component'
-import RatingIcon from '../rating/raiting.component'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchTastingDeleteStart, tastingSetEdit } from '../../features/tasting/tastingSlice'
 import { getLabel, uppercaseFirstLetter } from '../../helpers'
 import { TastingT } from '../../types'
+import ColorPalette from '../color-palette/color-palette.component'
+import RatingIcon from '../rating/raiting.component'
 
 const TastingRow = ({ row, labelId, isMobile }: { row: TastingT; labelId: string; isMobile: boolean }) => {
   const dispatch = useAppDispatch()

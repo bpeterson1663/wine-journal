@@ -279,7 +279,12 @@ const Tastings = () => {
         <CardHeader
           sx={{ flexDirection: 'end' }}
           action={
-            <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new-tasting')}>
+            <Button
+              color="secondary"
+              variant="contained"
+              sx={{ margin: '0 5px ' }}
+              onClick={() => navigate('/new-tasting')}
+            >
               New Entry
             </Button>
           }

@@ -1,7 +1,7 @@
 import { createAuthenticatedUser, loginUser, logoutUser } from './auth'
+import { addTastingEntry, deleteTastingEntry, getTastingById, getTastings, updateTastingEntry } from './tastings'
 import { createUserProfile, getUserProfileById } from './users'
 import { addVarietal, getVarietals } from './varietals'
-import { addTastingEntry, deleteTastingEntry, getTastingById, getTastings, updateTastingEntry } from './tastings'
 import { addWineEntry, deleteWineEntry, getWineById, getWines, updateWineEntry } from './wines'
 
 export {

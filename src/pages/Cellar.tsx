@@ -272,7 +272,12 @@ const Cellar = () => {
         <CardHeader
           sx={{ flexDirection: 'end' }}
           action={
-            <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new-wine')}>
+            <Button
+              color="secondary"
+              variant="contained"
+              sx={{ margin: '0 5px ' }}
+              onClick={() => navigate('/new-wine')}
+            >
               New Entry
             </Button>
           }
