@@ -30,6 +30,25 @@ export interface TastingFormT extends TastingForm {
   varietal: string[]
 }
 
+export interface WineT {
+id: string
+createdAt: string
+producer: string
+  classification: string
+  varietal: string[]
+  subregion: string
+  region: string
+  country: string
+  vintage: string
+  userId: string
+}
+
+type WineForm = Omit<WineT, 'varietal'>
+
+export interface WineFormT extends WineForm {
+  varietal: string[]
+}
+
 export interface VarietalT {
   id: string
   name: string

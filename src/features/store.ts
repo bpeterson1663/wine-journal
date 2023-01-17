@@ -3,6 +3,7 @@ import authReducer from './auth/authSlice'
 import userReducer from './user/userSlice'
 import varietalReducer from './varietal/varietalSlice'
 import tastingReducer from './tasting/tastingSlice'
+import wineReducer from './wine/wineSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     tasting: tastingReducer,
     user: userReducer,
     varietal: varietalReducer,
+    wine: wineReducer
   },
 })
 

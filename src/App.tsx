@@ -13,6 +13,8 @@ import NewVarietal from './pages/NewVarietal'
 import NewTasting from './pages/NewTasting'
 import Varietals from './pages/Varietals'
 import Tastings from './pages/Tastings'
+import NewWine from './pages/NewWine'
+import EditWine from './pages/EditWine'
 
 function App() {
   const auth = getAuth()
@@ -104,6 +106,22 @@ function App() {
               element={
                 <RequireAuth>
                   <Cellar />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/new-wine"
+              element={
+                <RequireAuth>
+                  <NewWine />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit-wine"
+              element={
+                <RequireAuth>
+                  <EditWine />
                 </RequireAuth>
               }
             />
