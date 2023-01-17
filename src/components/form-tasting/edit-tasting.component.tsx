@@ -4,21 +4,21 @@ import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchWineEditStart } from '../../features/wine/wineSlice'
-import { WineFormT, WineT } from '../../types'
-import { ColorSmell, Details, Review, Taste } from '../form-steps/'
+import { fetchTastingEditStart } from '../../features/tasting/tastingSlice'
+import { TastingFormT, TastingT } from '../../types'
+import { ColorSmell, Details, Review, Taste } from '../form-steps'
 
-export const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
+export const EditTastingForm = ({ editTasting }: { editTasting: TastingT | null }) => {
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { message } = useAppSelector((state) => state.wine)
-  const methods = useForm<WineFormT>({
+  const { message } = useAppSelector((state) => state.tasting)
+  const methods = useForm<TastingFormT>({
     mode: 'all',
-    defaultValues: { ...editWine },
+    defaultValues: { ...editTasting },
   })
-  const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
-    dispatch(fetchWineEditStart(data))
+  const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
+    dispatch(fetchTastingEditStart(data))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)
   }
@@ -78,7 +78,7 @@ export const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
           <Button disabled={disableSave()} type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
             Save
           </Button>
-          <Button onClick={() => navigate('/wines')} variant="outlined" sx={{ mt: 1, mr: 1 }}>
+          <Button onClick={() => navigate('/tastings')} variant="outlined" sx={{ mt: 1, mr: 1 }}>
             Cancel
           </Button>
         </Box>

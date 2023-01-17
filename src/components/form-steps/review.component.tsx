@@ -5,10 +5,10 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Box, FormControl, FormLabel, IconContainerProps, Rating, TextField } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
-import { WineT } from '../../types'
+import { TastingT } from '../../types'
 
 export const Review = () => {
-  const { control } = useFormContext<WineT>()
+  const { control } = useFormContext<TastingT>()
   const customIcons: {
     [index: string]: {
       icon: React.ReactElement

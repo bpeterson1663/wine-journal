@@ -6,12 +6,13 @@ import Layout from './components/layout/layout.component'
 import { authSuccess } from './features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from './features/hooks'
 import { fetchUserStart } from './features/user/userSlice'
-import EditWine from './pages/EditWine'
+import Cellar from './pages/Cellar'
+import EditTasting from './pages/EditTasting'
 import Home from './pages/Home'
 import NewVarietal from './pages/NewVarietal'
-import NewWine from './pages/NewWine'
+import NewTasting from './pages/NewTasting'
 import Varietals from './pages/Varietals'
-import Wines from './pages/Wines'
+import Tastings from './pages/Tastings'
 
 function App() {
   const auth = getAuth()
@@ -59,26 +60,26 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route
-              path="/wines"
+              path="/tastings"
               element={
                 <RequireAuth>
-                  <Wines />
+                  <Tastings />
                 </RequireAuth>
               }
             />
             <Route
-              path="/new"
+              path="/new-tasting"
               element={
                 <RequireAuth>
-                  <NewWine />
+                  <NewTasting />
                 </RequireAuth>
               }
             />
             <Route
-              path="/edit"
+              path="/edit-tasting"
               element={
                 <RequireAuth>
-                  <EditWine />
+                  <EditTasting />
                 </RequireAuth>
               }
             />
@@ -95,6 +96,14 @@ function App() {
               element={
                 <RequireAuth>
                   <NewVarietal />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/cellar"
+              element={
+                <RequireAuth>
+                  <Cellar />
                 </RequireAuth>
               }
             />

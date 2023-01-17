@@ -19,17 +19,17 @@ import {
 } from '@mui/material'
 import { MouseEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ColorPalette from '../../components/color-palette/color-palette.component'
-import RatingIcon from '../../components/rating/raiting.component'
+import ColorPalette from '../color-palette/color-palette.component'
+import RatingIcon from '../rating/raiting.component'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchWineDeleteStart, wineSetEdit } from '../../features/wine/wineSlice'
+import { fetchTastingDeleteStart, tastingSetEdit } from '../../features/tasting/tastingSlice'
 import { getLabel, uppercaseFirstLetter } from '../../helpers'
-import { WineT } from '../../types'
+import { TastingT } from '../../types'
 
-const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMobile: boolean }) => {
+const TastingRow = ({ row, labelId, isMobile }: { row: TastingT; labelId: string; isMobile: boolean }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { status } = useAppSelector((state) => state.wine)
+  const { status } = useAppSelector((state) => state.tasting)
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<readonly string[]>([])
   const [itemToDelete, setItemToDelete] = useState('')
@@ -63,29 +63,29 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
     setItemToDelete('')
     setIsConfirmOpen(false)
   }
-  const handleDeleteWine = () => {
-    dispatch(fetchWineDeleteStart(itemToDelete))
+  const handleDeleteTasting = () => {
+    dispatch(fetchTastingDeleteStart(itemToDelete))
     if (status === 'success') {
-      navigate('/wines')
+      navigate('/tastings')
     }
   }
 
-  const handleEditWineClick = (wine: WineT) => {
-    dispatch(wineSetEdit(wine))
-    navigate('/edit')
+  const handleEditTastingClick = (tasting: TastingT) => {
+    dispatch(tastingSetEdit(tasting))
+    navigate('/edit-tasting')
   }
 
   const ConfirmDeleteDialog = () => (
     <Dialog open={isConfirmOpen} onClose={handleConfirmDeleteClose} aria-labelledby="delete-dialog-title">
-      <DialogTitle id="delete-dialog-title">Delete Wine</DialogTitle>
+      <DialogTitle id="delete-dialog-title">Delete Tasting</DialogTitle>
       <DialogContent>
-        <DialogContentText>Are you sure you want to delete this wine?</DialogContentText>
+        <DialogContentText>Are you sure you want to delete this tasting?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleConfirmDeleteClose}>
           Cancel
         </Button>
-        <Button onClick={handleDeleteWine} autoFocus>
+        <Button onClick={handleDeleteTasting} autoFocus>
           Delete
         </Button>
       </DialogActions>
@@ -127,7 +127,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
           <Collapse in={open} timeout="auto" unmountOnExit sx={{ display: 'flex', flexFlow: 'column' }}>
             {!isMobile && (
               <Container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <IconButton onClick={() => handleEditWineClick(row)}>
+                <IconButton onClick={() => handleEditTastingClick(row)}>
                   <EditIcon />
                 </IconButton>
                 <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
@@ -150,7 +150,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                       Details
                     </Typography>
                     <div>
-                      <IconButton onClick={() => handleEditWineClick(row)}>
+                      <IconButton onClick={() => handleEditTastingClick(row)}>
                         <EditIcon />
                       </IconButton>
                       <IconButton onClick={() => handleConfirmDeleteOpen(row.id)}>
@@ -223,4 +223,4 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
   )
 }
 
-export default WineRow
+export default TastingRow

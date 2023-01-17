@@ -32,13 +32,13 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { getComparator, Order } from '../components/table/helpers'
-import WineRow from '../components/wine-row/wine-row.component'
+import TastingRow from '../components/tasting-row/tasting-row.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
-import { fetchWineListStart } from '../features/wine/wineSlice'
-import { WineT } from '../types'
+import { fetchTastingListStart } from '../features/tasting/tastingSlice'
+import { TastingT } from '../types'
 
 interface EnhancedTableProps {
-  onRequestSort: (event: MouseEvent<unknown>, property: keyof WineT) => void
+  onRequestSort: (event: MouseEvent<unknown>, property: keyof TastingT) => void
   order: Order
   orderBy: string
   rowCount: number
@@ -46,7 +46,7 @@ interface EnhancedTableProps {
 
 interface HeadCell {
   disablePadding: boolean
-  id: keyof WineT
+  id: keyof TastingT
   label: string
   numeric: boolean
   mobileOnly: boolean
@@ -64,16 +64,16 @@ const FILTERS = [
   { value: 'vintage', label: 'Vintage' },
 ]
 
-const Wines = () => {
+const Tastings = () => {
   const dispatch = useAppDispatch()
-  const { wineList } = useAppSelector((state) => state.wine)
+  const { tastingList } = useAppSelector((state) => state.tasting)
   const { currentUser } = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
   const { handleSubmit, control } = useForm<FilterFormT>()
   const [filterKey, setFilterKey] = useState<FilterKey>('producer')
   const [filterValue, setFilterValue] = useState('')
   const [order, setOrder] = useState<Order>('desc')
-  const [orderBy, setOrderBy] = useState<keyof WineT>('date')
+  const [orderBy, setOrderBy] = useState<keyof TastingT>('date')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [showFilterMenu, setShowFilterMenu] = useState(false)
@@ -81,7 +81,7 @@ const Wines = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
-    dispatch(fetchWineListStart(currentUser?.uid ?? ''))
+    dispatch(fetchTastingListStart(currentUser?.uid ?? ''))
   }, [dispatch, currentUser?.uid])
 
   const headCells: readonly HeadCell[] = [
@@ -124,7 +124,7 @@ const Wines = () => {
 
   function EnhancedTableHead(props: EnhancedTableProps) {
     const { order, orderBy, onRequestSort } = props
-    const createSortHandler = (property: keyof WineT) => (event: MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof TastingT) => (event: MouseEvent<unknown>) => {
       onRequestSort(event, property)
     }
 
@@ -181,7 +181,7 @@ const Wines = () => {
         }}
       >
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-          Your Wines
+          Your Tastings
         </Typography>
         {filterValue ? (
           <Chip label={`${getFilterLabel(filterKey)}: ${filterValue}`} onDelete={resetFilter} />
@@ -243,7 +243,7 @@ const Wines = () => {
     )
   }
 
-  const handleRequestSort = (_: MouseEvent<unknown>, property: keyof WineT) => {
+  const handleRequestSort = (_: MouseEvent<unknown>, property: keyof TastingT) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
@@ -257,7 +257,7 @@ const Wines = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const filterWines = (val: WineT) => {
+  const filterTastings = (val: TastingT) => {
     if (filterKey === 'varietal') {
       let isMatch = false
       val.varietal.forEach((item) => {
@@ -271,7 +271,7 @@ const Wines = () => {
     }
   }
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - wineList.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tastingList.length) : 0
 
   return (
     <Container component="main">
@@ -279,7 +279,7 @@ const Wines = () => {
         <CardHeader
           sx={{ flexDirection: 'end' }}
           action={
-            <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new')}>
+            <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new-tasting')}>
               New Entry
             </Button>
           }
@@ -293,17 +293,17 @@ const Wines = () => {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={wineList.filter(filterWines).length}
+                  rowCount={tastingList.filter(filterTastings).length}
                 />
                 <TableBody>
-                  {wineList
+                  {tastingList
                     .slice()
-                    .filter(filterWines)
+                    .filter(filterTastings)
                     .sort(getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`
-                      return <WineRow key={row.id} row={row} labelId={labelId} isMobile={isMobile} />
+                      return <TastingRow key={row.id} row={row} labelId={labelId} isMobile={isMobile} />
                     })}
                   {emptyRows > 0 && (
                     <TableRow
@@ -321,7 +321,7 @@ const Wines = () => {
               sx={{ width: '100%' }}
               rowsPerPageOptions={[10, 20, 30]}
               component="div"
-              count={wineList.filter(filterWines).length}
+              count={tastingList.filter(filterTastings).length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -334,4 +334,4 @@ const Wines = () => {
   )
 }
 
-export default Wines
+export default Tastings

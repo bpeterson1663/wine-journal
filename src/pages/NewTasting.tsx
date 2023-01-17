@@ -1,9 +1,9 @@
 import { Container } from '@mui/material'
-import { FormNewWine } from '../components/form-wine/new-wine.component'
+import { FormNewTasting } from '../components/form-tasting/new-tasting.component'
 
 const NewWine = () => (
   <Container component="main">
-    <FormNewWine />
+    <FormNewTasting />
   </Container>
 )
 

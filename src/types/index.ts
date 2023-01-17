@@ -1,6 +1,6 @@
 import { DocumentData } from 'firebase/firestore/lite'
 
-export interface WineT {
+export interface TastingT {
   id: string
   date: string
   producer: string
@@ -24,9 +24,9 @@ export interface WineT {
   userId: string
 }
 
-type WineForm = Omit<WineT, 'varietal'>
+type TastingForm = Omit<TastingT, 'varietal'>
 
-export interface WineFormT extends WineForm {
+export interface TastingFormT extends TastingForm {
   varietal: string[]
 }
 

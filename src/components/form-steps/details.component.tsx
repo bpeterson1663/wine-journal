@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchVarietalListStart } from '../../features/varietal/varietalSlice'
-import { WineFormT } from '../../types'
+import { TastingFormT } from '../../types'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',
@@ -13,7 +13,7 @@ const StyledTextField = styled(TextField)({
 export const Details = () => {
   const dispatch = useAppDispatch()
   const { varietalList } = useAppSelector((state) => state.varietal)
-  const { formState, control, setValue } = useFormContext<WineFormT>()
+  const { formState, control, setValue } = useFormContext<TastingFormT>()
   const { errors } = formState
   const varietals: string[] = []
 

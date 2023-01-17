@@ -1,8 +1,8 @@
 import { Box, FormControl, FormLabel, Slider } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Controller, useFormContext } from 'react-hook-form'
-import { WineT } from '../../types'
-import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-wine/form-wine.constants'
+import { TastingT } from '../../types'
+import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-tasting/form-tasting.constants'
 
 const StyledSlider = styled(Slider)(() => ({
   '& .MuiSlider-markLabel': {
@@ -17,7 +17,7 @@ const StyledFormControl = styled(FormControl)(() => ({
 }))
 
 export const Taste = () => {
-  const { control } = useFormContext<WineT>()
+  const { control } = useFormContext<TastingT>()
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <StyledFormControl>

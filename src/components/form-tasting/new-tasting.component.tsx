@@ -3,24 +3,24 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchWineCreateStart } from '../../features/wine/wineSlice'
-import { WineFormT, WineT } from '../../types'
+import { fetchTastingCreateStart } from '../../features/tasting/tastingSlice'
+import { TastingFormT, TastingT } from '../../types'
 import { ColorSmell, Details, Review, Taste } from '../form-steps'
-import { STEPS } from './form-wine.constants'
+import { STEPS } from './form-tasting.constants'
 
-export const FormNewWine = () => {
+export const FormNewTasting = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const { message } = useAppSelector((state) => state.wine)
+  const { message } = useAppSelector((state) => state.tasting)
   const { currentUser } = useAppSelector((state) => state.auth)
-  const methods = useForm<WineFormT>({
+  const methods = useForm<TastingFormT>({
     mode: 'all',
     defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, varietal: [] },
   })
 
-  const onSubmitHandler: SubmitHandler<WineT> = async (data) => {
-    dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
+  const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
+    dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)
   }

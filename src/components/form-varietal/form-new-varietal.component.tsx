@@ -6,7 +6,7 @@ import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-for
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchVarietalCreateStart } from '../../features/varietal/varietalSlice'
 import { VarietalT } from '../../types'
-import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-wine/form-wine.constants'
+import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-tasting/form-tasting.constants'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',

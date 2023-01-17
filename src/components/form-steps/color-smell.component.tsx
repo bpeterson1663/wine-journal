@@ -2,19 +2,19 @@ import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextF
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
 import { useAppSelector } from '../../features/hooks'
-import { ColorT, WineT } from '../../types'
+import { ColorT, TastingT } from '../../types'
 import ColorPalette from '../color-palette/color-palette.component'
 
 export const ColorSmell = () => {
   const location = useLocation()
-  const { setValue, control, formState } = useFormContext<WineT>()
+  const { setValue, control, formState } = useFormContext<TastingT>()
   const { errors } = formState
-  const { editWine } = useAppSelector((state) => state.wine)
+  const { editTasting } = useAppSelector((state) => state.tasting)
 
   const color = useWatch({
     control,
     name: 'color',
-    defaultValue: location.pathname === '/edit' && editWine ? editWine.color : 'red',
+    defaultValue: location.pathname === '/edit' && editTasting ? editTasting.color : 'red',
   })
   const hue = useWatch({
     control,
