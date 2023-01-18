@@ -165,7 +165,7 @@ const Cellar = () => {
   }
 
   const getFilterLabel = (value: FilterKey) => FILTERS.find((filter) => filter.value === value)?.label
-  
+
   const EnhancedTableToolbar = () => {
     return (
       <Toolbar
