@@ -51,12 +51,12 @@ export async function addWineEntry(data: WineT): Promise<ApiResponseT> {
     addDoc(collection(db, 'wines'), data)
     return {
       success: true,
-      message: 'Wine Created Successfully',
+      message: 'Wine added to cellar',
     }
   } catch (e) {
     return {
       success: false,
-      message: `Error creating wine ${e}`,
+      message: `Error adding wine ${e}`,
     }
   }
 }
