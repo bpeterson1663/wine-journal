@@ -73,7 +73,7 @@ const Cellar = () => {
   const [filterKey, setFilterKey] = useState<FilterKey>('producer')
   const [filterValue, setFilterValue] = useState('')
   const [order, setOrder] = useState<Order>('desc')
-  const [orderBy, setOrderBy] = useState<keyof WineT>('createdAt')
+  const [orderBy, setOrderBy] = useState<keyof WineT>('date')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [showFilterMenu, setShowFilterMenu] = useState(false)
@@ -86,7 +86,7 @@ const Cellar = () => {
 
   const headCells: readonly HeadCell[] = [
     {
-      id: 'createdAt',
+      id: 'date',
       numeric: false,
       disablePadding: true,
       label: 'Date Added',
@@ -130,7 +130,7 @@ const Cellar = () => {
             .map((headCell) => (
               <TableCell
                 key={headCell.id}
-                align={headCell.id === 'createdAt' ? 'left' : 'right'}
+                align={headCell.id === 'date' ? 'left' : 'right'}
                 padding={headCell.disablePadding ? 'none' : 'normal'}
                 sortDirection={orderBy === headCell.id ? order : false}
               >
@@ -165,7 +165,7 @@ const Cellar = () => {
   }
 
   const getFilterLabel = (value: FilterKey) => FILTERS.find((filter) => filter.value === value)?.label
-
+  
   const EnhancedTableToolbar = () => {
     return (
       <Toolbar
@@ -174,7 +174,7 @@ const Cellar = () => {
         }}
       >
         <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-          Your Wines
+          Your Cellar
         </Typography>
         {filterValue ? (
           <Chip label={`${getFilterLabel(filterKey)}: ${filterValue}`} onDelete={resetFilter} />

@@ -32,7 +32,7 @@ export interface TastingFormT extends TastingForm {
 
 export interface WineT {
   id: string
-  createdAt: string
+  date: string
   producer: string
   classification: string
   varietal: string[]

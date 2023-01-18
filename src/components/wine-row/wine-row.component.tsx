@@ -32,7 +32,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
   const [itemToDelete, setItemToDelete] = useState('')
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const InfoStyle = {
-    width: isMobile ? '100%' : '23%',
+    width: '100%',
     margin: '5px 0',
     padding: '0 5px',
   }
@@ -101,14 +101,14 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
         {isMobile ? (
           <>
             <TableCell component="td" id={labelId} scope="row" padding="none">
-              {row.createdAt}
+              {row.date}
             </TableCell>
             <TableCell align="right">{row.producer}</TableCell>
           </>
         ) : (
           <>
             <TableCell component="td" id={labelId} scope="row" padding="none">
-              {row.createdAt}
+              {row.date}
             </TableCell>
             <TableCell align="right">{row.producer}</TableCell>
             <TableCell align="right">{row.vintage}</TableCell>
