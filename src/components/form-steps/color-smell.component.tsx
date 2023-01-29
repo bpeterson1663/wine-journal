@@ -14,7 +14,7 @@ export const ColorSmell = () => {
   const color = useWatch({
     control,
     name: 'color',
-    defaultValue: location.pathname === '/edit' && editTasting ? editTasting.color : 'red',
+    defaultValue: location.pathname === '/edit-tasting' && editTasting ? editTasting.color : 'red',
   })
   const hue = useWatch({
     control,
