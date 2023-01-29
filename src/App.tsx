@@ -62,6 +62,30 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route
+              path="/cellar"
+              element={
+                <RequireAuth>
+                  <Cellar />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/new-wine"
+              element={
+                <RequireAuth>
+                  <NewWine />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit-wine"
+              element={
+                <RequireAuth>
+                  <EditWine />
+                </RequireAuth>
+              }
+            />
+            <Route
               path="/tastings"
               element={
                 <RequireAuth>
@@ -101,30 +125,7 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route
-              path="/cellar"
-              element={
-                <RequireAuth>
-                  <Cellar />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/new-wine"
-              element={
-                <RequireAuth>
-                  <NewWine />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/edit-wine"
-              element={
-                <RequireAuth>
-                  <EditWine />
-                </RequireAuth>
-              }
-            />
+            
           </Route>
         </Routes>
       </BrowserRouter>
