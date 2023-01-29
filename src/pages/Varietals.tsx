@@ -59,7 +59,7 @@ interface FilterFormT {
 }
 
 const FILTERS = [
-  { value: 'name', label: 'Producer' },
+  { value: 'name', label: 'Varietal' },
   { value: 'regionsGrown', label: 'Regions Grown' },
 ]
 

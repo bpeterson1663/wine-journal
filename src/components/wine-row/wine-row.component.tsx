@@ -111,6 +111,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
               {row.date}
             </TableCell>
             <TableCell align="right">{row.producer}</TableCell>
+            <TableCell align="right">{row.classification}</TableCell>
             <TableCell align="right">{row.vintage}</TableCell>
             <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
           </>

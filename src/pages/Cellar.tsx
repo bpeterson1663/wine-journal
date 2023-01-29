@@ -52,14 +52,15 @@ interface HeadCell {
   mobileOnly: boolean
 }
 
-type FilterKey = 'producer' | 'vintage' | 'varietal'
+type FilterKey = 'producer' | 'vintage' | 'varietal' | 'classification'
 interface FilterFormT {
-  filterKey: 'producer' | 'vintage' | 'varietal'
+  filterKey: FilterKey
   filterValue: string
 }
 
 const FILTERS = [
-  { value: 'producer', label: 'Producer' },
+  { value: 'producer', label: 'Producer / Winery' },
+  { value: 'classification', label: 'Classification / Name' },
   { value: 'varietal', label: 'Varietal' },
   { value: 'vintage', label: 'Vintage' },
 ]
@@ -96,7 +97,14 @@ const Cellar = () => {
       id: 'producer',
       numeric: false,
       disablePadding: false,
-      label: 'Producer',
+      label: 'Producer / Winery',
+      mobileOnly: true,
+    },
+    {
+      id: 'classification',
+      numeric: false,
+      disablePadding: false,
+      label: 'Classification / Name',
       mobileOnly: true,
     },
     {

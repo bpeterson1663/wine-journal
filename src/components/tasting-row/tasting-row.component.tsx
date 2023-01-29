@@ -114,6 +114,7 @@ const TastingRow = ({ row, labelId, isMobile }: { row: TastingT; labelId: string
               {row.date}
             </TableCell>
             <TableCell align="right">{row.producer}</TableCell>
+            <TableCell align="right">{row.classification}</TableCell>
             <TableCell align="right">{row.vintage}</TableCell>
             <TableCell align="right">{row.varietal.map((item, i) => `${item}`).join(', ')}</TableCell>
             <TableCell align="right">

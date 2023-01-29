@@ -54,7 +54,7 @@ export const Details = () => {
           <StyledTextField
             {...field}
             id="producer"
-            label="Producer"
+            label="Producer / Winery"
             variant="outlined"
             error={!!errors.producer}
             helperText={errors.producer ? errors.producer?.message : ''}
@@ -66,7 +66,7 @@ export const Details = () => {
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <StyledTextField {...field} id="classification" label="Classification" variant="outlined" />
+          <StyledTextField {...field} id="classification" label="Classification / Name" variant="outlined" />
         )}
       />
       <Controller
