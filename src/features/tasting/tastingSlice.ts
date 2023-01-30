@@ -55,7 +55,7 @@ export const tastingSlice = createSlice({
     tastingSetEdit: (state, action: PayloadAction<TastingT>) => {
       state.editTasting = action.payload
     },
-    tastingSetOpen: (state, action: PayloadAction<WineT>) => {
+    tastingSetOpen: (state, action: PayloadAction<WineT | null>) => {
       state.tastingOpen = action.payload
     },
   },

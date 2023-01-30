@@ -34,7 +34,7 @@ import { useNavigate } from 'react-router-dom'
 import { getComparator, Order } from '../components/table/helpers'
 import TastingRow from '../components/tasting-row/tasting-row.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
-import { fetchTastingListStart } from '../features/tasting/tastingSlice'
+import { fetchTastingListStart, tastingSetOpen } from '../features/tasting/tastingSlice'
 import { TastingT } from '../types'
 
 interface EnhancedTableProps {
@@ -265,6 +265,12 @@ const Tastings = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
+
+  const handleNewTasting = () => {
+    dispatch(tastingSetOpen(null))
+    navigate('/new-tasting')
+  }
+
   const filterTastings = (val: TastingT) => {
     if (filterKey === 'varietal') {
       let isMatch = false
@@ -291,7 +297,7 @@ const Tastings = () => {
               color="secondary"
               variant="contained"
               sx={{ margin: '0 5px ' }}
-              onClick={() => navigate('/new-tasting')}
+              onClick={() => handleNewTasting()}
             >
               New Tasting
             </Button>
