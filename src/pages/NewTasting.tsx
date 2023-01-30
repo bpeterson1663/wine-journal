@@ -3,11 +3,11 @@ import { FormNewTasting } from '../components/form-tasting/new-tasting.component
 import { useAppSelector } from '../features/hooks'
 
 const NewWine = () => {
-  const { tastingOpen } = useAppSelector(state => state.tasting)
+  const { tastingOpen } = useAppSelector((state) => state.tasting)
   return (
-  <Container component="main">
-    <FormNewTasting tastingOpen={tastingOpen} />
-  </Container>
+    <Container component="main">
+      <FormNewTasting tastingOpen={tastingOpen} />
+    </Container>
   )
 }
 

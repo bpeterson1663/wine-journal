@@ -20,8 +20,8 @@ import {
 import { MouseEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchWineDeleteStart, wineSetEdit } from '../../features/wine/wineSlice'
 import { tastingSetOpen } from '../../features/tasting/tastingSlice'
+import { fetchWineDeleteStart, wineSetEdit } from '../../features/wine/wineSlice'
 import { WineT } from '../../types'
 
 const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMobile: boolean }) => {
@@ -128,7 +128,7 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
           <Collapse in={open} timeout="auto" unmountOnExit sx={{ display: 'flex', flexFlow: 'column' }}>
             {!isMobile && (
               <Container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <IconButton onClick={() =>handleOpenBottleClick(row)} aria-label="Open Bottle">
+                <IconButton onClick={() => handleOpenBottleClick(row)} aria-label="Open Bottle">
                   <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
                 </IconButton>
                 <IconButton onClick={() => handleEditWineClick(row)}>

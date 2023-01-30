@@ -293,12 +293,7 @@ const Tastings = () => {
         <CardHeader
           sx={{ flexDirection: 'end' }}
           action={
-            <Button
-              color="secondary"
-              variant="contained"
-              sx={{ margin: '0 5px ' }}
-              onClick={() => handleNewTasting()}
-            >
+            <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => handleNewTasting()}>
               New Tasting
             </Button>
           }

@@ -8,7 +8,7 @@ import { TastingFormT, TastingT, WineT } from '../../types'
 import { ColorSmell, Details, Review, Taste } from '../form-steps'
 import { STEPS } from './form-tasting.constants'
 
-export const FormNewTasting = ({tastingOpen }: { tastingOpen: WineT | null }) => {
+export const FormNewTasting = ({ tastingOpen }: { tastingOpen: WineT | null }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()

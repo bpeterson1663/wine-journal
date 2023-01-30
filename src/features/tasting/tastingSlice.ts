@@ -70,7 +70,7 @@ export const {
   tastingFetchSuccess,
   tastingDeleteSuccess,
   tastingSetEdit,
-  tastingSetOpen
+  tastingSetOpen,
 } = tastingSlice.actions
 
 export const fetchTastingListStart =

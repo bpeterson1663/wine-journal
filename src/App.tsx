@@ -125,7 +125,6 @@ function App() {
                 </RequireAuth>
               }
             />
-            
           </Route>
         </Routes>
       </BrowserRouter>
