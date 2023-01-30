@@ -286,7 +286,7 @@ const Cellar = () => {
               sx={{ margin: '0 5px ' }}
               onClick={() => navigate('/new-wine')}
             >
-              New Entry
+              Add Wine
             </Button>
           }
         />

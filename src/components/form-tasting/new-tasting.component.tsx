@@ -4,11 +4,11 @@ import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchTastingCreateStart } from '../../features/tasting/tastingSlice'
-import { TastingFormT, TastingT } from '../../types'
+import { TastingFormT, TastingT, WineT } from '../../types'
 import { ColorSmell, Details, Review, Taste } from '../form-steps'
 import { STEPS } from './form-tasting.constants'
 
-export const FormNewTasting = () => {
+export const FormNewTasting = ({tastingOpen }: { tastingOpen: WineT | null }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
@@ -16,7 +16,7 @@ export const FormNewTasting = () => {
   const { currentUser } = useAppSelector((state) => state.auth)
   const methods = useForm<TastingFormT>({
     mode: 'all',
-    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, varietal: [] },
+    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, ...tastingOpen },
   })
 
   const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
@@ -67,7 +67,9 @@ export const FormNewTasting = () => {
     const { errors, touchedFields } = formState
 
     if (activeStep === 0) {
-      if (
+      if (tastingOpen) {
+        return false
+      } else if (
         !touchedFields.producer ||
         !touchedFields.country ||
         !touchedFields.region ||

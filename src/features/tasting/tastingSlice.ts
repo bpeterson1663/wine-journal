@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { addTastingEntry, deleteTastingEntry, getTastingById, getTastings, updateTastingEntry } from '../../api'
-import { FetchStatusT, MessageT, TastingT } from '../../types'
+import { FetchStatusT, MessageT, TastingT, WineT } from '../../types'
 import { AppThunk, RootState } from '../store'
 
 interface InitialTastingState {
@@ -8,12 +8,14 @@ interface InitialTastingState {
   status: FetchStatusT
   tastingList: TastingT[]
   editTasting: TastingT | null
+  tastingOpen: WineT | null
 }
 const initialState: InitialTastingState = {
   message: null,
   status: 'idle',
   tastingList: [],
   editTasting: null,
+  tastingOpen: null,
 }
 
 export const tastingSlice = createSlice({
@@ -53,6 +55,9 @@ export const tastingSlice = createSlice({
     tastingSetEdit: (state, action: PayloadAction<TastingT>) => {
       state.editTasting = action.payload
     },
+    tastingSetOpen: (state, action: PayloadAction<WineT>) => {
+      state.tastingOpen = action.payload
+    },
   },
 })
 
@@ -65,6 +70,7 @@ export const {
   tastingFetchSuccess,
   tastingDeleteSuccess,
   tastingSetEdit,
+  tastingSetOpen
 } = tastingSlice.actions
 
 export const fetchTastingListStart =

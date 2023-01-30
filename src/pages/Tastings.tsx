@@ -293,7 +293,7 @@ const Tastings = () => {
               sx={{ margin: '0 5px ' }}
               onClick={() => navigate('/new-tasting')}
             >
-              New Entry
+              New Tasting
             </Button>
           }
         />
