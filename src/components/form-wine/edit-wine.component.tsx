@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineEditStart } from '../../features/wine/wineSlice'
 import { WineFormT, WineT } from '../../types'
-import { Details } from '../form-steps'
+import { Details, Quantity } from '../form-steps'
 
 export const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
   const [open, setOpen] = useState(false)
@@ -64,6 +64,9 @@ export const EditWineForm = ({ editWine }: { editWine: WineT | null }) => {
         </Snackbar>
         <Box sx={{ width: '100%', maxWidth: 600, margin: '10px auto' }}>
           <Details />
+        </Box>
+        <Box sx={{ width: '100%', maxWidth: 600, margin: '10px auto' }}>
+          <Quantity />
         </Box>
         <Box>
           <Button disabled={disableSave()} type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>

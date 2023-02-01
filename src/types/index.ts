@@ -41,6 +41,9 @@ export interface WineT {
   country: string
   vintage: string
   userId: string
+  quantity: number
+  price: number
+  description: string
 }
 
 type WineForm = Omit<WineT, 'varietal'>
