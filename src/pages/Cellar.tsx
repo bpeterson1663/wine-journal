@@ -7,6 +7,7 @@ import {
   Chip,
   Container,
   Drawer,
+  fabClasses,
   FormControl,
   IconButton,
   InputLabel,
@@ -105,7 +106,7 @@ const Cellar = () => {
       numeric: false,
       disablePadding: false,
       label: 'Classification / Name',
-      mobileOnly: true,
+      mobileOnly: false,
     },
     {
       id: 'vintage',

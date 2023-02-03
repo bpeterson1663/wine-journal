@@ -154,6 +154,9 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                       Details
                     </Typography>
                     <div>
+                      <IconButton onClick={() => handleOpenBottleClick(row)} aria-label="Open Bottle">
+                        <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
+                      </IconButton>
                       <IconButton onClick={() => handleEditWineClick(row)}>
                         <EditIcon />
                       </IconButton>

@@ -1,4 +1,4 @@
-import { Box, Button, Container, Paper, Snackbar, Step, Stepper, StepLabel, StepContent } from '@mui/material'
+import { Box, Button, Container, Paper, Snackbar, Step, StepContent, StepLabel, Stepper } from '@mui/material'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -12,8 +12,8 @@ const STEPS = [
     label: 'Details',
   },
   {
-    label: 'Quantity'
-  }
+    label: 'Quantity',
+  },
 ]
 
 export const FormNewWine = () => {

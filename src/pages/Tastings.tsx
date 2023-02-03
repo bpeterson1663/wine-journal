@@ -105,7 +105,7 @@ const Tastings = () => {
       numeric: false,
       disablePadding: false,
       label: 'Classification / Name',
-      mobileOnly: true,
+      mobileOnly: false,
     },
     {
       id: 'vintage',
