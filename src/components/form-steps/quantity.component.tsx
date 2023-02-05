@@ -15,7 +15,7 @@ export const Quantity = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller
         name="quantity"
-        defaultValue={1}
+        defaultValue={0}
         control={control}
         rules={{
           required: 'Please enter number of bottles',
@@ -35,7 +35,7 @@ export const Quantity = () => {
       />
       <Controller
         name="price"
-        defaultValue={1}
+        defaultValue={0}
         control={control}
         rules={{
           required: 'Please enter a price',

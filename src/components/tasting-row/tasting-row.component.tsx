@@ -94,7 +94,6 @@ const TastingRow = ({ row, labelId, isMobile }: { row: TastingT; labelId: string
   return (
     <>
       <ConfirmDeleteDialog />
-
       <TableRow hover onClick={(event) => handleClick(event, row.producer)} tabIndex={-1} key={row.id}>
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>

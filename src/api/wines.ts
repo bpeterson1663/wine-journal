@@ -7,10 +7,17 @@ export async function getWines(userId: string) {
     const q = query(collection(db, 'wines'), where('userId', '==', userId))
     const winesSnapshot = await getDocs(q)
 
-    const wineList = winesSnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }))
+    const wineList = winesSnapshot.docs.map((doc) => {
+      const data = doc.data()
+      const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+      const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+      return {
+        ...data,
+        id: doc.id,
+        quantity,
+        price,
+      }
+    })
     const data = wineList.map((wine) => wine as WineT)
     return {
       success: true,
@@ -30,12 +37,17 @@ export async function getWineById(id: string): Promise<FirebaseApiResponseT> {
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
+    const data = docSnap.data()
+    const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+    const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
     return {
       success: true,
       message: '',
       data: {
-        ...docSnap.data(),
+        ...data,
         id: docSnap.id,
+        quantity,
+        price,
       },
     }
   } else {
@@ -47,8 +59,10 @@ export async function getWineById(id: string): Promise<FirebaseApiResponseT> {
 }
 
 export async function addWineEntry(data: WineT): Promise<ApiResponseT> {
+  const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+  const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
   try {
-    addDoc(collection(db, 'wines'), data)
+    addDoc(collection(db, 'wines'), { ...data, quantity, price })
     return {
       success: true,
       message: 'Wine added to cellar',
@@ -64,7 +78,9 @@ export async function addWineEntry(data: WineT): Promise<ApiResponseT> {
 export async function updateWineEntry(data: WineT): Promise<ApiResponseT> {
   try {
     const wineRef = doc(db, 'wines', data.id)
-    updateDoc(wineRef, { ...data })
+    const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+    const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+    updateDoc(wineRef, { ...data, quantity, price })
     return {
       success: true,
       message: 'Wine Updated Successfully',

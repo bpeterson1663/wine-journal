@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchTastingCreateStart } from '../../features/tasting/tastingSlice'
+import { fetchWineEditStart } from '../../features/wine/wineSlice'
 import { TastingFormT, TastingT, WineT } from '../../types'
 import { ColorSmell, Details, Review, Taste } from '../form-steps'
 import { STEPS } from './form-tasting.constants'
@@ -20,6 +21,10 @@ export const FormNewTasting = ({ tastingOpen }: { tastingOpen: WineT | null }) =
   })
 
   const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
+    if (tastingOpen) {
+      const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
+      dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))
+    }
     dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)

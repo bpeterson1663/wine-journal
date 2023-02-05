@@ -179,6 +179,9 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                 <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   {row.vintage} - {row.varietal.map((item) => `${item}`).join(', ')}
                 </Typography>
+                <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+                  Qty: {row.quantity ?? 0} Price: ${row?.price.toFixed(2)}
+                </Typography>
               </Box>
             </Container>
           </Collapse>
