@@ -16,7 +16,7 @@ const SignInForm = () => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (currentUser) {
-      navigate('/tastings')
+      navigate('/cellar')
     }
   }, [currentUser, navigate])
 

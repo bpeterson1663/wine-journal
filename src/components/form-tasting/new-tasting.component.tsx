@@ -17,7 +17,7 @@ export const FormNewTasting = ({ tastingOpen }: { tastingOpen: WineT | null }) =
   const { currentUser } = useAppSelector((state) => state.auth)
   const methods = useForm<TastingFormT>({
     mode: 'all',
-    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, ...tastingOpen },
+    defaultValues: { color: 'red', intensity: 'pale', hue: 'purple', rating: 3, ...tastingOpen, date: new Date().toISOString().split('T')[0] },
   })
 
   const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
