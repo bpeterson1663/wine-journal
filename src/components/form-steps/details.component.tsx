@@ -1,9 +1,7 @@
 import { Autocomplete, Box, TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchVarietalListStart } from '../../features/varietal/varietalSlice'
+import { useAppSelector } from '../../features/hooks'
 import { TastingFormT } from '../../types'
 
 const StyledTextField = styled(TextField)({
@@ -11,15 +9,10 @@ const StyledTextField = styled(TextField)({
 })
 
 export const Details = () => {
-  const dispatch = useAppDispatch()
   const { varietalList } = useAppSelector((state) => state.varietal)
   const { formState, control, setValue } = useFormContext<TastingFormT>()
   const { errors } = formState
   const varietals: string[] = []
-
-  useEffect(() => {
-    dispatch(fetchVarietalListStart())
-  }, [dispatch])
 
   varietalList.forEach((varietal) => varietals.push(varietal.name))
   varietals.sort((a, b) => a.localeCompare(b))

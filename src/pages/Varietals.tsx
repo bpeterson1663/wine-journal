@@ -28,13 +28,12 @@ import {
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { visuallyHidden } from '@mui/utils'
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { getComparator, Order } from '../components/table/helpers'
 import VarietalRow from '../components/varietal-row/varietal-row.component'
-import { useAppDispatch, useAppSelector } from '../features/hooks'
-import { fetchVarietalListStart } from '../features/varietal/varietalSlice'
+import { useAppSelector } from '../features/hooks'
 import { VarietalT } from '../types'
 
 interface EnhancedTableProps {
@@ -64,7 +63,6 @@ const FILTERS = [
 ]
 
 const Varietals = () => {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { varietalList } = useAppSelector((state) => state.varietal)
   const { handleSubmit, control } = useForm<FilterFormT>()
@@ -77,10 +75,6 @@ const Varietals = () => {
   const [showFilterMenu, setShowFilterMenu] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-
-  useEffect(() => {
-    dispatch(fetchVarietalListStart())
-  }, [dispatch])
 
   const headCells: readonly HeadCell[] = [
     {

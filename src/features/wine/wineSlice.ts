@@ -16,6 +16,16 @@ const initialState: InitialWineState = {
   editWine: null,
 }
 
+const prepData = (data: WineT): WineT => {
+  const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+  const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+  return {
+    ...data,
+    quantity,
+    price,
+  }
+}
+
 export const wineSlice = createSlice({
   name: 'wine',
   initialState,
@@ -37,9 +47,13 @@ export const wineSlice = createSlice({
       state.message = action.payload.message
       state.wineList = [...state.wineList, action.payload.wine]
     },
-    wineEditFetchSuccess: (state, action: PayloadAction<string>) => {
+    wineEditFetchSuccess: (state, action: PayloadAction<{ wine: WineT; message: string }>) => {
       state.status = 'success'
-      state.message = action.payload
+      state.message = action.payload.message
+      const index = state.wineList.findIndex(el => el.id === action.payload.wine.id)
+      if (index >= 0) {
+        state.wineList[index] = action.payload.wine
+      }
     },
     wineFetchSuccess: (state, action: PayloadAction<WineT>) => {
       state.status = 'success'
@@ -110,10 +124,11 @@ export const fetchWineCreateStart =
   async (dispatch) => {
     try {
       dispatch(wineFetchStart())
-      const response = await addWineEntry(payload)
+      const data = prepData(payload)
+      const response = await addWineEntry(data)
       const { success, message } = response
       if (success) {
-        dispatch(wineCreateFetchSuccess({ wine: payload, message }))
+        dispatch(wineCreateFetchSuccess({ wine: data, message }))
       } else {
         dispatch(wineFetchFailure(message))
       }
@@ -127,10 +142,12 @@ export const fetchWineEditStart =
   async (dispatch) => {
     try {
       dispatch(wineFetchStart())
-      const response = await updateWineEntry(payload)
+      const data = prepData(payload)
+      debugger;
+      const response = await updateWineEntry(data)
       const { success, message } = response
       if (success) {
-        dispatch(wineEditFetchSuccess(message))
+        dispatch(wineEditFetchSuccess({ message, wine: data }))
       } else {
         dispatch(wineFetchFailure(message))
       }

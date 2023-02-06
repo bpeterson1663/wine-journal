@@ -28,13 +28,12 @@ import {
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { visuallyHidden } from '@mui/utils'
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { getComparator, Order } from '../components/table/helpers'
 import WineRow from '../components/wine-row/wine-row.component'
-import { useAppDispatch, useAppSelector } from '../features/hooks'
-import { fetchWineListStart } from '../features/wine/wineSlice'
+import { useAppSelector } from '../features/hooks'
 import { WineT } from '../types'
 
 interface EnhancedTableProps {
@@ -66,9 +65,7 @@ const FILTERS = [
 ]
 
 const Cellar = () => {
-  const dispatch = useAppDispatch()
   const { wineList } = useAppSelector((state) => state.wine)
-  const { currentUser } = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
   const { handleSubmit, control } = useForm<FilterFormT>()
   const [filterKey, setFilterKey] = useState<FilterKey>('producer')
@@ -80,10 +77,6 @@ const Cellar = () => {
   const [showFilterMenu, setShowFilterMenu] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-
-  useEffect(() => {
-    dispatch(fetchWineListStart(currentUser?.uid ?? ''))
-  }, [dispatch, currentUser?.uid])
 
   const headCells: readonly HeadCell[] = [
     {
