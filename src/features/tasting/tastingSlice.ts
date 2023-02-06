@@ -39,9 +39,13 @@ export const tastingSlice = createSlice({
       state.message = action.payload.message
       state.tastingList = [...state.tastingList, action.payload.tasting]
     },
-    tastingEditFetchSuccess: (state, action: PayloadAction<string>) => {
+    tastingEditFetchSuccess: (state, action: PayloadAction<{ tasting: TastingT; message: string }>) => {
       state.status = 'success'
-      state.message = action.payload
+      state.message = action.payload.message
+      const index = state.tastingList.findIndex(el => el.id === action.payload.tasting.id)
+      if (index >= 0) {
+        state.tastingList[index] = action.payload.tasting
+      }
     },
     tastingFetchSuccess: (state, action: PayloadAction<TastingT>) => {
       state.status = 'success'
@@ -136,7 +140,7 @@ export const fetchTastingEditStart =
       const response = await updateTastingEntry(payload)
       const { success, message } = response
       if (success) {
-        dispatch(tastingEditFetchSuccess(message))
+        dispatch(tastingEditFetchSuccess({message, tasting: payload}))
       } else {
         dispatch(tastingFetchFailure(message))
       }
