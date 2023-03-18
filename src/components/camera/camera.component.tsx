@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
-import Camera, { IMAGE_TYPES } from 'react-html5-camera-photo'
+import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
 import './camera.css'
 
@@ -42,7 +42,7 @@ export const WineLabelPic = ({ value, onChange }: Props) => {
               <img src={value} alt="Wine Label" style={{ width: '100%' }} />
             </div>
           ) : (
-            <Camera imageType={IMAGE_TYPES.JPG} imageCompression={0.97} onTakePhoto={handleTakePhotoAnimationDone} />
+            <Camera idealFacingMode={FACING_MODES.ENVIRONMENT} imageType={IMAGE_TYPES.JPG} imageCompression={0.97} onTakePhoto={handleTakePhotoAnimationDone} />
           )}
         </div>
       ) : null}
