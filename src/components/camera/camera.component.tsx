@@ -42,7 +42,7 @@ export const WineLabelPic = ({ value, onChange }: Props) => {
               <img src={value} alt="Wine Label" style={{ width: '100%' }} />
             </div>
           ) : (
-            <Camera idealFacingMode={FACING_MODES.USER} imageType={IMAGE_TYPES.JPG} imageCompression={0.97} onTakePhoto={handleTakePhotoAnimationDone} />
+            <Camera idealFacingMode={FACING_MODES.ENVIRONMENT} imageType={IMAGE_TYPES.JPG} imageCompression={0.97} onTakePhoto={handleTakePhotoAnimationDone} />
           )}
         </div>
       ) : null}
