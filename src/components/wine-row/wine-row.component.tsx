@@ -33,7 +33,13 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
   const [itemToDelete, setItemToDelete] = useState('')
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const InfoStyle = {
-    width: '100%',
+    width: isMobile ? '100%' : '78%',
+    margin: '5px 0',
+    padding: '0 5px',
+  }
+
+  const LabelStyle = {
+    width: isMobile ? '100%' : '18%',
     margin: '5px 0',
     padding: '0 5px',
   }
@@ -147,6 +153,9 @@ const WineRow = ({ row, labelId, isMobile }: { row: WineT; labelId: string; isMo
                 paddingBottom: '10px',
               }}
             >
+              <Box sx={LabelStyle}>
+                <img src={row.labelUri} alt="Wine Label" style={{ width: 150 }} />
+              </Box>
               <Box sx={InfoStyle}>
                 {isMobile ? (
                   <Container sx={{ display: 'flex', justifyContent: 'space-between', paddingLeft: 0, paddingRight: 0 }}>

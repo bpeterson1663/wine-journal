@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useAppSelector } from '../../features/hooks'
 import { TastingFormT } from '../../types'
+import { WineLabelPic } from '../camera/camera.component'
 
 const StyledTextField = styled(TextField)({
   margin: '5px 0',
@@ -151,6 +152,7 @@ export const Details = () => {
         defaultValue=""
         render={({ field }) => <StyledTextField {...field} id="subregion" label="Subregion" variant="outlined" />}
       />
+      <Controller name="labelUri" control={control} render={({ field }) => <WineLabelPic {...field} />} />
     </Box>
   )
 }

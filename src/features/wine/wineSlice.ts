@@ -50,7 +50,7 @@ export const wineSlice = createSlice({
     wineEditFetchSuccess: (state, action: PayloadAction<{ wine: WineT; message: string }>) => {
       state.status = 'success'
       state.message = action.payload.message
-      const index = state.wineList.findIndex(el => el.id === action.payload.wine.id)
+      const index = state.wineList.findIndex((el) => el.id === action.payload.wine.id)
       if (index >= 0) {
         state.wineList[index] = action.payload.wine
       }
@@ -143,7 +143,6 @@ export const fetchWineEditStart =
     try {
       dispatch(wineFetchStart())
       const data = prepData(payload)
-      debugger;
       const response = await updateWineEntry(data)
       const { success, message } = response
       if (success) {

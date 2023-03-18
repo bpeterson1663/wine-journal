@@ -22,6 +22,7 @@ export interface TastingT {
   tannin: number
   sweet: number
   userId: string
+  labelUri: string
 }
 
 type TastingForm = Omit<TastingT, 'varietal'>
@@ -44,6 +45,7 @@ export interface WineT {
   quantity: number
   price: number
   description: string
+  labelUri: string
 }
 
 type WineForm = Omit<WineT, 'varietal'>

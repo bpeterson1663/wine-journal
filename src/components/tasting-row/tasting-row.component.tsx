@@ -172,6 +172,9 @@ const TastingRow = ({ row, labelId, isMobile }: { row: TastingT; labelId: string
                 <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
                   {row.vintage} - {row.varietal.map((item) => `${item}`).join(', ')}
                 </Typography>
+                <Box sx={InfoStyle}>
+                  <img src={row.labelUri} alt="Wine Label" style={{ width: 150 }} />
+                </Box>
               </Box>
               <Box sx={InfoStyle}>
                 <Typography variant="h6" component="div">

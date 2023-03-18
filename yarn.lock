@@ -2544,6 +2544,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-html5-camera-photo@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@types/react-html5-camera-photo/-/react-html5-camera-photo-1.5.1.tgz#7585ca88a52a80035b743cd0df8a236530fe6e0a"
+  integrity sha512-5kJwACiD+fIErQiS6bVD7+d4b9lnECbfWqbDTTAcDyBDRAXDoBEqRCfRjlTYnhNIkkWJA1Ow3s8xCuLKvC1IkQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-is@^16.7.1 || ^17.0.0":
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-17.0.3.tgz#2d855ba575f2fc8d17ef9861f084acc4b90a137a"
@@ -6409,6 +6416,11 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
+jslib-html5-camera-photo@3.3.4:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/jslib-html5-camera-photo/-/jslib-html5-camera-photo-3.3.4.tgz#ae859b1747f8dd709edeb98ea28a5c0802871157"
+  integrity sha512-qysjLnP4bud0+g0qs5uA/7i569x+6ID2ufgezf9XQ+BE3EvhYjz177vi9WXLEuq+V6C/WXEv73NUICvHm5VGmQ==
+
 json-parse-better-errors@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
@@ -8070,6 +8082,13 @@ react-hook-form@^7.36.1:
   version "7.36.1"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.36.1.tgz#82a311fe8cbe75e689fd4529f083b7c983da6520"
   integrity sha512-EbYYkCG2p8ywe7ikOH2l02lAFMrrrslZi1I8fqd8ifDGNAkhomHZQzQsP6ksvzrWBKntRe8b5L5L7Zsd+Gm02Q==
+
+react-html5-camera-photo@^1.5.11:
+  version "1.5.11"
+  resolved "https://registry.yarnpkg.com/react-html5-camera-photo/-/react-html5-camera-photo-1.5.11.tgz#0616539f65bea79485aa8a4c0c305f3ed72d5a27"
+  integrity sha512-5OpdW66UmwKwd0ZHvy/U9tEZj19GrcG6RDRXjs1bFBgJoWzLJoJ7YNd8rmdrizV/6go/z9GrwoWMovqCUyaJgQ==
+  dependencies:
+    jslib-html5-camera-photo "3.3.4"
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
