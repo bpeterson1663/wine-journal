@@ -2,8 +2,9 @@ import { Button, Container, TextField } from '@mui/material'
 import { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../../features/auth/authSlice'
+import { login, signInWithGoogle } from '../../features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
+
 interface SignInFormT {
   email: string
   password: string
@@ -24,6 +25,7 @@ const SignInForm = () => {
     const { password, email } = data
     dispatch(login(email, password))
   }
+
   return (
     <Container
       sx={{
@@ -52,6 +54,7 @@ const SignInForm = () => {
       <Button type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
         Submit
       </Button>
+      <Button onClick={() => dispatch(signInWithGoogle())}>Sign In With Google</Button>
     </Container>
   )
 }

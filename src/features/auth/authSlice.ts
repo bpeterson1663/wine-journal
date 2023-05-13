@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { createAuthenticatedUser, loginUser, logoutUser } from '../../api'
+import { signInWithGooglePopup } from '../../firebase/index'
 import { AuthUserT, CurrentUser, FetchStatusT, MessageT, SignUpT } from '../../types'
 import { AppThunk, RootState } from '../store'
 import { fetchUserCreateStart } from '../user/userSlice'
+
 interface InitialAuthState {
   currentUser: CurrentUser
   status: FetchStatusT
@@ -89,6 +91,20 @@ export const login =
       dispatch(authFailure(`error ${err}`))
     }
   }
+
+export const signInWithGoogle = (): AppThunk => async (dispatch) => {
+  try {
+    dispatch(authStart())
+    const { user } = await signInWithGooglePopup()
+    if (user.email) {
+      dispatch(authSuccess({ email: user.email, uid: user.uid }))
+    } else {
+      dispatch(authFailure('could not get auth email'))
+    }
+  } catch (err) {
+    dispatch(authFailure(`error ${err}`))
+  }
+}
 
 export const authSelector = (state: RootState) => state.auth
 

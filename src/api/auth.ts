@@ -1,9 +1,9 @@
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { auth } from '../firebase'
 import { ApiResponseT, SignUpT } from '../types'
 
 export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiResponseT> => {
   try {
-    const auth = getAuth()
     const { email, password } = data
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -24,7 +24,6 @@ export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiRespons
 }
 
 export async function loginUser(email: string, password: string): Promise<ApiResponseT> {
-  const auth = getAuth()
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
     return {
@@ -45,7 +44,6 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
 
 export async function logoutUser(): Promise<ApiResponseT> {
   try {
-    const auth = getAuth()
     await signOut(auth)
     return {
       success: true,

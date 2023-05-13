@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app'
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 // import { getAnalytics } from 'firebase/analytics'
 import { getFirestore } from 'firebase/firestore/lite'
 
@@ -16,3 +17,12 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 // const analytics = getAnalytics(app)
 export const db = getFirestore(app)
+
+export const auth = getAuth()
+
+const googleProvider = new GoogleAuthProvider()
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+})
+
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)

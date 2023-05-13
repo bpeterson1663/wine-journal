@@ -9,10 +9,10 @@ import { fetchUserStart } from './features/user/userSlice'
 import Cellar from './pages/Cellar'
 import EditTasting from './pages/EditTasting'
 import EditWine from './pages/EditWine'
-import Home from './pages/Home'
 import NewTasting from './pages/NewTasting'
 import NewVarietal from './pages/NewVarietal'
 import NewWine from './pages/NewWine'
+import SignInUp from './pages/SignInUp'
 import Tastings from './pages/Tastings'
 import Varietals from './pages/Varietals'
 
@@ -60,7 +60,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
+            <Route index element={<SignInUp />} />
             <Route
               path="/cellar"
               element={
