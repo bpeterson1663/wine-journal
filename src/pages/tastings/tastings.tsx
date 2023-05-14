@@ -26,7 +26,7 @@ export default function Tastings() {
       </header>
       <section className={styles.list}>
         {tastingList.map((tasting) => (
-          <Card wine={tasting} url="tasting" showDate />
+          <Card key={tasting.id} wine={tasting} url="tasting" showDate />
         ))}
       </section>
     </main>
