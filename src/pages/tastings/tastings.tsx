@@ -1,10 +1,10 @@
 import { Button } from '@mui/material'
+import { Card } from 'components/card/card.component'
+import { Header } from 'components/typography/typography.component'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { tastingSetOpen } from 'features/tasting/tastingSlice'
 import { useNavigate } from 'react-router-dom'
-import { Card } from '../components/card/card.component'
-import { Header } from '../components/typography/typography.component'
-import { useAppDispatch, useAppSelector } from '../features/hooks'
-import { tastingSetOpen } from '../features/tasting/tastingSlice'
-import styles from './index.module.css'
+import styles from 'styles/pages.module.css'
 
 export default function Tastings() {
   const dispatch = useAppDispatch()
@@ -17,18 +17,18 @@ export default function Tastings() {
   }
 
   return (
-    <div className={styles.main}>
-      <div className={styles.headerRow}>
+    <main className={styles.main}>
+      <header className={styles.headerRow}>
         <Header variant="h2" text="Tastings" />
         <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => handleNewTasting()}>
           New Tasting
         </Button>
-      </div>
-      <div className={styles.list}>
+      </header>
+      <section className={styles.list}>
         {tastingList.map((tasting) => (
           <Card wine={tasting} url="tasting" showDate />
         ))}
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }

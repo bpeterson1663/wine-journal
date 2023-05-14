@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
+import styles from 'components/card/card.module.css'
 import { useNavigate } from 'react-router-dom'
-import { TastingT, WineT } from '../../types'
-import styles from './card.module.css'
+import { TastingT, WineT } from 'types'
 interface Props {
   wine: WineT | TastingT
   url: string

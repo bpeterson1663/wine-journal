@@ -3,7 +3,7 @@ import { addWineEntry, deleteWineEntry, getWineById, getWines, updateWineEntry }
 import { FetchStatusT, MessageT, WineT } from '../../types'
 import { AppThunk, RootState } from '../store'
 
-interface InitialWineState {
+export interface InitialWineState {
   message: MessageT
   status: FetchStatusT
   wineList: WineT[]

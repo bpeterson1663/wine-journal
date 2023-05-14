@@ -1,20 +1,21 @@
 import { grey, red } from '@mui/material/colors'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import Layout from 'components/layout/layout.component'
+import { authSuccess } from 'features/auth/authSlice'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { fetchUserStart } from 'features/user/userSlice'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import Cellar from 'pages/cellar/cellar'
+import CellarId from 'pages/cellar/cellar-id'
+import EditTasting from 'pages/EditTasting'
+import EditWine from 'pages/EditWine'
+import NewTasting from 'pages/NewTasting'
+import NewVarietal from 'pages/NewVarietal'
+import NewWine from 'pages/NewWine'
+import SignInUp from 'pages/SignInUp'
+import Tastings from 'pages/tastings/tastings'
+import Varietals from 'pages/Varietals'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import Layout from './components/layout/layout.component'
-import { authSuccess } from './features/auth/authSlice'
-import { useAppDispatch, useAppSelector } from './features/hooks'
-import { fetchUserStart } from './features/user/userSlice'
-import Cellar from './pages/Cellar'
-import EditTasting from './pages/EditTasting'
-import EditWine from './pages/EditWine'
-import NewTasting from './pages/NewTasting'
-import NewVarietal from './pages/NewVarietal'
-import NewWine from './pages/NewWine'
-import SignInUp from './pages/SignInUp'
-import Tastings from './pages/Tastings'
-import Varietals from './pages/Varietals'
 
 function App() {
   const auth = getAuth()
@@ -66,6 +67,14 @@ function App() {
               element={
                 <RequireAuth>
                   <Cellar />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/cellar/:id"
+              element={
+                <RequireAuth>
+                  <CellarId />
                 </RequireAuth>
               }
             />
