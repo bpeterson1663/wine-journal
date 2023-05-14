@@ -1,8 +1,7 @@
-import { Button, Grid } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { WineCard } from '../components/wine-card/wine-card.component'
+import { Card } from '../components/card/card.component'
 import { useAppSelector } from '../features/hooks'
-
 import styles from './index.module.css'
 
 export default function Cellar() {
@@ -11,14 +10,18 @@ export default function Cellar() {
 
   return (
     <div className={styles.main}>
-      <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new-wine')}>
-        Add Wine
-      </Button>
-      <Grid container className={styles.container}>
+      <div className={styles.headerRow}>
+        <Typography variant="h2">Cellar</Typography>
+        <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new-wine')}>
+          Add Wine
+        </Button>
+      </div>
+
+      <div className={styles.list}>
         {wineList.map((wine) => (
-          <WineCard wine={wine} />
+          <Card key={wine.id} wine={wine} url="cellar" />
         ))}
-      </Grid>
+      </div>
     </div>
   )
 }

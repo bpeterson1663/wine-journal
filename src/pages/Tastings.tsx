@@ -1,6 +1,6 @@
-import { Button, Grid } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { TastingCard } from '../components/tasting-card/tasting-card.component'
+import { Card } from '../components/card/card.component'
 import { useAppDispatch, useAppSelector } from '../features/hooks'
 import { tastingSetOpen } from '../features/tasting/tastingSlice'
 import styles from './index.module.css'
@@ -17,14 +17,17 @@ export default function Tastings() {
 
   return (
     <div className={styles.main}>
-      <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => handleNewTasting()}>
-        New Tasting
-      </Button>
-      <Grid container className={styles.container}>
+      <div className={styles.headerRow}>
+        <Typography variant="h2">Tastings</Typography>
+        <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => handleNewTasting()}>
+          New Tasting
+        </Button>
+      </div>
+      <div className={styles.list}>
         {tastingList.map((tasting) => (
-          <TastingCard tasting={tasting} />
+          <Card wine={tasting} url="tasting" />
         ))}
-      </Grid>
+      </div>
     </div>
   )
 }
