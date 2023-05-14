@@ -23,15 +23,25 @@
   
 .container {
   border-radius: 0.75rem /* 12px */;
-  padding: 0.25rem 1rem;
   margin: 0.5rem 1rem;
-  width: 240px;
   backdrop-filter: blur(10px);
   box-sizing: border-box;
   cursor: pointer;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   column-gap: 1.5rem /* 24px */;
-  row-gap: 1.5rem /* 24px */;
+  display: flex;
+  flex-direction: column;
+  max-width: 360px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  padding: 5px;
+  max-width: 180px;
 }
   
 .cardHeaderWrapper {
@@ -55,6 +65,7 @@
 
 .cardImage {
   border-radius: 0.75rem /* 12px */;
+  width: 175px;
 }
   
 @media (min-width: 1024px) {

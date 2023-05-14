@@ -1,8 +1,9 @@
-import { Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { Card } from '../components/card/card.component'
 import { useAppSelector } from '../features/hooks'
 import styles from './index.module.css'
+import { Header } from '../components/typography/typography.component'
 
 export default function Cellar() {
   const { wineList } = useAppSelector((state) => state.wine)
@@ -11,7 +12,7 @@ export default function Cellar() {
   return (
     <div className={styles.main}>
       <div className={styles.headerRow}>
-        <Typography variant="h2">Cellar</Typography>
+        <Header variant="h2" text="Cellar" />
         <Button color="secondary" variant="contained" sx={{ margin: '0 5px ' }} onClick={() => navigate('/new-wine')}>
           Add Wine
         </Button>
