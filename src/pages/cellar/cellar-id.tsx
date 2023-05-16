@@ -15,9 +15,9 @@ import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { tastingSetOpen } from 'features/tasting/tastingSlice'
 import { selectWineById } from 'features/wine/wineSelectors'
 import { fetchWineDeleteStart, wineSetEdit } from 'features/wine/wineSlice'
+import styles from 'pages/cellar/cellar.module.css'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import styles from 'pages/cellar/cellar.module.css'
 import { WineT } from 'types'
 
 export default function CellarId() {
@@ -85,7 +85,16 @@ export default function CellarId() {
       </header>
       <section className={styles.container}>
         <div className={styles.column}>
-          <img className={styles.wineImage} src={labelUri || './static/wine-tasting.jpg'} alt={wine?.producer} />
+          <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={wine?.producer} />
+          <IconButton onClick={() => handleOpenBottleClick(wine)} aria-label="Open Bottle">
+            <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
+          </IconButton>
+          <IconButton onClick={() => handleEditWineClick(wine)}>
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={() => handleConfirmDeleteOpen(wine.id)}>
+            <DeleteIcon />
+          </IconButton>
         </div>
         <div className={styles.column}>
           {producer && <Typography variant="h6">Winery: {producer}</Typography>}
@@ -98,16 +107,6 @@ export default function CellarId() {
           {subregion && <Typography variant="subtitle1">Subregion: {subregion}</Typography>}
           <Typography variant="subtitle1">Price: ${price}</Typography>
           <Typography variant="subtitle1">Quantity: {quantity}</Typography>
-
-          <IconButton onClick={() => handleOpenBottleClick(wine)} aria-label="Open Bottle">
-            <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
-          </IconButton>
-          <IconButton onClick={() => handleEditWineClick(wine)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleConfirmDeleteOpen(wine.id)}>
-            <DeleteIcon />
-          </IconButton>
         </div>
       </section>
       <ConfirmDeleteDialog />

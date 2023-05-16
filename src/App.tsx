@@ -13,6 +13,7 @@ import NewTasting from 'pages/NewTasting'
 import NewVarietal from 'pages/NewVarietal'
 import NewWine from 'pages/NewWine'
 import SignInUp from 'pages/SignInUp'
+import TastingId from 'pages/tastings/tasting-id'
 import Tastings from 'pages/tastings/tastings'
 import Varietals from 'pages/Varietals'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
@@ -99,6 +100,14 @@ function App() {
               element={
                 <RequireAuth>
                   <Tastings />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/tastings/:id"
+              element={
+                <RequireAuth>
+                  <TastingId />
                 </RequireAuth>
               }
             />

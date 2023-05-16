@@ -20,15 +20,15 @@ export const BODY_MARKS = [
   },
   {
     value: 2,
-    label: 'Med -',
+    label: 'Medium Minus',
   },
   {
     value: 3,
-    label: 'Med',
+    label: 'Medium',
   },
   {
     value: 4,
-    label: 'Med +',
+    label: 'Medium Plus',
   },
   {
     value: 5,
@@ -43,15 +43,15 @@ export const TANNIN_ACIDITY_MARKS = [
   },
   {
     value: 2,
-    label: 'Med -',
+    label: 'Medium Minus',
   },
   {
     value: 3,
-    label: 'Med',
+    label: 'Medium',
   },
   {
     value: 4,
-    label: 'Med +',
+    label: 'Medium Plus',
   },
   {
     value: 5,
