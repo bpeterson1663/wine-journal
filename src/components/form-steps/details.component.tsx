@@ -1,7 +1,6 @@
 import { Autocomplete, Box, TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useAppSelector } from '../../features/hooks'
 import { TastingFormT } from '../../types'
 import { WineLabelPic } from '../camera/camera.component'
 
@@ -10,13 +9,10 @@ const StyledTextField = styled(TextField)({
 })
 
 export const Details = () => {
-  const { varietalList } = useAppSelector((state) => state.varietal)
   const { formState, control, setValue } = useFormContext<TastingFormT>()
   const { errors } = formState
   const varietals: string[] = []
 
-  varietalList.forEach((varietal) => varietals.push(varietal.name))
-  varietals.sort((a, b) => a.localeCompare(b))
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
       <Controller

@@ -1,18 +1,15 @@
 import { Button } from '@mui/material'
 import { Card } from 'components/card/card.component'
 import { Header } from 'components/typography/typography.component'
-import { useAppDispatch, useAppSelector } from 'features/hooks'
-import { tastingSetOpen } from 'features/tasting/tastingSlice'
+import { useAppSelector } from 'features/hooks'
 import { useNavigate } from 'react-router-dom'
 import styles from 'styles/pages.module.css'
 
 export default function Tastings() {
-  const dispatch = useAppDispatch()
   const { tastingList } = useAppSelector((state) => state.tasting)
   const navigate = useNavigate()
 
   const handleNewTasting = () => {
-    dispatch(tastingSetOpen(null))
     navigate('/new-tasting')
   }
 

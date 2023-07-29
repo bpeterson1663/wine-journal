@@ -31,19 +31,9 @@ const NavBar = () => {
       <Toolbar>
         {currentUser && (
           <>
-            <NavLink to="/cellar">
-              <Icon aria-label="home button">
-                <span className="iconify" data-icon="game-icons:cellar-barrels"></span>
-              </Icon>
-            </NavLink>
             <NavLink to="/tastings">
               <Icon aria-label="home button">
                 <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
-              </Icon>
-            </NavLink>
-            <NavLink to="/varietals">
-              <Icon aria-label="home button">
-                <span className="iconify" data-icon="mdi:fruit-grapes"></span>
               </Icon>
             </NavLink>
             <div

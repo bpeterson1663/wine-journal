@@ -4,12 +4,11 @@ import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchTastingCreateStart } from '../../features/tasting/tastingSlice'
-import { fetchWineEditStart } from '../../features/wine/wineSlice'
-import { TastingFormT, TastingT, WineT } from '../../types'
+import { TastingFormT, TastingT } from '../../types'
 import { ColorSmell, Details, Review, Taste } from '../form-steps'
 import { STEPS } from './form-tasting.constants'
 
-export const FormNewTasting = ({ tastingOpen }: { tastingOpen: WineT | null }) => {
+export const FormNewTasting = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
@@ -22,16 +21,11 @@ export const FormNewTasting = ({ tastingOpen }: { tastingOpen: WineT | null }) =
       intensity: 'pale',
       hue: 'purple',
       rating: 3,
-      ...tastingOpen,
       date: new Date().toISOString().split('T')[0],
     },
   })
 
   const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
-    if (tastingOpen) {
-      const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
-      dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))
-    }
     dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
     setTimeout(() => setOpen(false), 5000)
@@ -79,9 +73,7 @@ export const FormNewTasting = ({ tastingOpen }: { tastingOpen: WineT | null }) =
     const { errors, touchedFields } = formState
 
     if (activeStep === 0) {
-      if (tastingOpen) {
-        return false
-      } else if (
+      if (
         !touchedFields.producer ||
         !touchedFields.country ||
         !touchedFields.region ||
