@@ -27,7 +27,7 @@ const NavBar = () => {
     }
   }
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" style={{ marginBottom: 60 }}>
       <Toolbar>
         {currentUser && (
           <>

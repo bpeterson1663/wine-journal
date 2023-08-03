@@ -1,13 +1,15 @@
 import { Container } from '@mui/material'
-import { FormNewTasting } from '../../components/form-tasting/new-tasting.component'
 import Footer from 'components/footer/footer.component'
+import { FormNewTasting } from '../../components/form-tasting/new-tasting.component'
 
 const NewWine = () => {
   return (
-    <Container component="main">
-      <FormNewTasting />
+    <>
+      <Container component="main">
+        <FormNewTasting />
+      </Container>
       <Footer />
-    </Container>
+    </>
   )
 }
 

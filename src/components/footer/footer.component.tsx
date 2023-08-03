@@ -7,7 +7,7 @@ interface Props {
 
 const Footer = ({ children }: Props) => {
   return (
-    <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
+    <AppBar component="footer" position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
       <Toolbar>{children}</Toolbar>
     </AppBar>
   )

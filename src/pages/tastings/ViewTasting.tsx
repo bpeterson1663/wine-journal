@@ -22,8 +22,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import RatingIcon from 'components/rating/raiting.component'
 
-import { TastingT } from 'types'
 import Footer from 'components/footer/footer.component'
+import { TastingT } from 'types'
 
 export default function TastingId() {
   const params = useParams()
@@ -59,7 +59,7 @@ export default function TastingId() {
 
   const handleEditClick = (wine: TastingT) => {
     dispatch(tastingSetEdit(wine))
-    navigate('/edit-wine')
+    navigate('/edit-tasting')
   }
 
   const ConfirmDeleteDialog = () => (
@@ -102,67 +102,69 @@ export default function TastingId() {
   } = tasting
 
   return (
-    <main className={styles.main}>
-      <header className={styles.headerRow}>
-        <Header variant="h2" text={producer} />
-      </header>
-      <section className={styles.container}>
-        <div className={styles.column}>
-          <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
-        </div>
-        <div className={styles.column}>
-          <IconButton onClick={() => handleEditClick(tasting)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleConfirmDeleteOpen(tasting.id)}>
-            <DeleteIcon />
-          </IconButton>
-          {producer && <Typography variant="h6">Winery: {producer}</Typography>}
-          {classification && <Typography variant="h6">Name: {classification}</Typography>}
-          <Typography variant="subtitle1">Varietal(s): {varietal.join(', ')}</Typography>
-          <Typography variant="subtitle1">Vintage: {vintage}</Typography>
-          <Typography variant="subtitle1">Country: {country}</Typography>
+    <>
+      <main>
+        <header className={styles.headerRow}>
+          <Header variant="h2" text={producer} />
+        </header>
+        <section className={styles.container}>
+          <div className={styles.column}>
+            <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
+          </div>
+          <div className={styles.column}>
+            <IconButton onClick={() => handleEditClick(tasting)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => handleConfirmDeleteOpen(tasting.id)}>
+              <DeleteIcon />
+            </IconButton>
+            {producer && <Typography variant="h6">Winery: {producer}</Typography>}
+            {classification && <Typography variant="h6">Name: {classification}</Typography>}
+            <Typography variant="subtitle1">Varietal(s): {varietal.join(', ')}</Typography>
+            <Typography variant="subtitle1">Vintage: {vintage}</Typography>
+            <Typography variant="subtitle1">Country: {country}</Typography>
 
-          <Typography variant="subtitle1">Region: {region}</Typography>
-          {subregion && <Typography variant="subtitle1">Subregion: {subregion}</Typography>}
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            {uppercaseFirstLetter(color)} / {uppercaseFirstLetter(intensity)} / {uppercaseFirstLetter(hue)}
-          </Typography>
-          <ColorPalette color={color} hue={hue} intensity={intensity} />
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            {smell}
-          </Typography>
-        </div>
-        <div className={styles.column}>
-          <Typography variant="h6" component="div">
-            Taste
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            Body: {getLabel('BODY', body)}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            Tannin: {getLabel('TANNIN', tannin)}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            Acidity: {getLabel('ACIDITY', acidity)}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            Alcohol: {getLabel('ALCOHOL', alcohol)}%
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            Sweetness: {getLabel('SWEET', sweet)}
-          </Typography>
-          <Typography variant="h6" component="div">
-            Remarks and Review
-          </Typography>
-          <RatingIcon rating={rating} />
-          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-            {remarks}
-          </Typography>
-        </div>
-      </section>
-      <ConfirmDeleteDialog />
+            <Typography variant="subtitle1">Region: {region}</Typography>
+            {subregion && <Typography variant="subtitle1">Subregion: {subregion}</Typography>}
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              {uppercaseFirstLetter(color)} / {uppercaseFirstLetter(intensity)} / {uppercaseFirstLetter(hue)}
+            </Typography>
+            <ColorPalette color={color} hue={hue} intensity={intensity} />
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              {smell}
+            </Typography>
+          </div>
+          <div className={styles.column}>
+            <Typography variant="h6" component="div">
+              Taste
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              Body: {getLabel('BODY', body)}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              Tannin: {getLabel('TANNIN', tannin)}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              Acidity: {getLabel('ACIDITY', acidity)}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              Alcohol: {getLabel('ALCOHOL', alcohol)}%
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              Sweetness: {getLabel('SWEET', sweet)}
+            </Typography>
+            <Typography variant="h6" component="div">
+              Remarks and Review
+            </Typography>
+            <RatingIcon rating={rating} />
+            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+              {remarks}
+            </Typography>
+          </div>
+        </section>
+        <ConfirmDeleteDialog />
+      </main>
       <Footer />
-    </main>
+    </>
   )
 }
