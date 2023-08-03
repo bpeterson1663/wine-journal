@@ -2,11 +2,11 @@ import { grey, red } from '@mui/material/colors'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Layout from 'components/layout/layout.component'
 import { useAppSelector } from 'features/hooks'
-import EditTasting from 'pages/EditTasting'
 import Home from 'pages/Home'
-import NewTasting from 'pages/NewTasting'
-import TastingId from 'pages/tastings/tasting-id'
-import Tastings from 'pages/tastings/tastings'
+import NotFound from 'pages/NotFound'
+import EditTasting from 'pages/tastings/EditTasting'
+import NewTasting from 'pages/tastings/NewTasting'
+import ViewTasting from 'pages/tastings/ViewTasting'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 function App() {
@@ -40,18 +40,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route
-            path="/tastings"
-            element={
-              <AuthRoute>
-                <Tastings />
-              </AuthRoute>
-            }
-          />
-          <Route
             path="/tastings/:id"
             element={
               <AuthRoute>
-                <TastingId />
+                <ViewTasting />
               </AuthRoute>
             }
           />
@@ -71,6 +63,7 @@ function App() {
               </AuthRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </ThemeProvider>

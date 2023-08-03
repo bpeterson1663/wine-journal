@@ -23,6 +23,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import RatingIcon from 'components/rating/raiting.component'
 
 import { TastingT } from 'types'
+import Footer from 'components/footer/footer.component'
 
 export default function TastingId() {
   const params = useParams()
@@ -52,7 +53,7 @@ export default function TastingId() {
   const handleDelete = () => {
     dispatch(fetchTastingDeleteStart(itemToDelete))
     if (status === 'success') {
-      navigate('/tastings')
+      navigate('/')
     }
   }
 
@@ -161,6 +162,7 @@ export default function TastingId() {
         </div>
       </section>
       <ConfirmDeleteDialog />
+      <Footer />
     </main>
   )
 }

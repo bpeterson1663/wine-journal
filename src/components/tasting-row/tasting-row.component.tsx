@@ -66,7 +66,7 @@ const TastingRow = ({ row, labelId, isMobile }: { row: TastingT; labelId: string
   const handleDeleteTasting = () => {
     dispatch(fetchTastingDeleteStart(itemToDelete))
     if (status === 'success') {
-      navigate('/tastings')
+      navigate('/')
     }
   }
 

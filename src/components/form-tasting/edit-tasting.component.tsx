@@ -78,7 +78,7 @@ export const EditTastingForm = ({ editTasting }: { editTasting: TastingT | null 
           <Button disabled={disableSave()} type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
             Save
           </Button>
-          <Button onClick={() => navigate('/tastings')} variant="outlined" sx={{ mt: 1, mr: 1 }}>
+          <Button onClick={() => navigate('/')} variant="outlined" sx={{ mt: 1, mr: 1 }}>
             Cancel
           </Button>
         </Box>

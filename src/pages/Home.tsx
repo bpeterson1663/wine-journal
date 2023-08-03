@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { fetchUserStart } from 'features/user/userSlice'
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth'
 import SignInUp from 'pages/SignInUp'
-import Tastings from 'pages/tastings/tastings'
+import Tastings from 'pages/Tastings'
 import { useState } from 'react'
 
 export default function Home() {
@@ -26,6 +26,7 @@ export default function Home() {
       }
     } else {
       setLoading(false)
+      setUser(null)
     }
   })
 
