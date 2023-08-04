@@ -1,17 +1,5 @@
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  Typography,
-} from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import ColorPalette from 'components/color-palette/color-palette.component'
-import { Header } from 'components/typography/typography.component'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectTastingById } from 'features/tasting/tastingSelectors'
 import { fetchTastingDeleteStart, tastingSetEdit } from 'features/tasting/tastingSlice'
@@ -22,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import RatingIcon from 'components/rating/raiting.component'
 
-import Footer from 'components/footer/footer.component'
+import PageContainer from 'components/page-container/page-container.component'
 import { TastingT } from 'types'
 
 export default function TastingId() {
@@ -37,7 +25,7 @@ export default function TastingId() {
 
   if (!tasting) {
     navigate('/')
-    return <></>
+    return null
   }
 
   const handleConfirmDeleteOpen = (id: string) => {
@@ -79,6 +67,17 @@ export default function TastingId() {
     </Dialog>
   )
 
+  const Actions = () => (
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+      <Button color="secondary" variant="contained" sx={{ mt: 1, mr: 1 }} onClick={() => handleEditClick(tasting)}>
+        Edit
+      </Button>
+      <Button color="info" onClick={() => handleConfirmDeleteOpen(tasting.id)} variant="outlined" sx={{ mt: 1, mr: 1 }}>
+        Delete
+      </Button>
+    </div>
+  )
+
   const {
     producer,
     labelUri,
@@ -102,69 +101,57 @@ export default function TastingId() {
   } = tasting
 
   return (
-    <>
-      <main>
-        <header className={styles.headerRow}>
-          <Header variant="h2" text={producer} />
-        </header>
-        <section className={styles.container}>
-          <div className={styles.column}>
-            <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
-          </div>
-          <div className={styles.column}>
-            <IconButton onClick={() => handleEditClick(tasting)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => handleConfirmDeleteOpen(tasting.id)}>
-              <DeleteIcon />
-            </IconButton>
-            {producer && <Typography variant="h6">Winery: {producer}</Typography>}
-            {classification && <Typography variant="h6">Name: {classification}</Typography>}
-            <Typography variant="subtitle1">Varietal(s): {varietal.join(', ')}</Typography>
-            <Typography variant="subtitle1">Vintage: {vintage}</Typography>
-            <Typography variant="subtitle1">Country: {country}</Typography>
+    <PageContainer title={producer} actions={<Actions />}>
+      <section className={styles.container}>
+        <div className={styles.column}>
+          <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
+        </div>
+        <div className={styles.column}>
+          {producer && <Typography variant="h6">Winery: {producer}</Typography>}
+          {classification && <Typography variant="h6">Name: {classification}</Typography>}
+          <Typography variant="subtitle1">Varietal(s): {varietal.join(', ')}</Typography>
+          <Typography variant="subtitle1">Vintage: {vintage}</Typography>
+          <Typography variant="subtitle1">Country: {country}</Typography>
 
-            <Typography variant="subtitle1">Region: {region}</Typography>
-            {subregion && <Typography variant="subtitle1">Subregion: {subregion}</Typography>}
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              {uppercaseFirstLetter(color)} / {uppercaseFirstLetter(intensity)} / {uppercaseFirstLetter(hue)}
-            </Typography>
-            <ColorPalette color={color} hue={hue} intensity={intensity} />
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              {smell}
-            </Typography>
-          </div>
-          <div className={styles.column}>
-            <Typography variant="h6" component="div">
-              Taste
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              Body: {getLabel('BODY', body)}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              Tannin: {getLabel('TANNIN', tannin)}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              Acidity: {getLabel('ACIDITY', acidity)}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              Alcohol: {getLabel('ALCOHOL', alcohol)}%
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              Sweetness: {getLabel('SWEET', sweet)}
-            </Typography>
-            <Typography variant="h6" component="div">
-              Remarks and Review
-            </Typography>
-            <RatingIcon rating={rating} />
-            <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
-              {remarks}
-            </Typography>
-          </div>
-        </section>
-        <ConfirmDeleteDialog />
-      </main>
-      <Footer />
-    </>
+          <Typography variant="subtitle1">Region: {region}</Typography>
+          {subregion && <Typography variant="subtitle1">Subregion: {subregion}</Typography>}
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            {uppercaseFirstLetter(color)} / {uppercaseFirstLetter(intensity)} / {uppercaseFirstLetter(hue)}
+          </Typography>
+          <ColorPalette color={color} hue={hue} intensity={intensity} />
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            {smell}
+          </Typography>
+        </div>
+        <div className={styles.column}>
+          <Typography variant="h6" component="div">
+            Taste
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            Body: {getLabel('BODY', body)}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            Tannin: {getLabel('TANNIN', tannin)}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            Acidity: {getLabel('ACIDITY', acidity)}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            Alcohol: {getLabel('ALCOHOL', alcohol)}%
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            Sweetness: {getLabel('SWEET', sweet)}
+          </Typography>
+          <Typography variant="h6" component="div">
+            Remarks and Review
+          </Typography>
+          <RatingIcon rating={rating} />
+          <Typography variant="body2" sx={{ mb: 1.5 }} color="text.secondary">
+            {remarks}
+          </Typography>
+        </div>
+      </section>
+      <ConfirmDeleteDialog />
+    </PageContainer>
   )
 }

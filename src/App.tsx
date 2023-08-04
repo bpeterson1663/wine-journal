@@ -1,4 +1,3 @@
-import { grey, red } from '@mui/material/colors'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Layout from 'components/layout/layout.component'
 import { useAppSelector } from 'features/hooks'
@@ -13,10 +12,13 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: grey[800],
+        main: '#424242',
       },
       secondary: {
-        main: red[900],
+        main: '#b71c1c',
+      },
+      info: {
+        main: '#ffffff',
       },
     },
     typography: {

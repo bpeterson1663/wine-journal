@@ -1,18 +1,3 @@
-export const STEPS = [
-  {
-    label: 'Details',
-  },
-  {
-    label: 'Color and Smell',
-  },
-  {
-    label: 'Taste',
-  },
-  {
-    label: 'Remarks and Review',
-  },
-]
-
 export const BODY_MARKS = [
   {
     value: 1,
@@ -58,6 +43,7 @@ export const TANNIN_ACIDITY_MARKS = [
     label: 'High',
   },
 ]
+
 export const ALCOHOL_MARKS = [
   {
     value: 1,

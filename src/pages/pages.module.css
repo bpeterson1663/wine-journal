@@ -1,8 +1,4 @@
 /** HOME.MODULE.CSS **/
-
-/** Mobile first development **/
-
-  
 .main {
   margin-top: 2.5rem;
   margin-left: auto;
@@ -11,13 +7,6 @@
   max-width: 76rem;
   padding-left: 1rem;
   padding-right: 1rem;
-}
-
-.headerRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
 }
 
 .list {

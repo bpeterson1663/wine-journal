@@ -1,15 +1,5 @@
-import Footer from 'components/footer/footer.component'
-import { Header } from 'components/typography/typography.component'
+import PageContainer from '../components/page-container/page-container.component'
 
 export default function NotFound() {
-  return (
-    <>
-      <main>
-        <header>
-          <Header variant="h2" text="Page Not Found" />
-        </header>
-      </main>
-      <Footer />
-    </>
-  )
+  return <PageContainer title="Page Not Found" />
 }
