@@ -47,7 +47,7 @@ export default function TastingId () {
 
   const handleEditClick = (wine: TastingT) => {
     dispatch(tastingSetEdit(wine))
-    navigate('/edit-tasting')
+    navigate('/tastings/edit')
   }
 
   const ConfirmDeleteDialog = () => (

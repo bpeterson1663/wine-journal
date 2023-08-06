@@ -10,7 +10,7 @@ export default function Tastings () {
   const navigate = useNavigate()
 
   const handleNewTasting = () => {
-    navigate('/new-tasting')
+    navigate('/tastings/new')
   }
 
   const Actions = () => (

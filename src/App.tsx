@@ -72,9 +72,14 @@ function App () {
         <Route path="/" element={ <Layout /> } >
           <Route path="/login" element={ <SignInUp /> } />
           <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
-          <Route path="/tastings/:id" element={ <ProtectedRoute component={ <ViewTasting /> } /> } />
-          <Route path="/new-tasting" element={ <ProtectedRoute component={ <NewTasting /> } /> } />
-          <Route path="/edit-tasting" element={ <ProtectedRoute component={ <EditTasting /> } /> } />
+
+          <Route path="/tastings">
+            <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
+            <Route path=":id" element={ <ProtectedRoute component={ <ViewTasting /> } /> } />
+            <Route path="new" element={ <ProtectedRoute component={ <NewTasting /> } /> } />
+            <Route path="edit" element={ <ProtectedRoute component={ <EditTasting /> } /> } />
+          </Route>
+
           <Route path="*" element={ <NotFound /> } />
         </Route>
       </Routes>
