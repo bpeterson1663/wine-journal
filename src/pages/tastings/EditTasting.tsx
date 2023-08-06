@@ -1,7 +1,7 @@
 import { Box, Button, Container, Snackbar } from '@mui/material'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import PageContainer from '../../components/page-container/page-container.component'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { ColorSmell, Details, Review, Taste } from '../../components/form-steps'
@@ -21,9 +21,11 @@ const EditTasting = () => {
     defaultValues: { ...editTasting }
   })
 
-  if (!editTasting) {
-    navigate('/')
-  }
+  useEffect(() => {
+    if (!editTasting) {
+      navigate('/')
+    }
+  }, [editTasting, navigate])
 
   const onSubmitHandler: SubmitHandler<TastingT> = async data => {
     dispatch(fetchTastingEditStart(data))

@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import { Card } from 'components/card/card.component'
 import PageContainer from 'components/page-container/page-container.component'
 import { useAppSelector } from 'features/hooks'
-import styles from 'pages/pages.module.css'
+import styles from 'pages/tastings/tasting.module.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function Tastings () {
@@ -24,9 +24,11 @@ export default function Tastings () {
   return (
     <PageContainer title="Tastings" actions={ <Actions /> }>
       <section className={ styles.list }>
-        { tastingList.map(tasting => (
+        { [...tastingList]
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .map(tasting => (
           <Card key={ tasting.id } wine={ tasting } url="tastings" showDate />
-        )) }
+          )) }
       </section>
     </PageContainer>
   )

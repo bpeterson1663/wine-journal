@@ -1,38 +1,56 @@
 .column {
-    padding: 5px;
-    margin: 0 5px;
+  padding: 5px;
+  margin: 0 5px;
 }
 
 .wineImage {
-    border-radius: 0.75rem /* 12px */;
-    width: 300px;
+  border-radius: 0.75rem;
+  width: 300px;
 }
 
+.list {
+  margin-bottom: 3rem;
+  display: flex;
+  overflow-x: scroll;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
 @media (min-width: 640px) {
-    .main {
-      padding-left: .5rem;
-      padding-right: .5rem;
-    }
-    .container {
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+  .container {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+  .list {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
     
-  @media (min-width: 768px) {
-    .container {
-        display: flex;
-        flex-direction: row;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+@media (min-width: 768px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+
+  .list {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
   
-  @media (min-width: 1024px) {
-    .container {
-        display: flex;
-        flex-direction: row;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+@media (min-width: 1024px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+
+  .list {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
   

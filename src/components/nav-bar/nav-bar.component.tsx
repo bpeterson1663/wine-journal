@@ -27,7 +27,7 @@ const NavBar = () => {
     }
   }
   return (
-    <AppBar position="fixed" style={ { marginBottom: 60 } }>
+    <AppBar position="sticky">
       <Toolbar>
         { currentUser && (
           <>
