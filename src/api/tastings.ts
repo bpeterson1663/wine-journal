@@ -1,31 +1,32 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore/lite'
 import { db } from '../firebase'
-import { ApiResponseT, FirebaseApiResponseT, TastingT } from '../types'
+import { type ApiResponseT, type FirebaseApiResponseT, type TastingT } from '../types'
 
-export async function getTastings(userId: string) {
+export async function getTastings (userId: string) {
   try {
-    const q = query(collection(db, 'tastings'), where('userId', '==', userId))
-    const tastingsSnapshot = await getDocs(q)
+    const fbq = query(collection(db, 'tastings'), where('userId', '==', userId))
+    const tastingsSnapshot = await getDocs(fbq)
 
-    const tastingList = tastingsSnapshot.docs.map((doc) => ({
+    const tastingList = tastingsSnapshot.docs.map(doc => ({
       ...doc.data(),
-      id: doc.id,
+      id: doc.id
     }))
-    const data = tastingList.map((tasting) => tasting as TastingT)
+    const data = tastingList.map(tasting => tasting as TastingT)
     return {
       success: true,
       message: '',
-      data,
+      data
     }
   } catch (e) {
+    console.error(e)
     return {
       success: false,
-      message: `Error fetching tastings ${e}`,
+      message: 'Error fetching tastings'
     }
   }
 }
 
-export async function getTastingById(id: string): Promise<FirebaseApiResponseT> {
+export async function getTastingById (id: string): Promise<FirebaseApiResponseT> {
   const docRef = doc(db, 'tastings', id)
   const docSnap = await getDoc(docRef)
 
@@ -35,59 +36,62 @@ export async function getTastingById(id: string): Promise<FirebaseApiResponseT> 
       message: '',
       data: {
         ...docSnap.data(),
-        id: docSnap.id,
-      },
+        id: docSnap.id
+      }
     }
   } else {
     return {
       success: false,
-      message: 'Document does not exist',
+      message: 'Document does not exist'
     }
   }
 }
 
-export async function addTastingEntry(data: TastingT): Promise<ApiResponseT> {
+export async function addTastingEntry (data: TastingT): Promise<ApiResponseT> {
   try {
-    addDoc(collection(db, 'tastings'), data)
+    await addDoc(collection(db, 'tastings'), data)
     return {
       success: true,
-      message: 'Tasting Created Successfully',
+      message: 'Tasting Created Successfully'
     }
   } catch (e) {
+    console.error(e)
     return {
       success: false,
-      message: `Error creating tasting ${e}`,
+      message: 'Error creating tasting'
     }
   }
 }
 
-export async function updateTastingEntry(data: TastingT): Promise<ApiResponseT> {
+export async function updateTastingEntry (data: TastingT): Promise<ApiResponseT> {
   try {
     const tastingRef = doc(db, 'tastings', data.id)
-    updateDoc(tastingRef, { ...data })
+    await updateDoc(tastingRef, { ...data })
     return {
       success: true,
-      message: 'Tasting Updated Successfully',
+      message: 'Tasting Updated Successfully'
     }
   } catch (e) {
+    console.error(e)
     return {
       success: false,
-      message: `Error creating tasting ${e}`,
+      message: 'Error creating tasting'
     }
   }
 }
 
-export async function deleteTastingEntry(id: string): Promise<ApiResponseT> {
+export async function deleteTastingEntry (id: string): Promise<ApiResponseT> {
   try {
-    deleteDoc(doc(db, 'tastings', id))
+    await deleteDoc(doc(db, 'tastings', id))
     return {
       success: true,
-      message: 'Tasting Deleted Successfully',
+      message: 'Tasting Deleted Successfully'
     }
   } catch (e) {
+    console.error(e)
     return {
       success: false,
-      message: `Error deleting tasting ${e}`,
+      message: 'Error deleting tasting'
     }
   }
 }

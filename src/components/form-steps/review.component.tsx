@@ -9,63 +9,61 @@ import { TastingT } from '../../types'
 
 export const Review = () => {
   const { control } = useFormContext<TastingT>()
-  const customIcons: {
-    [index: string]: {
-      icon: React.ReactElement
-      label: string
-    }
-  } = {
+  const customIcons: Record<string, {
+    icon: React.ReactElement
+    label: string
+  }> = {
     1: {
       icon: <SentimentVeryDissatisfiedIcon fontSize="large" />,
-      label: 'Very Dissatisfied',
+      label: 'Very Dissatisfied'
     },
     2: {
       icon: <SentimentDissatisfiedIcon fontSize="large" />,
-      label: 'Dissatisfied',
+      label: 'Dissatisfied'
     },
     3: {
       icon: <SentimentSatisfiedIcon fontSize="large" />,
-      label: 'Neutral',
+      label: 'Neutral'
     },
     4: {
       icon: <SentimentSatisfiedAltIcon fontSize="large" />,
-      label: 'Satisfied',
+      label: 'Satisfied'
     },
     5: {
       icon: <SentimentVerySatisfiedIcon fontSize="large" />,
-      label: 'Very Satisfied',
-    },
+      label: 'Very Satisfied'
+    }
   }
 
-  function IconContainer(props: IconContainerProps) {
+  function IconContainer (props: IconContainerProps) {
     const { value, ...other } = props
-    return <span {...other}>{customIcons[value].icon}</span>
+    return <span { ...other }>{ customIcons[value].icon }</span>
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
+    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
       <Controller
         name="remarks"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => (
-          <TextField multiline rows={4} id="remarks" label="Remarks" variant="outlined" {...field} />
-        )}
+        render={ ({ field }) => (
+          <TextField multiline rows={ 4 } id="remarks" label="Remarks" variant="outlined" { ...field } />
+        ) }
       />
       <FormControl>
         <FormLabel id="rating-label">Rating</FormLabel>
         <Controller
           name="rating"
-          control={control}
-          defaultValue={3}
-          render={({ field }) => (
+          control={ control }
+          defaultValue={ 3 }
+          render={ ({ field }) => (
             <Rating
-              {...field}
+              { ...field }
               aria-labelledby="rating-label"
-              IconContainerComponent={IconContainer}
+              IconContainerComponent={ IconContainer }
               highlightSelectedOnly
             />
-          )}
+          ) }
         />
       </FormControl>
     </Box>

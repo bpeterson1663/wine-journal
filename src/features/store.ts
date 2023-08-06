@@ -1,4 +1,4 @@
-import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { type Action, configureStore, type ThunkAction } from '@reduxjs/toolkit'
 import authReducer from './auth/authSlice'
 import tastingReducer from './tasting/tastingSlice'
 import userReducer from './user/userSlice'
@@ -7,8 +7,8 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     tasting: tastingReducer,
-    user: userReducer,
-  },
+    user: userReducer
+  }
 })
 
 export type RootState = ReturnType<typeof store.getState>

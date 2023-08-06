@@ -11,7 +11,7 @@ const SignUpForm = () => {
   const { handleSubmit, control } = useForm<SignUpFormT>()
   const dispatch = useAppDispatch()
 
-  const onSubmitHandler: SubmitHandler<SignUpFormT> = async (data) => {
+  const onSubmitHandler: SubmitHandler<SignUpFormT> = async data => {
     const { password, confirmPassword, email, firstName, lastName } = data
     if (password !== confirmPassword) {
       alert('Passwords do not match')
@@ -21,50 +21,50 @@ const SignUpForm = () => {
   }
   return (
     <Container
-      sx={{
+      sx={ {
         display: 'flex',
         flexFlow: 'column wrap',
         maxWidth: 600,
-        width: '90%',
-      }}
+        width: '90%'
+      } }
       component="form"
-      onSubmit={handleSubmit(onSubmitHandler)}
+      onSubmit={ handleSubmit(onSubmitHandler) }
     >
       <Controller
         name="firstName"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => <TextField id="firstName" label="First Name" {...field} />}
+        render={ ({ field }) => <TextField id="firstName" label="First Name" { ...field } /> }
       />
       <Controller
         name="lastName"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => <TextField id="lastName" label="Last Name" {...field} />}
+        render={ ({ field }) => <TextField id="lastName" label="Last Name" { ...field } /> }
       />
       <Controller
         name="email"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => <TextField id="email" type="email" label="Email" {...field} />}
+        render={ ({ field }) => <TextField id="email" type="email" label="Email" { ...field } /> }
       />
       <Controller
         name="password"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => (
-          <TextField autoComplete="on" id="password" type="password" label="Password" {...field} />
-        )}
+        render={ ({ field }) => (
+          <TextField autoComplete="on" id="password" type="password" label="Password" { ...field } />
+        ) }
       />
       <Controller
         name="confirmPassword"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => (
-          <TextField autoComplete="on" id="confirmPassword" type="password" label="Confirm Password" {...field} />
-        )}
+        render={ ({ field }) => (
+          <TextField autoComplete="on" id="confirmPassword" type="password" label="Confirm Password" { ...field } />
+        ) }
       />
-      <Button type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
+      <Button type="submit" variant="contained" sx={ { mt: 1, mr: 1 } }>
         Submit
       </Button>
     </Container>

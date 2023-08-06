@@ -5,20 +5,20 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 
 type FontSizeT = 'large' | 'medium' | 'small'
-const RatingIcon = ({ rating, fontSize = 'large' }: { rating: number; fontSize?: FontSizeT }) => {
+const RatingIcon = ({ rating, fontSize = 'large' }: { rating: number, fontSize?: FontSizeT }) => {
   switch (rating * 1) {
     case 1:
-      return <SentimentVeryDissatisfiedIcon fontSize={fontSize} />
+      return <SentimentVeryDissatisfiedIcon fontSize={ fontSize } />
     case 2:
-      return <SentimentDissatisfiedIcon fontSize={fontSize} />
+      return <SentimentDissatisfiedIcon fontSize={ fontSize } />
     case 3:
-      return <SentimentSatisfiedIcon fontSize={fontSize} />
+      return <SentimentSatisfiedIcon fontSize={ fontSize } />
     case 4:
-      return <SentimentSatisfiedAltIcon fontSize={fontSize} />
+      return <SentimentSatisfiedAltIcon fontSize={ fontSize } />
     case 5:
-      return <SentimentVerySatisfiedIcon fontSize={fontSize} />
+      return <SentimentVerySatisfiedIcon fontSize={ fontSize } />
     default:
-      return <SentimentSatisfiedIcon fontSize={fontSize} />
+      return <SentimentSatisfiedIcon fontSize={ fontSize } />
   }
 }
 

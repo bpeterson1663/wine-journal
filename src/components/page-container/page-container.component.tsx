@@ -9,14 +9,14 @@ interface Props {
   actions?: ReactNode
 }
 
-export default function PageContainer({ children, title = '', actions = null }: Props) {
+export default function PageContainer ({ children, title = '', actions = null }: Props) {
   return (
-    <main className={styles['main']}>
-      <header className={styles['header-row']}>
-        <Header variant="h2" text={title} />
+    <main className={ styles.main }>
+      <header className={ styles['header-row'] }>
+        <Header variant="h2" text={ title } />
       </header>
-      {children}
-      <Footer>{actions}</Footer>
+      { children }
+      <Footer>{ actions }</Footer>
     </main>
   )
 }

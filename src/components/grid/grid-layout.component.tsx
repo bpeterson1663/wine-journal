@@ -6,13 +6,13 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
-  color: theme.palette.text.secondary,
+  color: theme.palette.text.secondary
 }))
 
-export function GridLayout() {
+export function GridLayout () {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={6} md={4}>
+    <Grid container spacing={ 2 }>
+      <Grid item xs={ 6 } md={ 4 }>
         <Item>
           <Typography></Typography>
         </Item>

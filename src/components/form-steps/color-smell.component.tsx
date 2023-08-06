@@ -9,140 +9,140 @@ export const ColorSmell = () => {
   const location = useLocation()
   const { setValue, control, formState } = useFormContext<TastingT>()
   const { errors } = formState
-  const { editTasting } = useAppSelector((state) => state.tasting)
+  const { editTasting } = useAppSelector(state => state.tasting)
 
   const color = useWatch({
     control,
     name: 'color',
-    defaultValue: location.pathname === '/edit-tasting' && editTasting ? editTasting.color : 'red',
+    defaultValue: location.pathname === '/edit-tasting' && editTasting ? editTasting.color : 'red'
   })
   const hue = useWatch({
     control,
-    name: 'hue',
+    name: 'hue'
   })
   const intensity = useWatch({
     control,
-    name: 'intensity',
+    name: 'intensity'
   })
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
+    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
       <FormControl>
         <FormLabel id="color-group-label">Color</FormLabel>
         <Controller
-          control={control}
+          control={ control }
           name="color"
           defaultValue="red"
-          render={({ field }) => (
+          render={ ({ field }) => (
             <RadioGroup
               row
               aria-labelledby="color-group-label"
-              {...field}
-              onChange={(_, val) => {
+              { ...field }
+              onChange={ (_, val) => {
                 if (val === 'red') setValue('hue', 'purple')
                 else if (val === 'white') setValue('hue', 'straw')
                 else if (val === 'rose') setValue('hue', 'pink')
                 setValue('color', val as ColorT)
-              }}
+              } }
             >
-              <FormControlLabel value="red" label="Red" control={<Radio />} />
-              <FormControlLabel value="white" label="White" control={<Radio />} />
-              <FormControlLabel value="rose" label="Rosé" control={<Radio />} />
+              <FormControlLabel value="red" label="Red" control={ <Radio /> } />
+              <FormControlLabel value="white" label="White" control={ <Radio /> } />
+              <FormControlLabel value="rose" label="Rosé" control={ <Radio /> } />
             </RadioGroup>
-          )}
+          ) }
         />
       </FormControl>
       <FormControl>
         <FormLabel id="intensity-group-label">Intensity</FormLabel>
         <Controller
-          control={control}
+          control={ control }
           name="intensity"
           defaultValue="pale"
-          render={({ field }) => (
-            <RadioGroup row aria-labelledby="intensity-group-label" {...field}>
-              <FormControlLabel value="pale" label="Pale" control={<Radio />} />
-              <FormControlLabel value="medium" label="Medium" control={<Radio />} />
-              <FormControlLabel value="deep" label="Deep" control={<Radio />} />
+          render={ ({ field }) => (
+            <RadioGroup row aria-labelledby="intensity-group-label" { ...field }>
+              <FormControlLabel value="pale" label="Pale" control={ <Radio /> } />
+              <FormControlLabel value="medium" label="Medium" control={ <Radio /> } />
+              <FormControlLabel value="deep" label="Deep" control={ <Radio /> } />
             </RadioGroup>
-          )}
+          ) }
         />
       </FormControl>
-      {color === 'red' && (
+      { color === 'red' && (
         <FormControl>
           <FormLabel id="hue-group-label">Hue</FormLabel>
           <Controller
-            control={control}
+            control={ control }
             name="hue"
             defaultValue="purple"
-            render={({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" {...field}>
-                <FormControlLabel value="purple" label="Purple" control={<Radio />} />
-                <FormControlLabel value="ruby" label="Ruby" control={<Radio />} />
-                <FormControlLabel value="garnet" label="Garnet" control={<Radio />} />
-                <FormControlLabel value="tawny" label="Tawny" control={<Radio />} />
-                <FormControlLabel value="brown" label="Brown" control={<Radio />} />
+            render={ ({ field }) => (
+              <RadioGroup row aria-labelledby="hue-group-label" { ...field }>
+                <FormControlLabel value="purple" label="Purple" control={ <Radio /> } />
+                <FormControlLabel value="ruby" label="Ruby" control={ <Radio /> } />
+                <FormControlLabel value="garnet" label="Garnet" control={ <Radio /> } />
+                <FormControlLabel value="tawny" label="Tawny" control={ <Radio /> } />
+                <FormControlLabel value="brown" label="Brown" control={ <Radio /> } />
               </RadioGroup>
-            )}
+            ) }
           />
         </FormControl>
-      )}
-      {color === 'white' && (
+      ) }
+      { color === 'white' && (
         <FormControl>
           <FormLabel id="hue-group-label">Hue</FormLabel>
           <Controller
-            control={control}
+            control={ control }
             name="hue"
             defaultValue="straw"
-            render={({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" {...field}>
-                <FormControlLabel value="straw" label="Straw" control={<Radio />} />
-                <FormControlLabel value="yellow" label="Yellow" control={<Radio />} />
-                <FormControlLabel value="gold" label="Gold" control={<Radio />} />
-                <FormControlLabel value="amber" label="Amber" control={<Radio />} />
-                <FormControlLabel value="brown" label="Brown" control={<Radio />} />
+            render={ ({ field }) => (
+              <RadioGroup row aria-labelledby="hue-group-label" { ...field }>
+                <FormControlLabel value="straw" label="Straw" control={ <Radio /> } />
+                <FormControlLabel value="yellow" label="Yellow" control={ <Radio /> } />
+                <FormControlLabel value="gold" label="Gold" control={ <Radio /> } />
+                <FormControlLabel value="amber" label="Amber" control={ <Radio /> } />
+                <FormControlLabel value="brown" label="Brown" control={ <Radio /> } />
               </RadioGroup>
-            )}
+            ) }
           />
         </FormControl>
-      )}
-      {color === 'rose' && (
+      ) }
+      { color === 'rose' && (
         <FormControl>
           <FormLabel id="hue-group-label">Hue</FormLabel>
           <Controller
-            control={control}
+            control={ control }
             name="hue"
             defaultValue="pink"
-            render={({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" {...field}>
-                <FormControlLabel value="pink" label="Pink" control={<Radio />} />
-                <FormControlLabel value="salmon" label="Salmon" control={<Radio />} />
-                <FormControlLabel value="copper" label="Copper" control={<Radio />} />
+            render={ ({ field }) => (
+              <RadioGroup row aria-labelledby="hue-group-label" { ...field }>
+                <FormControlLabel value="pink" label="Pink" control={ <Radio /> } />
+                <FormControlLabel value="salmon" label="Salmon" control={ <Radio /> } />
+                <FormControlLabel value="copper" label="Copper" control={ <Radio /> } />
               </RadioGroup>
-            )}
+            ) }
           />
         </FormControl>
-      )}
-      <ColorPalette color={color} hue={hue} intensity={intensity} />
+      ) }
+      <ColorPalette color={ color } hue={ hue } intensity={ intensity } />
       <Controller
         name="smell"
-        control={control}
+        control={ control }
         defaultValue=""
-        rules={{
-          required: 'Enter some descriptors of what the wine smells like',
-        }}
-        render={({ field }) => (
+        rules={ {
+          required: 'Enter some descriptors of what the wine smells like'
+        } }
+        render={ ({ field }) => (
           <TextField
-            {...field}
-            sx={{ marginTop: '5px' }}
+            { ...field }
+            sx={ { marginTop: '5px' } }
             multiline
-            rows={4}
+            rows={ 4 }
             id="smell"
             label="Smell"
             variant="outlined"
-            error={!!errors.smell}
-            helperText={errors.smell ? errors.smell?.message : ''}
+            error={ !!errors.smell }
+            helperText={ errors.smell ? errors.smell?.message : '' }
           />
-        )}
+        ) }
       />
     </Box>
   )

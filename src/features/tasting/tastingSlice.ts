@@ -13,14 +13,14 @@ const initialState: InitialTastingState = {
   message: null,
   status: 'idle',
   tastingList: [],
-  editTasting: null,
+  editTasting: null
 }
 
 export const tastingSlice = createSlice({
   name: 'tasting',
   initialState,
   reducers: {
-    tastingFetchStart: (state) => {
+    tastingFetchStart: state => {
       state.status = 'loading'
     },
     tastingListFetchSuccess: (state, action: PayloadAction<TastingT[]>) => {
@@ -32,15 +32,15 @@ export const tastingSlice = createSlice({
       state.status = 'error'
       state.message = action.payload
     },
-    tastingCreateFetchSuccess: (state, action: PayloadAction<{ tasting: TastingT; message: string }>) => {
+    tastingCreateFetchSuccess: (state, action: PayloadAction<{ tasting: TastingT, message: string }>) => {
       state.status = 'success'
       state.message = action.payload.message
       state.tastingList = [...state.tastingList, action.payload.tasting]
     },
-    tastingEditFetchSuccess: (state, action: PayloadAction<{ tasting: TastingT; message: string }>) => {
+    tastingEditFetchSuccess: (state, action: PayloadAction<{ tasting: TastingT, message: string }>) => {
       state.status = 'success'
       state.message = action.payload.message
-      const index = state.tastingList.findIndex((el) => el.id === action.payload.tasting.id)
+      const index = state.tastingList.findIndex(el => el.id === action.payload.tasting.id)
       if (index >= 0) {
         state.tastingList[index] = action.payload.tasting
       }
@@ -52,12 +52,12 @@ export const tastingSlice = createSlice({
     tastingDeleteSuccess: (state, action: PayloadAction<string>) => {
       state.status = 'success'
       state.message = 'Tasting Deleted Successfully'
-      state.tastingList = state.tastingList.filter((tasting) => tasting.id !== action.payload)
+      state.tastingList = state.tastingList.filter(tasting => tasting.id !== action.payload)
     },
     tastingSetEdit: (state, action: PayloadAction<TastingT>) => {
       state.editTasting = action.payload
-    },
-  },
+    }
+  }
 })
 
 export const {
@@ -68,97 +68,102 @@ export const {
   tastingEditFetchSuccess,
   tastingFetchSuccess,
   tastingDeleteSuccess,
-  tastingSetEdit,
+  tastingSetEdit
 } = tastingSlice.actions
 
 export const fetchTastingListStart =
   (userId: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(tastingFetchStart())
-      const response = await getTastings(userId)
-      const { success, data, message } = response
-      if (success && data) {
-        dispatch(tastingListFetchSuccess(data))
-      } else {
-        dispatch(tastingFetchFailure(message))
-      }
-    } catch (err) {
-      dispatch(tastingFetchFailure(`error ${err}`))
-    }
-  }
-
-export const fetchTastingStart =
-  (id: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(tastingFetchStart())
-      if (!id) {
-        dispatch(tastingFetchFailure('id does not exist'))
-      } else {
-        const response = await getTastingById(id)
-        const { data, success, message } = response
+    async dispatch => {
+      try {
+        dispatch(tastingFetchStart())
+        const response = await getTastings(userId)
+        const { success, data, message } = response
         if (success && data) {
-          dispatch(tastingFetchSuccess(data as TastingT))
+          dispatch(tastingListFetchSuccess(data))
         } else {
           dispatch(tastingFetchFailure(message))
         }
+      } catch (err) {
+        console.error(err)
+        dispatch(tastingFetchFailure('error fetching tastings'))
       }
-    } catch (err) {
-      dispatch(tastingFetchFailure(`error ${err}`))
     }
-  }
+
+export const fetchTastingStart =
+  (id: string): AppThunk =>
+    async dispatch => {
+      try {
+        dispatch(tastingFetchStart())
+        if (!id) {
+          dispatch(tastingFetchFailure('id does not exist'))
+        } else {
+          const response = await getTastingById(id)
+          const { data, success, message } = response
+          if (success && data) {
+            dispatch(tastingFetchSuccess(data as TastingT))
+          } else {
+            dispatch(tastingFetchFailure(message))
+          }
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(tastingFetchFailure('error occurred'))
+      }
+    }
 
 export const fetchTastingCreateStart =
   (payload: TastingT): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(tastingFetchStart())
-      const response = await addTastingEntry(payload)
-      const { success, message } = response
-      if (success) {
-        dispatch(tastingCreateFetchSuccess({ tasting: payload, message }))
-      } else {
-        dispatch(tastingFetchFailure(message))
+    async dispatch => {
+      try {
+        dispatch(tastingFetchStart())
+        const response = await addTastingEntry(payload)
+        const { success, message } = response
+        if (success) {
+          dispatch(tastingCreateFetchSuccess({ tasting: payload, message }))
+        } else {
+          dispatch(tastingFetchFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(tastingFetchFailure('error occurred'))
       }
-    } catch (err) {
-      dispatch(tastingFetchFailure(`error ${err}`))
     }
-  }
 
 export const fetchTastingEditStart =
   (payload: TastingT): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(tastingFetchStart())
-      const response = await updateTastingEntry(payload)
-      const { success, message } = response
-      if (success) {
-        dispatch(tastingEditFetchSuccess({ message, tasting: payload }))
-      } else {
-        dispatch(tastingFetchFailure(message))
+    async dispatch => {
+      try {
+        dispatch(tastingFetchStart())
+        const response = await updateTastingEntry(payload)
+        const { success, message } = response
+        if (success) {
+          dispatch(tastingEditFetchSuccess({ message, tasting: payload }))
+        } else {
+          dispatch(tastingFetchFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(tastingFetchFailure('error occurred'))
       }
-    } catch (err) {
-      dispatch(tastingFetchFailure(`error ${err}`))
     }
-  }
 
 export const fetchTastingDeleteStart =
   (payload: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(tastingFetchStart())
-      const response = await deleteTastingEntry(payload)
-      const { success, message } = response
-      if (success) {
-        dispatch(tastingDeleteSuccess(payload))
-      } else {
-        dispatch(tastingFetchFailure(message))
+    async dispatch => {
+      try {
+        dispatch(tastingFetchStart())
+        const response = await deleteTastingEntry(payload)
+        const { success, message } = response
+        if (success) {
+          dispatch(tastingDeleteSuccess(payload))
+        } else {
+          dispatch(tastingFetchFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(tastingFetchFailure('error occurred'))
       }
-    } catch (err) {
-      dispatch(tastingFetchFailure(`error ${err}`))
     }
-  }
 
 export const tastingListSelector = (state: RootState) => state.tasting
 

@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { auth } from '../firebase'
-import { ApiResponseT, SignUpT } from '../types'
+import { type ApiResponseT, type SignUpT } from '../types'
 
 export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiResponseT> => {
   try {
@@ -12,18 +12,19 @@ export const createAuthenticatedUser = async (data: SignUpT): Promise<ApiRespons
       message: 'User Created Successfully',
       data: {
         email,
-        uid: user.uid,
-      },
+        uid: user.uid
+      }
     }
   } catch (err) {
+    console.error(err)
     return {
       success: false,
-      message: `Error ${err}`,
+      message: 'Error trying to create authenticated user'
     }
   }
 }
 
-export async function loginUser(email: string, password: string): Promise<ApiResponseT> {
+export async function loginUser (email: string, password: string): Promise<ApiResponseT> {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
     return {
@@ -31,28 +32,30 @@ export async function loginUser(email: string, password: string): Promise<ApiRes
       message: 'Logged in successfully',
       data: {
         email,
-        uid: user.uid,
-      },
+        uid: user.uid
+      }
     }
   } catch (err) {
+    console.error(err)
     return {
       success: false,
-      message: `Error ${err}`,
+      message: 'Error trying to login'
     }
   }
 }
 
-export async function logoutUser(): Promise<ApiResponseT> {
+export async function logoutUser (): Promise<ApiResponseT> {
   try {
     await signOut(auth)
     return {
       success: true,
-      message: 'Logged out successfully',
+      message: 'Logged out successfully'
     }
   } catch (err) {
+    console.error(err)
     return {
       success: false,
-      message: `Error trying to log out ${err}`,
+      message: 'Error trying to log out'
     }
   }
 }

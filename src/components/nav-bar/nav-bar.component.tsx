@@ -4,22 +4,22 @@ import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../../features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
 const NavButton = styled(Button)(() => ({
-  color: 'white',
+  color: 'white'
 }))
 
 const Icon = styled(IconButton)(() => ({
-  color: 'white',
+  color: 'white'
 }))
 
 const NavLink = styled(Link)(() => ({
-  textDecoration: 'none',
+  textDecoration: 'none'
 }))
 
 const NavBar = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { currentUser } = useAppSelector((state) => state.auth)
-  const { userProfile } = useAppSelector((state) => state.user)
+  const { currentUser } = useAppSelector(state => state.auth)
+  const { userProfile } = useAppSelector(state => state.user)
   const handleLogout = () => {
     dispatch(logout())
     if (!currentUser) {
@@ -27,9 +27,9 @@ const NavBar = () => {
     }
   }
   return (
-    <AppBar position="fixed" style={{ marginBottom: 60 }}>
+    <AppBar position="fixed" style={ { marginBottom: 60 } }>
       <Toolbar>
-        {currentUser && (
+        { currentUser && (
           <>
             <NavLink to="/">
               <Icon aria-label="home button">
@@ -37,21 +37,21 @@ const NavBar = () => {
               </Icon>
             </NavLink>
             <div
-              style={{
+              style={ {
                 display: 'flex',
                 flexFlow: 'row-reverse wrap',
                 width: '90%',
                 alignItems: 'center',
-                margin: '0 10px',
-              }}
+                margin: '0 10px'
+              } }
             >
-              <NavButton variant="text" onClick={handleLogout}>
+              <NavButton variant="text" onClick={ handleLogout }>
                 Sign Out
               </NavButton>
-              {userProfile?.firstName && <span>Hello, {userProfile?.firstName}</span>}
+              { userProfile?.firstName && <span>Hello, { userProfile?.firstName }</span> }
             </div>
           </>
-        )}
+        ) }
       </Toolbar>
     </AppBar>
   )

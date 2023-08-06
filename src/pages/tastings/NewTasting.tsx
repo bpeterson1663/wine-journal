@@ -10,25 +10,25 @@ import { TastingFormT, TastingT } from '../../types'
 
 const STEPS = [
   {
-    label: 'Details',
+    label: 'Details'
   },
   {
-    label: 'Color and Smell',
+    label: 'Color and Smell'
   },
   {
-    label: 'Taste',
+    label: 'Taste'
   },
   {
-    label: 'Remarks and Review',
-  },
+    label: 'Remarks and Review'
+  }
 ]
 
 const NewWine = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const { message } = useAppSelector((state) => state.tasting)
-  const { currentUser } = useAppSelector((state) => state.auth)
+  const { message } = useAppSelector(state => state.tasting)
+  const { currentUser } = useAppSelector(state => state.auth)
   const methods = useForm<TastingFormT>({
     mode: 'all',
     defaultValues: {
@@ -36,21 +36,21 @@ const NewWine = () => {
       intensity: 'pale',
       hue: 'purple',
       rating: 3,
-      date: new Date().toISOString().split('T')[0],
-    },
+      date: new Date().toISOString().split('T')[0]
+    }
   })
 
-  const onSubmitHandler: SubmitHandler<TastingT> = async (data) => {
+  const onSubmitHandler: SubmitHandler<TastingT> = async data => {
     dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
-    setTimeout(() => setOpen(false), 5000)
+    setTimeout(() => { setOpen(false) }, 5000)
   }
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    setActiveStep(prevActiveStep => prevActiveStep + 1)
   }
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+    setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
   const handleReset = () => {
@@ -72,8 +72,8 @@ const NewWine = () => {
         break
     }
   }
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (props, ref) {
+    return <MuiAlert elevation={ 6 } ref={ ref } variant="filled" { ...props } />
   })
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -113,28 +113,30 @@ const NewWine = () => {
   const Actions = () => {
     if (activeStep !== STEPS.length) {
       return (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-          {activeStep === STEPS.length - 1 ? (
-            <Button color="secondary" type="submit" variant="contained" onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+        <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+          { activeStep === STEPS.length - 1
+            ? (
+            <Button color="secondary" type="submit" variant="contained" onClick={ handleNext } sx={ { mt: 1, mr: 1 } }>
               Submit
             </Button>
-          ) : (
+              )
+            : (
             <Button
-              disabled={disableContinue()}
+              disabled={ disableContinue() }
               variant="contained"
               color="secondary"
-              onClick={handleNext}
-              sx={{ mt: 1, mr: 1 }}
+              onClick={ handleNext }
+              sx={ { mt: 1, mr: 1 } }
             >
               Continue
             </Button>
-          )}
+              ) }
           <Button
-            disabled={activeStep === 0}
+            disabled={ activeStep === 0 }
             color="info"
             variant="outlined"
-            onClick={handleBack}
-            sx={{ mt: 1, mr: 1 }}
+            onClick={ handleBack }
+            sx={ { mt: 1, mr: 1 } }
           >
             Back
           </Button>
@@ -143,8 +145,8 @@ const NewWine = () => {
     }
 
     return (
-      <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-        <Button color="secondary" variant="contained" onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+      <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+        <Button color="secondary" variant="contained" onClick={ handleReset } sx={ { mt: 1, mr: 1 } }>
           Add Another Entry
         </Button>
       </div>
@@ -152,36 +154,36 @@ const NewWine = () => {
   }
 
   return (
-    <PageContainer actions={<Actions />}>
-      <FormProvider {...methods}>
+    <PageContainer actions={ <Actions /> }>
+      <FormProvider { ...methods }>
         <Container
-          sx={{
+          sx={ {
             display: 'flex',
             flexFlow: 'column wrap',
             maxWidth: 600,
-            width: '90%',
-          }}
+            width: '90%'
+          } }
           component="form"
-          onSubmit={methods.handleSubmit(onSubmitHandler)}
+          onSubmit={ methods.handleSubmit(onSubmitHandler) }
         >
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-              {message}
+          <Snackbar open={ open } autoHideDuration={ 6000 } onClose={ handleClose }>
+            <Alert onClose={ handleClose } severity="success" sx={ { width: '100%' } }>
+              { message }
             </Alert>
           </Snackbar>
           <Stepper
-            activeStep={activeStep}
+            activeStep={ activeStep }
             orientation="vertical"
-            sx={{ maxWidth: 600, width: '100%', margin: '0 auto' }}
+            sx={ { maxWidth: 600, width: '100%', margin: '0 auto' } }
           >
-            {STEPS.map((step, index) => (
-              <Step key={step.label}>
-                <StepLabel color="secondary">{step.label}</StepLabel>
+            { STEPS.map((step, index) => (
+              <Step key={ step.label }>
+                <StepLabel color="secondary">{ step.label }</StepLabel>
                 <StepContent>
-                  <Box sx={{ width: '100%' }}>{getStepContent(index)}</Box>
+                  <Box sx={ { width: '100%' } }>{ getStepContent(index) }</Box>
                 </StepContent>
               </Step>
-            ))}
+            )) }
           </Stepper>
         </Container>
       </FormProvider>

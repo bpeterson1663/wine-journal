@@ -14,14 +14,14 @@ interface InitialAuthState {
 const initialState: InitialAuthState = {
   currentUser: null,
   message: null,
-  status: 'idle',
+  status: 'idle'
 }
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    authStart: (state) => {
+    authStart: state => {
       state.status = 'loading'
     },
     authSuccess: (state, action: PayloadAction<AuthUserT>) => {
@@ -39,33 +39,34 @@ export const authSlice = createSlice({
       state.currentUser = null
       state.message = action.payload
     },
-    signOut: (state) => {
+    signOut: state => {
       state.currentUser = null
       state.message = 'success'
-    },
-  },
+    }
+  }
 })
 
 export const { authStart, authSuccess, authFailure, signOut, logoutSuccess } = authSlice.actions
 
 export const signUp =
   (payload: SignUpT): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(authStart())
-      const response = await createAuthenticatedUser(payload)
-      const { success, data, message } = response
-      if (success && data?.email) {
-        dispatch(fetchUserCreateStart({ firstName: payload.firstName, lastName: payload.lastName, userId: data.uid }))
-      } else {
-        dispatch(authFailure(message))
+    async dispatch => {
+      try {
+        dispatch(authStart())
+        const response = await createAuthenticatedUser(payload)
+        const { success, data, message } = response
+        if (success && data?.email) {
+          dispatch(fetchUserCreateStart({ firstName: payload.firstName, lastName: payload.lastName, userId: data.uid }))
+        } else {
+          dispatch(authFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(authFailure('error signing up'))
       }
-    } catch (err) {
-      dispatch(authFailure(`error ${err}`))
     }
-  }
 
-export const logout = (): AppThunk => async (dispatch) => {
+export const logout = (): AppThunk => async dispatch => {
   try {
     dispatch(authStart())
     const response = await logoutUser()
@@ -78,21 +79,22 @@ export const logout = (): AppThunk => async (dispatch) => {
 
 export const login =
   (email: string, password: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(authStart())
-      const { success, data, message } = await loginUser(email, password)
-      if (success && data) {
-        dispatch(authSuccess(data))
-      } else {
-        dispatch(authFailure(message))
+    async dispatch => {
+      try {
+        dispatch(authStart())
+        const { success, data, message } = await loginUser(email, password)
+        if (success && data) {
+          dispatch(authSuccess(data))
+        } else {
+          dispatch(authFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(authFailure('error logging '))
       }
-    } catch (err) {
-      dispatch(authFailure(`error ${err}`))
     }
-  }
 
-export const signInWithGoogle = (): AppThunk => async (dispatch) => {
+export const signInWithGoogle = (): AppThunk => async dispatch => {
   try {
     dispatch(authStart())
     const { user } = await signInWithGooglePopup()
@@ -102,7 +104,8 @@ export const signInWithGoogle = (): AppThunk => async (dispatch) => {
       dispatch(authFailure('could not get auth email'))
     }
   } catch (err) {
-    dispatch(authFailure(`error ${err}`))
+    console.error(err)
+    dispatch(authFailure('Error logging in'))
   }
 }
 

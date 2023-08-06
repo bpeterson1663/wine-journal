@@ -12,5 +12,5 @@ export {
   getTastingById,
   addTastingEntry,
   updateTastingEntry,
-  deleteTastingEntry,
+  deleteTastingEntry
 }

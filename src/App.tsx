@@ -1,71 +1,81 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import React, { ReactNode, useState } from 'react'
 import Layout from 'components/layout/layout.component'
-import { useAppSelector } from 'features/hooks'
-import Home from 'pages/Home'
+import { useAppSelector, useAppDispatch } from 'features/hooks'
 import NotFound from 'pages/NotFound'
 import EditTasting from 'pages/tastings/EditTasting'
 import NewTasting from 'pages/tastings/NewTasting'
 import ViewTasting from 'pages/tastings/ViewTasting'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { getAuth, onAuthStateChanged, type User } from 'firebase/auth'
+import SignInUp from 'pages/SignInUp'
+import Tastings from 'pages/tastings/Tastings'
+import { authSuccess } from 'features/auth/authSlice'
+import { fetchUserStart } from 'features/user/userSlice'
 
-function App() {
+function App () {
+  const dispatch = useAppDispatch()
+
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#424242',
+        main: '#424242'
       },
       secondary: {
-        main: '#b71c1c',
+        main: '#b71c1c'
       },
       info: {
-        main: '#ffffff',
-      },
+        main: '#ffffff'
+      }
     },
     typography: {
-      fontFamily: 'Lexend Deca',
-    },
+      fontFamily: 'Lexend Deca'
+    }
   })
 
-  const AuthRoute = ({ children }: { children: JSX.Element }) => {
-    const { currentUser } = useAppSelector((state) => state.auth)
-    let location = useLocation()
+  const ProtectedRoute = ({ component }: { component: ReactNode }) => {
+    const auth = getAuth()
+    const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true)
+    const { userProfile } = useAppSelector(state => state.user)
 
-    if (!currentUser?.uid) {
-      return <Navigate to="/" state={{ from: location }} replace />
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        const { email, uid } = user
+        if (email && uid) {
+          dispatch(authSuccess({ email, uid }))
+          setUser(user)
+          setLoading(false)
+          if (!userProfile?.firstName) {
+            dispatch(fetchUserStart(uid))
+          }
+        }
+      } else {
+        setLoading(false)
+        setUser(null)
+      }
+    })
+
+    if (loading) {
+      return <div>Loading....</div>
     }
-    return children
+    if (!user) {
+      return <Navigate to="/login" replace />
+    }
+
+    return component
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ theme }>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route
-            path="/tastings/:id"
-            element={
-              <AuthRoute>
-                <ViewTasting />
-              </AuthRoute>
-            }
-          />
-          <Route
-            path="/new-tasting"
-            element={
-              <AuthRoute>
-                <NewTasting />
-              </AuthRoute>
-            }
-          />
-          <Route
-            path="/edit-tasting"
-            element={
-              <AuthRoute>
-                <EditTasting />
-              </AuthRoute>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
+        <Route path="/" element={ <Layout /> } >
+          <Route path="/login" element={ <SignInUp /> } />
+          <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
+          <Route path="/tastings/:id" element={ <ProtectedRoute component={ <ViewTasting /> } /> } />
+          <Route path="/new-tasting" element={ <ProtectedRoute component={ <NewTasting /> } /> } />
+          <Route path="/edit-tasting" element={ <ProtectedRoute component={ <EditTasting /> } /> } />
+          <Route path="*" element={ <NotFound /> } />
         </Route>
       </Routes>
     </ThemeProvider>

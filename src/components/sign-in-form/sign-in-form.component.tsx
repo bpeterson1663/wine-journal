@@ -13,7 +13,7 @@ interface SignInFormT {
 const SignInForm = () => {
   const navigate = useNavigate()
   const { handleSubmit, control } = useForm<SignInFormT>()
-  const { currentUser } = useAppSelector((state) => state.auth)
+  const { currentUser } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (currentUser) {
@@ -21,40 +21,40 @@ const SignInForm = () => {
     }
   }, [currentUser, navigate])
 
-  const onSubmitHandler: SubmitHandler<SignInFormT> = async (data) => {
+  const onSubmitHandler: SubmitHandler<SignInFormT> = async data => {
     const { password, email } = data
     dispatch(login(email, password))
   }
 
   return (
     <Container
-      sx={{
+      sx={ {
         display: 'flex',
         flexFlow: 'column wrap',
         maxWidth: 600,
-        width: '90%',
-      }}
+        width: '90%'
+      } }
       component="form"
-      onSubmit={handleSubmit(onSubmitHandler)}
+      onSubmit={ handleSubmit(onSubmitHandler) }
     >
       <Controller
         name="email"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => <TextField id="signInEmail" type="email" label="Email" {...field} />}
+        render={ ({ field }) => <TextField id="signInEmail" type="email" label="Email" { ...field } /> }
       />
       <Controller
         name="password"
-        control={control}
+        control={ control }
         defaultValue=""
-        render={({ field }) => (
-          <TextField id="signInPassword" autoComplete="on" type="password" label="Password" {...field} />
-        )}
+        render={ ({ field }) => (
+          <TextField id="signInPassword" autoComplete="on" type="password" label="Password" { ...field } />
+        ) }
       />
-      <Button type="submit" variant="contained" sx={{ mt: 1, mr: 1 }}>
+      <Button type="submit" variant="contained" sx={ { mt: 1, mr: 1 } }>
         Submit
       </Button>
-      <Button onClick={() => dispatch(signInWithGoogle())}>Sign In With Google</Button>
+      <Button onClick={ () => { dispatch(signInWithGoogle()) } }>Sign In With Google</Button>
     </Container>
   )
 }

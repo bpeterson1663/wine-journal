@@ -6,7 +6,7 @@ import NavBar from '../nav-bar/nav-bar.component'
 
 const Layout = () => {
   const dispatch = useAppDispatch()
-  const { currentUser } = useAppSelector((state) => state.auth)
+  const { currentUser } = useAppSelector(state => state.auth)
   useEffect(() => {
     dispatch(fetchTastingListStart(currentUser?.uid ?? ''))
   }, [dispatch, currentUser?.uid])

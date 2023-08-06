@@ -1,4 +1,4 @@
-import { DocumentData } from 'firebase/firestore/lite'
+import { type DocumentData } from 'firebase/firestore/lite'
 
 export interface TastingT {
   id: string

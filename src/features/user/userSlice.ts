@@ -12,14 +12,14 @@ interface InitialUserState {
 const initialState: InitialUserState = {
   userProfile: null,
   status: 'idle',
-  message: null,
+  message: null
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    userStart: (state) => {
+    userStart: state => {
       state.status = 'loading'
     },
     userFetchSuccess: (state, action: PayloadAction<UserProfileT>) => {
@@ -30,45 +30,47 @@ export const userSlice = createSlice({
       state.status = 'error'
       state.userProfile = null
       state.message = action.payload
-    },
-  },
+    }
+  }
 })
 
 export const { userStart, userFetchSuccess, userFetchFailure } = userSlice.actions
 
 export const fetchUserStart =
   (id: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(userStart())
-      const response = await getUserProfileById(id)
-      const { success, message, data } = response
-      if (success) {
-        dispatch(userFetchSuccess(data as UserProfileT))
-      } else {
-        dispatch(userFetchFailure(message))
+    async dispatch => {
+      try {
+        dispatch(userStart())
+        const response = await getUserProfileById(id)
+        const { success, message, data } = response
+        if (success) {
+          dispatch(userFetchSuccess(data as UserProfileT))
+        } else {
+          dispatch(userFetchFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(userFetchFailure('error occurred'))
       }
-    } catch (err) {
-      dispatch(userFetchFailure(`error ${err}`))
     }
-  }
 
 export const fetchUserCreateStart =
   (profile: UserProfileT): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(userStart())
-      const response = await createUserProfile(profile)
-      const { success, message, data } = response
-      if (success) {
-        dispatch(userFetchSuccess(data as UserProfileT))
-      } else {
-        dispatch(userFetchFailure(message))
+    async dispatch => {
+      try {
+        dispatch(userStart())
+        const response = await createUserProfile(profile)
+        const { success, message, data } = response
+        if (success) {
+          dispatch(userFetchSuccess(data as UserProfileT))
+        } else {
+          dispatch(userFetchFailure(message))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(userFetchFailure('error occurred'))
       }
-    } catch (err) {
-      dispatch(userFetchFailure(`error ${err}`))
     }
-  }
 
 export const userSelector = (state: RootState) => state.user
 
