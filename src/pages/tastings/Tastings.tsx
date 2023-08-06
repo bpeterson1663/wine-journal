@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import { Card } from 'components/card/card.component'
 import PageContainer from 'components/page-container/page-container.component'
 import { useAppSelector } from 'features/hooks'
-import styles from 'pages/tastings/tasting.module.css'
+import styles from 'pages/styles/pages.module.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function Tastings () {

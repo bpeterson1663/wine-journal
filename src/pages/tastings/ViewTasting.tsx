@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectTastingById } from 'features/tasting/tastingSelectors'
 import { fetchTastingDeleteStart, tastingSetEdit } from 'features/tasting/tastingSlice'
 import { getLabel, uppercaseFirstLetter } from 'helpers'
-import styles from 'pages/tastings/tasting.module.css'
+import styles from 'pages/styles/pages.module.css'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 

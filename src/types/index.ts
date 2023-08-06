@@ -1,4 +1,5 @@
 import { type DocumentData } from 'firebase/firestore/lite'
+import { WineT } from 'types/cellar'
 
 export interface TastingT {
   id: string
@@ -82,3 +83,7 @@ export type RedHueT = 'purple' | 'ruby' | 'garnet' | 'tawny' | 'brown'
 export type WhiteHueT = 'straw' | 'yellow' | 'gold' | 'amber' | 'brown'
 
 export type RoseHueT = 'pink' | 'salmon' | 'copper'
+
+export type {
+  WineT
+}

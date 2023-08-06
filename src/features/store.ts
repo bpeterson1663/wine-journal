@@ -1,13 +1,15 @@
 import { type Action, configureStore, type ThunkAction } from '@reduxjs/toolkit'
-import authReducer from './auth/authSlice'
-import tastingReducer from './tasting/tastingSlice'
-import userReducer from './user/userSlice'
+import authReducer from 'features/auth/authSlice'
+import tastingReducer from 'features/tasting/tastingSlice'
+import userReducer from 'features/user/userSlice'
+import cellarReducer from 'features/cellar/cellarSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     tasting: tastingReducer,
-    user: userReducer
+    user: userReducer,
+    cellar: cellarReducer
   }
 })
 

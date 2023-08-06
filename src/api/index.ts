@@ -1,6 +1,7 @@
-import { createAuthenticatedUser, loginUser, logoutUser } from './auth'
-import { addTastingEntry, deleteTastingEntry, getTastingById, getTastings, updateTastingEntry } from './tastings'
-import { createUserProfile, getUserProfileById } from './users'
+import { createAuthenticatedUser, loginUser, logoutUser } from 'api/auth'
+import { addTastingEntry, deleteTastingEntry, getTastingById, getTastings, updateTastingEntry } from 'api/tastings'
+import { createUserProfile, getUserProfileById } from 'api/users'
+import { addWineEntry, deleteWineEntry, getWineById, getWines, updateWineEntry } from 'api/cellar'
 
 export {
   createAuthenticatedUser,
@@ -12,5 +13,10 @@ export {
   getTastingById,
   addTastingEntry,
   updateTastingEntry,
-  deleteTastingEntry
+  deleteTastingEntry,
+  addWineEntry,
+  deleteWineEntry,
+  getWineById,
+  getWines,
+  updateWineEntry
 }
