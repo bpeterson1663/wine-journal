@@ -1,15 +1,15 @@
+import { useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectWineById } from 'features/cellar/cellarSelectors'
 import { fetchWineDeleteStart, wineSetEdit } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
-import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import PageContainer from 'components/page-container/page-container.component'
 import { WineT } from 'types'
 
-export default function CellarId () {
+export default function WineId () {
   const params = useParams()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()

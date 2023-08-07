@@ -36,6 +36,11 @@ const NavBar = () => {
                 <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
               </Icon>
             </NavLink>
+            <NavLink to="/cellar">
+              <Icon aria-label="home button">
+                <span className="iconify" data-icon="game-icons:cellar-barrels"></span>
+              </Icon>
+            </NavLink>
             <div
               style={ {
                 display: 'flex',

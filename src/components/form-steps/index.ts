@@ -1,6 +1,7 @@
-import { ColorSmell } from './color-smell.component'
-import { Details } from './details.component'
-import { Review } from './review.component'
-import { Taste } from './taste.component'
+import { ColorSmell } from 'components/form-steps/color-smell.component'
+import { Details } from 'components/form-steps/details.component'
+import { Review } from 'components/form-steps/review.component'
+import { Taste } from 'components/form-steps/taste.component'
+import { Quantity } from 'components/form-steps/quantity.component'
 
-export { ColorSmell, Details, Review, Taste }
+export { ColorSmell, Details, Review, Taste, Quantity }
