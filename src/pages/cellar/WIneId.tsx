@@ -5,7 +5,7 @@ import { selectWineById } from 'features/cellar/cellarSelectors'
 import { fetchWineDeleteStart, wineSetEdit } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import { tastingSetOpen } from 'features/tasting/tastingSlice'
 import PageContainer from 'components/page-container/page-container.component'
 import { WineT } from 'types'
 
@@ -46,6 +46,11 @@ export default function WineId () {
     navigate('/cellar/edit')
   }
 
+  const handleOpenBottleClick = (wine: WineT) => {
+    dispatch(tastingSetOpen(wine))
+    navigate('/tastings/new')
+  }
+
   const ConfirmDeleteDialog = () => (
     <Dialog open={ isConfirmOpen } onClose={ handleConfirmDeleteClose } aria-labelledby="delete wine">
       <DialogTitle id="delete wine">Delete Wine</DialogTitle>
@@ -63,14 +68,18 @@ export default function WineId () {
     </Dialog>
   )
 
-  const Actions = () => (
+  const Actions = ({ wine }: { wine: WineT }) => (
     <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+      <Button color="secondary" variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } sx={ { mt: 1, mr: 1 } }>
+        Open Bottle
+      </Button>
       <Button color="secondary" variant="contained" sx={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(wine) } }>
         Edit
       </Button>
       <Button color="info" onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outlined" sx={ { mt: 1, mr: 1 } }>
         Delete
       </Button>
+
     </div>
   )
 
@@ -86,7 +95,7 @@ export default function WineId () {
   } = wine
 
   return (
-    <PageContainer title={ producer } actions={ <Actions /> }>
+    <PageContainer title={ producer } actions={ <Actions wine={ wine } /> }>
       <section className={ styles.container }>
         <div className={ styles.column }>
           <img className={ styles.wineImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />

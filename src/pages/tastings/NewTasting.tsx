@@ -3,10 +3,11 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import PageContainer from 'components/page-container/page-container.component'
 import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { ColorSmell, Details, Review, Taste } from '../../components/form-steps'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchTastingCreateStart } from '../../features/tasting/tastingSlice'
-import { TastingFormT, TastingT } from '../../types'
+import { ColorSmell, Details, Review, Taste } from 'components/form-steps'
+import { fetchWineEditStart } from 'features/cellar/cellarSlice'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { fetchTastingCreateStart } from 'features/tasting/tastingSlice'
+import { TastingFormT, TastingT } from 'types'
 
 const STEPS = [
   {
@@ -27,7 +28,7 @@ const NewWine = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const { message } = useAppSelector(state => state.tasting)
+  const { message, tastingOpen } = useAppSelector(state => state.tasting)
   const { currentUser } = useAppSelector(state => state.auth)
   const methods = useForm<TastingFormT>({
     mode: 'all',
@@ -36,11 +37,16 @@ const NewWine = () => {
       intensity: 'pale',
       hue: 'purple',
       rating: 3,
+      ...tastingOpen,
       date: new Date().toISOString().split('T')[0]
     }
   })
 
   const onSubmitHandler: SubmitHandler<TastingT> = async data => {
+    if (tastingOpen) {
+      const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
+      dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))
+    }
     dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setOpen(true)
     setTimeout(() => { setOpen(false) }, 5000)
@@ -88,7 +94,9 @@ const NewWine = () => {
     const { errors, touchedFields } = formState
 
     if (activeStep === 0) {
-      if (
+      if (tastingOpen) {
+        return false
+      } else if (
         !touchedFields.producer ||
         !touchedFields.country ||
         !touchedFields.region ||
