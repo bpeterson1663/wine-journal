@@ -1,4 +1,5 @@
 import { Button, Container, TextField } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -10,10 +11,16 @@ interface SignInFormT {
   password: string
 }
 
+const StyledTextField = styled(TextField)({
+  margin: '8px 0'
+})
+
 const SignInForm = () => {
   const navigate = useNavigate()
-  const { handleSubmit, control } = useForm<SignInFormT>()
+  const { handleSubmit, control, formState } = useForm<SignInFormT>()
   const { currentUser } = useAppSelector(state => state.auth)
+  const { errors } = formState
+
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (currentUser) {
@@ -41,14 +48,36 @@ const SignInForm = () => {
         name="email"
         control={ control }
         defaultValue=""
-        render={ ({ field }) => <TextField id="signInEmail" type="email" label="Email" { ...field } /> }
+        rules={ {
+          required: '*Required'
+        } }
+        render={ ({ field }) => (
+          <StyledTextField
+            { ...field }
+            id="signInEmail"
+            type="email"
+            label="Email"
+            error={ !!errors.email }
+            helperText={ errors.email ? errors.email?.message : '' }
+          />
+        ) }
       />
       <Controller
         name="password"
         control={ control }
         defaultValue=""
+        rules={ {
+          required: '*Required'
+        } }
         render={ ({ field }) => (
-          <TextField id="signInPassword" autoComplete="on" type="password" label="Password" { ...field } />
+          <StyledTextField
+            { ...field }
+            id="signInPassword"
+            autoComplete="on"
+            type="password"
+            label="Password"
+            error={ !!errors.password }
+            helperText={ errors.password ? errors.password?.message : '' } />
         ) }
       />
       <Button type="submit" variant="contained" sx={ { mt: 1, mr: 1 } }>
