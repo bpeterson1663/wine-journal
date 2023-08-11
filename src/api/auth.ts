@@ -35,8 +35,15 @@ export async function loginUser (email: string, password: string): Promise<ApiRe
         uid: user.uid
       }
     }
-  } catch (err) {
-    console.error(err)
+  } catch (err: any) {
+    console.error({ err })
+    const { code } = err
+    if (code === 'auth/user-not-found') {
+      return {
+        success: false,
+        message: 'User was not found. Sign Up to gain access.'
+      }
+    }
     return {
       success: false,
       message: 'Error trying to login'

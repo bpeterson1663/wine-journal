@@ -1,10 +1,11 @@
-import { Button, Container, TextField } from '@mui/material'
+import { Button, Container, TextField, Snackbar } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { login, signInWithGoogle } from '../../features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 
 interface SignInFormT {
   email: string
@@ -17,8 +18,9 @@ const StyledTextField = styled(TextField)({
 
 const SignInForm = () => {
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
   const { handleSubmit, control, formState } = useForm<SignInFormT>()
-  const { currentUser } = useAppSelector(state => state.auth)
+  const { currentUser, message, status } = useAppSelector(state => state.auth)
   const { errors } = formState
 
   const dispatch = useAppDispatch()
@@ -31,6 +33,19 @@ const SignInForm = () => {
   const onSubmitHandler: SubmitHandler<SignInFormT> = async data => {
     const { password, email } = data
     dispatch(login(email, password))
+    setOpen(true)
+    setTimeout(() => { setOpen(false) }, 5000)
+  }
+
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (props, ref) {
+    return <MuiAlert elevation={ 6 } ref={ ref } variant="filled" { ...props } />
+  })
+
+  const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setOpen(false)
   }
 
   return (
@@ -44,6 +59,11 @@ const SignInForm = () => {
       component="form"
       onSubmit={ handleSubmit(onSubmitHandler) }
     >
+      { message && <Snackbar open={ open } autoHideDuration={ 6000 } onClose={ handleClose }>
+        <Alert onClose={ handleClose } severity={ status === 'success' ? 'success' : 'error' } sx={ { width: '100%' } }>
+          { message }
+        </Alert>
+      </Snackbar> }
       <Controller
         name="email"
         control={ control }
