@@ -64,6 +64,7 @@ const SignInForm = () => {
           { message }
         </Alert>
       </Snackbar> }
+      <Button sx={ { marginTop: '10px', marginBottom: '20px' } } variant="contained" color="primary" onClick={ () => { dispatch(signInWithGoogle()) } }>Sign In With Google</Button>
       <Controller
         name="email"
         control={ control }
@@ -103,7 +104,6 @@ const SignInForm = () => {
       <Button type="submit" variant="contained" sx={ { mt: 1, mr: 1 } }>
         Submit
       </Button>
-      <Button onClick={ () => { dispatch(signInWithGoogle()) } }>Sign In With Google</Button>
     </Container>
   )
 }

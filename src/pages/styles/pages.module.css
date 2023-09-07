@@ -15,6 +15,15 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.click-here{
+  text-decoration: underline;
+}
+
+.action-container {
+  display: flex;
+  justify-content: center;
+}
+
 
 @media (min-width: 640px) {
   .container {
