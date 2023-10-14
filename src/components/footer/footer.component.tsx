@@ -1,5 +1,7 @@
-import { AppBar, Toolbar } from '@mui/material'
-import { ReactNode } from 'react'
+import { Group } from '@mantine/core'
+import { type ReactNode } from 'react'
+
+import styles from 'components/footer/footer.module.css'
 
 interface Props {
   children?: ReactNode
@@ -7,9 +9,9 @@ interface Props {
 
 const Footer = ({ children }: Props) => {
   return (
-    <AppBar component="footer" position="fixed" color="primary" sx={ { top: 'auto', bottom: 0 } }>
-      <Toolbar>{ children }</Toolbar>
-    </AppBar>
+    <footer className={ styles.footer }>
+      <Group justify="flex-end">{ children }</Group>
+    </footer>
   )
 }
 

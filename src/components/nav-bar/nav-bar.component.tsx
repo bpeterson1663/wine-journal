@@ -1,64 +1,48 @@
-import { AppBar, Button, IconButton, Toolbar } from '@mui/material'
-import { styled } from '@mui/system'
+import { ActionIcon, Button, Container, Group } from '@mantine/core'
 import { Link, useNavigate } from 'react-router-dom'
-import { logout } from '../../features/auth/authSlice'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
-const NavButton = styled(Button)(() => ({
-  color: 'white'
-}))
+import { logout } from 'features/auth/authSlice'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
 
-const Icon = styled(IconButton)(() => ({
-  color: 'white'
-}))
-
-const NavLink = styled(Link)(() => ({
-  textDecoration: 'none'
-}))
+import styles from 'components/nav-bar/nav-bar.module.css'
 
 const NavBar = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { currentUser } = useAppSelector(state => state.auth)
   const { userProfile } = useAppSelector(state => state.user)
+
   const handleLogout = () => {
     dispatch(logout())
     if (!currentUser) {
       navigate('/')
     }
   }
+
   return (
-    <AppBar position="sticky">
-      <Toolbar>
+    <header className={ styles['nav-bar'] }>
         { currentUser && (
-          <>
-            <NavLink to="/">
-              <Icon aria-label="home button">
-                <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
-              </Icon>
-            </NavLink>
-            <NavLink to="/cellar">
-              <Icon aria-label="home button">
-                <span className="iconify" data-icon="game-icons:cellar-barrels"></span>
-              </Icon>
-            </NavLink>
-            <div
-              style={ {
-                display: 'flex',
-                flexFlow: 'row-reverse wrap',
-                width: '90%',
-                alignItems: 'center',
-                margin: '0 10px'
-              } }
-            >
-              <NavButton variant="text" onClick={ handleLogout }>
+          <Container className={ styles.inner } fluid>
+            <Group>
+              <Link className={ styles['nav-link'] } to="/">
+                <ActionIcon className={ styles.icon } variant="subtle" aria-label="Tastings">
+                  <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
+                </ActionIcon>
+              </Link>
+              <Link className={ styles['nav-link'] } to="/cellar">
+                <ActionIcon className={ styles.icon } variant="subtle" aria-label="Cellar">
+                  <span className="iconify" data-icon="game-icons:cellar-barrels"></span>
+                </ActionIcon>
+              </Link>
+            </Group>
+            <Group justify="flex-end">
+              <Button variant="text" onClick={ handleLogout }>
                 Sign Out
-              </NavButton>
+              </Button>
               { userProfile?.firstName && <span>Hello, { userProfile?.firstName }</span> }
-            </div>
-          </>
+            </Group>
+          </Container>
         ) }
-      </Toolbar>
-    </AppBar>
+    </header>
   )
 }
 

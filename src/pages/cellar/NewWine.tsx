@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../features/hooks'
 import { fetchWineCreateStart } from 'features/cellar/cellarSlice'
 import { WineFormT, WineT } from 'types'
 import { Details, Quantity } from 'components/form-steps'
+import { notifications } from '@mantine/notifications'
 
 const STEPS = [
   {
@@ -20,7 +21,7 @@ export default function NewWine () {
   const [activeStep, setActiveStep] = useState(0)
   const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const { message } = useAppSelector(state => state.cellar)
+  const { message, status } = useAppSelector(state => state.cellar)
   const { currentUser } = useAppSelector(state => state.auth)
   const methods = useForm<WineFormT>({
     mode: 'all',
@@ -29,8 +30,9 @@ export default function NewWine () {
 
   const onSubmitHandler: SubmitHandler<WineT> = async data => {
     dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
-    setOpen(true)
-    setTimeout(() => { setOpen(false) }, 5000)
+    notifications.show({
+      message
+    })
   }
 
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (props, ref) {

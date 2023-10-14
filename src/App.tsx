@@ -1,4 +1,3 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles'
 import React, { ReactNode, useState } from 'react'
 import Layout from 'components/layout/layout.component'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
@@ -13,26 +12,33 @@ import SignInUp from 'pages/SignInUp'
 import Tastings from 'pages/tastings/Tastings'
 import { authSuccess } from 'features/auth/authSlice'
 import { fetchUserStart } from 'features/user/userSlice'
+import { MantineProvider, createTheme } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
+
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+import '@mantine/carousel/styles.css'
 
 function App () {
   const dispatch = useAppDispatch()
-
   const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#424242'
-      },
-      secondary: {
-        main: '#b71c1c'
-      },
-      info: {
-        main: '#ffffff'
-      }
-    },
-    typography: {
-      fontFamily: 'Lexend Deca'
-    }
+    fontFamily: 'Lexend Deca',
+    primaryColor: 'cyan'
+    /** Put your mantine theme override here */
   })
+
+  // Original theme
+  //   palette: {
+  //     primary: {
+  //       main: '#424242'
+  //     },
+  //     secondary: {
+  //       main: '#b71c1c'
+  //     },
+  //     info: {
+  //       main: '#ffffff'
+  //     }
+  //   },
 
   const ProtectedRoute = ({ component }: { component: ReactNode }) => {
     const auth = getAuth()
@@ -68,7 +74,8 @@ function App () {
   }
 
   return (
-    <ThemeProvider theme={ theme }>
+    <MantineProvider theme={ theme } defaultColorScheme="dark">
+      <Notifications />
       <Routes>
         <Route path="/" element={ <Layout /> } >
           <Route path="/login" element={ <SignInUp /> } />
@@ -91,7 +98,7 @@ function App () {
           <Route path="*" element={ <NotFound /> } />
         </Route>
       </Routes>
-    </ThemeProvider>
+    </MantineProvider>
   )
 }
 

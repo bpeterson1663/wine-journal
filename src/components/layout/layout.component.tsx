@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchTastingListStart } from '../../features/tasting/tastingSlice'
-import NavBar from '../nav-bar/nav-bar.component'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { fetchTastingListStart } from 'features/tasting/tastingSlice'
+import NavBar from 'components/nav-bar/nav-bar.component'
 import { fetchWineListStart } from 'features/cellar/cellarSlice'
 
 const Layout = () => {

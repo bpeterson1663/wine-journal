@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
-import Footer from '../footer/footer.component'
-import { Header } from '../typography/typography.component'
-import styles from './page-container.module.css'
+import Footer from 'components/footer/footer.component'
+import { Title } from '@mantine/core'
+import styles from 'components/page-container/page-container.module.css'
 
 interface Props {
   children?: ReactNode
@@ -13,7 +13,7 @@ export default function PageContainer ({ children, title = '', actions = null }:
   return (
     <main className={ styles.main }>
       <header className={ styles['header-row'] }>
-        <Header variant="h2" text={ title } />
+        <Title order={ 2 }> { title } </Title>
       </header>
       { children }
       <Footer>{ actions }</Footer>

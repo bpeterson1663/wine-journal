@@ -1,0 +1,23 @@
+.nav-bar {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: 0;
+    background-color: var(--mantine-color-gray-6);
+    padding: 5px;
+}
+
+.inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon {
+    color: white;
+    font-size: 24px;
+}
+
+.nav-link {
+    text-decoration: none;
+}
