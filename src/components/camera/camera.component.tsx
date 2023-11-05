@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
@@ -18,7 +18,7 @@ export const WineLabelPic = ({ value, onChange }: Props): JSX.Element => {
   }, [value])
 
   return (
-    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
+    <Box>
       { value === ''
         ? (
           <Button
