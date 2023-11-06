@@ -1,14 +1,13 @@
-import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
-import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { Flex, Radio, Group, Textarea } from '@mantine/core'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
-import { useAppSelector } from '../../features/hooks'
-import { ColorT, TastingT } from '../../types'
-import ColorPalette from '../color-palette/color-palette.component'
+import { useAppSelector } from 'features/hooks'
+import { ColorT, TastingT } from 'types'
+import ColorPalette from 'components/color-palette/color-palette.component'
 
 export const ColorSmell = () => {
   const location = useLocation()
-  const { setValue, control, formState } = useFormContext<TastingT>()
-  const { errors } = formState
+  const { setValue, control } = useFormContext<TastingT>()
   const { editTasting } = useAppSelector(state => state.tasting)
 
   const color = useWatch({
@@ -26,124 +25,94 @@ export const ColorSmell = () => {
   })
 
   return (
-    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
-      <FormControl>
-        <FormLabel id="color-group-label">Color</FormLabel>
-        <Controller
-          control={ control }
-          name="color"
-          defaultValue="red"
-          render={ ({ field }) => (
-            <RadioGroup
-              row
-              aria-labelledby="color-group-label"
-              { ...field }
-              onChange={ (_, val) => {
-                if (val === 'red') setValue('hue', 'purple')
-                else if (val === 'white') setValue('hue', 'straw')
-                else if (val === 'rose') setValue('hue', 'pink')
-                setValue('color', val as ColorT)
-              } }
-            >
-              <FormControlLabel value="red" label="Red" control={ <Radio /> } />
-              <FormControlLabel value="white" label="White" control={ <Radio /> } />
-              <FormControlLabel value="rose" label="Rosé" control={ <Radio /> } />
-            </RadioGroup>
-          ) }
-        />
-      </FormControl>
-      <FormControl>
-        <FormLabel id="intensity-group-label">Intensity</FormLabel>
-        <Controller
-          control={ control }
-          name="intensity"
-          defaultValue="pale"
-          render={ ({ field }) => (
-            <RadioGroup row aria-labelledby="intensity-group-label" { ...field }>
-              <FormControlLabel value="pale" label="Pale" control={ <Radio /> } />
-              <FormControlLabel value="medium" label="Medium" control={ <Radio /> } />
-              <FormControlLabel value="deep" label="Deep" control={ <Radio /> } />
-            </RadioGroup>
-          ) }
-        />
-      </FormControl>
+    <Flex
+      direction="column"
+      wrap="wrap"
+      maw={ 600 }
+    >
+      <Radio.Group
+        name="color"
+        label="Color"
+        defaultValue="red"
+        onChange={ val => {
+          if (val === 'red') setValue('hue', 'purple')
+          else if (val === 'white') setValue('hue', 'straw')
+          else if (val === 'rose') setValue('hue', 'pink')
+          setValue('color', val as ColorT)
+        } }
+      >
+        <Group mt="xs">
+          <Radio value="red" label="Red" />
+          <Radio value="white" label="White" />
+          <Radio value="rose" label="Rosé" />
+        </Group>
+      </Radio.Group>
+
+      <Radio.Group
+        name="intensity"
+        label="Intensity"
+        defaultValue="pale"
+      >
+        <Group mt="xs">
+          <Radio value="pale" label="Pale" />
+          <Radio value="medium" label="Medium" />
+          <Radio value="deep" label="Deep" />
+        </Group>
+      </Radio.Group>
+
       { color === 'red' && (
-        <FormControl>
-          <FormLabel id="hue-group-label">Hue</FormLabel>
-          <Controller
-            control={ control }
-            name="hue"
-            defaultValue="purple"
-            render={ ({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" { ...field }>
-                <FormControlLabel value="purple" label="Purple" control={ <Radio /> } />
-                <FormControlLabel value="ruby" label="Ruby" control={ <Radio /> } />
-                <FormControlLabel value="garnet" label="Garnet" control={ <Radio /> } />
-                <FormControlLabel value="tawny" label="Tawny" control={ <Radio /> } />
-                <FormControlLabel value="brown" label="Brown" control={ <Radio /> } />
-              </RadioGroup>
-            ) }
-          />
-        </FormControl>
+         <Radio.Group
+          name="hue"
+          label="Hue"
+          defaultValue="purple"
+        >
+         <Group mt="xs">
+           <Radio value="purple" label="Purple" />
+           <Radio value="ruby" label="Ruby" />
+           <Radio value="garnet" label="Garnet" />
+           <Radio value="tawny" label="Tawny" />
+           <Radio value="brown" label="Brown" />
+         </Group>
+        </Radio.Group>
       ) }
       { color === 'white' && (
-        <FormControl>
-          <FormLabel id="hue-group-label">Hue</FormLabel>
-          <Controller
-            control={ control }
-            name="hue"
-            defaultValue="straw"
-            render={ ({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" { ...field }>
-                <FormControlLabel value="straw" label="Straw" control={ <Radio /> } />
-                <FormControlLabel value="yellow" label="Yellow" control={ <Radio /> } />
-                <FormControlLabel value="gold" label="Gold" control={ <Radio /> } />
-                <FormControlLabel value="amber" label="Amber" control={ <Radio /> } />
-                <FormControlLabel value="brown" label="Brown" control={ <Radio /> } />
-              </RadioGroup>
-            ) }
-          />
-        </FormControl>
+        <Radio.Group
+          name="hue"
+          label="Hue"
+          defaultValue="straw"
+        >
+          <Group mt="xs">
+            <Radio value="straw" label="Straw" />
+            <Radio value="yellow" label="Yellow" />
+            <Radio value="gold" label="Gold" />
+            <Radio value="amber" label="Amber" />
+            <Radio value="brown" label="Brown" />
+          </Group>
+        </Radio.Group>
       ) }
       { color === 'rose' && (
-        <FormControl>
-          <FormLabel id="hue-group-label">Hue</FormLabel>
-          <Controller
-            control={ control }
-            name="hue"
-            defaultValue="pink"
-            render={ ({ field }) => (
-              <RadioGroup row aria-labelledby="hue-group-label" { ...field }>
-                <FormControlLabel value="pink" label="Pink" control={ <Radio /> } />
-                <FormControlLabel value="salmon" label="Salmon" control={ <Radio /> } />
-                <FormControlLabel value="copper" label="Copper" control={ <Radio /> } />
-              </RadioGroup>
-            ) }
-          />
-        </FormControl>
+        <Radio.Group
+          name="hue"
+          label="Hue"
+          defaultValue="pink"
+        >
+          <Group mt="xs">
+            <Radio value="pink" label="Pink" />
+            <Radio value="salmon" label="Salmon" />
+            <Radio value="copper" label="Copper" />
+          </Group>
+        </Radio.Group>
       ) }
       <ColorPalette color={ color } hue={ hue } intensity={ intensity } />
-      <Controller
+
+      <Textarea
+        multiline
+        rows={ 4 }
         name="smell"
-        control={ control }
-        defaultValue=""
-        rules={ {
-          required: 'Enter some descriptors of what the wine smells like'
-        } }
-        render={ ({ field }) => (
-          <TextField
-            { ...field }
-            sx={ { marginTop: '5px' } }
-            multiline
-            rows={ 4 }
-            id="smell"
-            label="Smell"
-            variant="outlined"
-            error={ !!errors.smell }
-            helperText={ errors.smell ? errors.smell?.message : '' }
-          />
-        ) }
+        label="Smell"
+        variant="outlined"
       />
-    </Box>
+
+    </Flex>
   )
 }

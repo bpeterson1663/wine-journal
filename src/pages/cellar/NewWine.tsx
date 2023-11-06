@@ -1,5 +1,4 @@
-import { Box, Button, Container, Paper, Snackbar, Step, StepContent, StepLabel, Stepper } from '@mui/material'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import { Stepper, Group, Button, Box } from '@mantine/core'
 import React, { useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from '../../features/hooks'
@@ -19,10 +18,10 @@ const STEPS = [
 
 export default function NewWine () {
   const [activeStep, setActiveStep] = useState(0)
-  const [open, setOpen] = useState(false)
   const dispatch = useAppDispatch()
-  const { message, status } = useAppSelector(state => state.cellar)
+  const { message } = useAppSelector(state => state.cellar)
   const { currentUser } = useAppSelector(state => state.auth)
+
   const methods = useForm<WineFormT>({
     mode: 'all',
     defaultValues: { varietal: [] }
@@ -35,25 +34,8 @@ export default function NewWine () {
     })
   }
 
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (props, ref) {
-    return <MuiAlert elevation={ 6 } ref={ ref } variant="filled" { ...props } />
-  })
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpen(false)
-  }
-
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-  }
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
-  }
+  const handleNext = () => { setActiveStep(current => (current < 3 ? current + 1 : current)) }
+  const handleBack = () => { setActiveStep(current => (current > 0 ? current - 1 : current)) }
 
   const handleReset = () => {
     setActiveStep(0)
@@ -92,69 +74,52 @@ export default function NewWine () {
 
   return (
       <FormProvider { ...methods }>
-        <Container
-          sx={ {
-            display: 'flex',
-            flexFlow: 'column wrap',
-            maxWidth: 600,
-            width: '90%'
-          } }
+        <Box
           component="form"
           onSubmit={ methods.handleSubmit(onSubmitHandler) }
         >
-          <Snackbar open={ open } autoHideDuration={ 6000 } onClose={ handleClose }>
-            <Alert onClose={ handleClose } severity="success" sx={ { width: '100%' } }>
-              { message }
-            </Alert>
-          </Snackbar>
-          <Stepper activeStep={ activeStep } orientation="vertical" sx={ { maxWidth: 600, width: '100%', margin: '0 auto' } }>
+          <Stepper active={ activeStep } onStepClick={ setActiveStep } allowNextStepsSelect={ false }>
             { STEPS.map((step, index) => (
-              <Step key={ step.label }>
-                <StepLabel color="secondary">{ step.label }</StepLabel>
-                <StepContent>
-                  <Box sx={ { width: '100%' } }>{ getStepContent(index) }</Box>
-                  <Box>
-                    <>
-                      { index === STEPS.length - 1
-                        ? (
-                        <Button
-                          color="secondary"
-                          type="submit"
-                          variant="contained"
-                          onClick={ handleNext }
-                          sx={ { mt: 1, mr: 1 } }
-                        >
-                          Submit
-                        </Button>
-                          )
-                        : (
-                        <Button
-                          disabled={ disableContinue() }
-                          variant="contained"
-                          color="secondary"
-                          onClick={ handleNext }
-                          sx={ { mt: 1, mr: 1 } }
-                        >
-                          Continue
-                        </Button>
-                          ) }
-                      <Button disabled={ index === 0 } onClick={ handleBack } sx={ { mt: 1, mr: 1 } }>
-                        Back
-                      </Button>
-                    </>
-                  </Box>
-                </StepContent>
-              </Step>
+              <Stepper.Step label={ step.label } description="Create an account">
+                { getStepContent(index) }
+              </Stepper.Step>
             )) }
           </Stepper>
+          <Group justify="center" mt="xl">
+          { activeStep === STEPS.length - 1
+            ? (
+              <Button
+                color="secondary"
+                type="submit"
+                variant="contained"
+                onClick={ handleNext }
+              >
+                Submit
+              </Button>
+              )
+            : (
+              <Button
+                disabled={ disableContinue() }
+                variant="contained"
+                color="secondary"
+                onClick={ handleNext }
+
+              >
+                Continue
+              </Button>
+              ) }
+              <Button disabled={ activeStep === 0 } onClick={ handleBack } >
+                Back
+              </Button>
+          </Group>
           { activeStep === STEPS.length && (
-            <Paper square elevation={ 0 } sx={ { display: 'flex', justifyContent: 'center' } }>
-              <Button color="secondary" variant="contained" onClick={ handleReset } sx={ { mt: 1, mr: 1 } }>
+            <Box>
+              <Button color="secondary" variant="contained" onClick={ handleReset }>
                 Add Another Entry
               </Button>
-            </Paper>
+            </Box>
           ) }
-        </Container>
+        </Box>
       </FormProvider>
   )
 }

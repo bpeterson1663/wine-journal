@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
+import { Group, Modal, Button, Title, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectWineById } from 'features/cellar/cellarSelectors'
 import { fetchWineDeleteStart, wineSetEdit } from 'features/cellar/cellarSlice'
@@ -10,13 +11,14 @@ import PageContainer from 'components/page-container/page-container.component'
 import { WineT } from 'types'
 
 export default function WineId () {
+  const [opened, { open, close }] = useDisclosure(false)
+
   const params = useParams()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const id = params.id ?? ''
   const wine = useAppSelector(selectWineById(id))
   const [itemToDelete, setItemToDelete] = useState('')
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { status } = useAppSelector(state => state.tasting)
 
   if (!wine) {
@@ -26,12 +28,12 @@ export default function WineId () {
 
   const handleConfirmDeleteOpen = (id: string) => {
     setItemToDelete(id)
-    setIsConfirmOpen(true)
+    open()
   }
 
   const handleConfirmDeleteClose = () => {
     setItemToDelete('')
-    setIsConfirmOpen(false)
+    close()
   }
 
   const handleDelete = () => {
@@ -52,31 +54,31 @@ export default function WineId () {
   }
 
   const ConfirmDeleteDialog = () => (
-    <Dialog open={ isConfirmOpen } onClose={ handleConfirmDeleteClose } aria-labelledby="delete wine">
-      <DialogTitle id="delete wine">Delete Wine</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Are you sure you want to delete this wine?</DialogContentText>
-      </DialogContent>
-      <DialogActions>
+    <Modal opened={ opened } onClose={ close } title="Authentication">
+      <Modal.Title>Delete Wine</Modal.Title>
+      <Modal.Content>
+        Are you sure you want to delete this wine?
+      </Modal.Content>
+      <Group>
         <Button autoFocus onClick={ handleConfirmDeleteClose }>
           Cancel
         </Button>
         <Button onClick={ handleDelete } autoFocus>
           Delete
         </Button>
-      </DialogActions>
-    </Dialog>
+      </Group>
+    </Modal>
   )
 
   const Actions = ({ wine }: { wine: WineT }) => (
     <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } sx={ { mt: 1, mr: 1 } }>
+      <Button color="secondary" variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } >
         Open Bottle
       </Button>
-      <Button color="secondary" variant="contained" sx={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(wine) } }>
+      <Button color="secondary" variant="contained" onClick={ () => { handleEditClick(wine) } }>
         Edit
       </Button>
-      <Button color="info" onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outlined" sx={ { mt: 1, mr: 1 } }>
+      <Button color="info" onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outlined">
         Delete
       </Button>
 
@@ -101,14 +103,14 @@ export default function WineId () {
           <img className={ styles.wineImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />
         </div>
         <div className={ styles.column }>
-          { producer && <Typography variant="h6">Winery: { producer }</Typography> }
-          { classification && <Typography variant="h6">Name: { classification }</Typography> }
-          <Typography variant="subtitle1">Varietal(s): { varietal.join(', ') }</Typography>
-          <Typography variant="subtitle1">Vintage: { vintage }</Typography>
-          <Typography variant="subtitle1">Country: { country }</Typography>
+          { producer && <Title order={ 6 }>Winery: { producer }</Title> }
+          { classification && <Title order={ 6 }>Name: { classification }</Title> }
+          <Text size="sm">Varietal(s): { varietal.join(', ') }</Text>
+          <Text size="sm">Vintage: { vintage }</Text>
+          <Text size="sm">Country: { country }</Text>
 
-          <Typography variant="subtitle1">Region: { region }</Typography>
-          { subregion && <Typography variant="subtitle1">Subregion: { subregion }</Typography> }
+          <Text size="sm">Region: { region }</Text>
+          { subregion && <Text size="sm">Subregion: { subregion }</Text> }
 
         </div>
       </section>
