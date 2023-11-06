@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core'
-import { ColorT, IntensityT, RedHueT, RoseHueT, WhiteHueT } from '../../types'
-import { COLOR_INDEX } from './color-palette.constant'
+import { ColorT, IntensityT, RedHueT, RoseHueT, WhiteHueT } from 'types'
+import { COLOR_INDEX } from 'components/color-palette/color-palette.constant'
 import styles from 'components/color-palette/color-palette.module.css'
 const ColorPalette = ({
   color,
