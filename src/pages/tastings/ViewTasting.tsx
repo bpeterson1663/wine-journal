@@ -1,4 +1,5 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
+import { Button, Modal, Group, Title, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import ColorPalette from 'components/color-palette/color-palette.component'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectTastingById } from 'features/tasting/tastingSelectors'
@@ -20,8 +21,8 @@ export default function TastingId () {
   const id = params.id ?? ''
   const tasting = useAppSelector(selectTastingById(id))
   const [itemToDelete, setItemToDelete] = useState('')
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { status } = useAppSelector(state => state.tasting)
+  const [opened, { open, close }] = useDisclosure(false)
 
   if (!tasting) {
     navigate('/')
@@ -30,12 +31,12 @@ export default function TastingId () {
 
   const handleConfirmDeleteOpen = (id: string) => {
     setItemToDelete(id)
-    setIsConfirmOpen(true)
+    open()
   }
 
   const handleConfirmDeleteClose = () => {
     setItemToDelete('')
-    setIsConfirmOpen(false)
+    close()
   }
 
   const handleDelete = () => {
@@ -51,28 +52,28 @@ export default function TastingId () {
   }
 
   const ConfirmDeleteDialog = () => (
-    <Dialog open={ isConfirmOpen } onClose={ handleConfirmDeleteClose } aria-labelledby="delete-dialog-title">
-      <DialogTitle id="delete-dialog-title">Delete Tasting</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Are you sure you want to delete this tasting?</DialogContentText>
-      </DialogContent>
-      <DialogActions>
+    <Modal opened={ opened } onClose={ close } title="Authentication">
+      <Modal.Title>Delete Tasting</Modal.Title>
+      <Modal.Content>
+        Are you sure you want to delete this tasting?
+      </Modal.Content>
+      <Group>
         <Button autoFocus onClick={ handleConfirmDeleteClose }>
           Cancel
         </Button>
         <Button onClick={ handleDelete } autoFocus>
           Delete
         </Button>
-      </DialogActions>
-    </Dialog>
+      </Group>
+    </Modal>
   )
 
   const Actions = () => (
     <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" variant="contained" sx={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(tasting) } }>
+      <Button color="secondary" variant="contained" style={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(tasting) } }>
         Edit
       </Button>
-      <Button color="info" onClick={ () => { handleConfirmDeleteOpen(tasting.id) } } variant="outlined" sx={ { mt: 1, mr: 1 } }>
+      <Button color="info" onClick={ () => { handleConfirmDeleteOpen(tasting.id) } } variant="outlined" style={ { mt: 1, mr: 1 } }>
         Delete
       </Button>
     </div>
@@ -107,48 +108,48 @@ export default function TastingId () {
           <img className={ styles.wineImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />
         </div>
         <div className={ styles.column }>
-          { producer && <Typography variant="h6">Winery: { producer }</Typography> }
-          { classification && <Typography variant="h6">Name: { classification }</Typography> }
-          <Typography variant="subtitle1">Varietal(s): { varietal.join(', ') }</Typography>
-          <Typography variant="subtitle1">Vintage: { vintage }</Typography>
-          <Typography variant="subtitle1">Country: { country }</Typography>
+          { producer && <Title order={ 6 }>Winery: { producer }</Title> }
+          { classification && <Title order={ 6 }>Name: { classification }</Title> }
+          <Text size="sm">Varietal(s): { varietal.join(', ') }</Text>
+          <Text size="sm">Vintage: { vintage }</Text>
+          <Text size="sm">Country: { country }</Text>
 
-          <Typography variant="subtitle1">Region: { region }</Typography>
-          { subregion && <Typography variant="subtitle1">Subregion: { subregion }</Typography> }
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          <Text size="sm">Region: { region }</Text>
+          { subregion && <Text size="sm">Subregion: { subregion }</Text> }
+          <Text size="md" style={ { mb: 1.5 } }>
             { uppercaseFirstLetter(color) } / { uppercaseFirstLetter(intensity) } / { uppercaseFirstLetter(hue) }
-          </Typography>
+          </Text>
           <ColorPalette color={ color } hue={ hue } intensity={ intensity } />
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          <Text size="md" style={ { mb: 1.5 } } >
             { smell }
-          </Typography>
+          </Text>
         </div>
         <div className={ styles.column }>
-          <Typography variant="h6" component="div">
+          <Title order={ 6 }>
             Taste
-          </Typography>
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          </Title>
+          <Text size="md" style={ { mb: 1.5 } }>
             Body: { getLabel('BODY', body) }
-          </Typography>
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          </Text>
+          <Text size="md" style={ { mb: 1.5 } } color="text.secondary">
             Tannin: { getLabel('TANNIN', tannin) }
-          </Typography>
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          </Text>
+          <Text size="md" style={ { mb: 1.5 } } color="text.secondary">
             Acidity: { getLabel('ACIDITY', acidity) }
-          </Typography>
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          </Text>
+          <Text size="md" style={ { mb: 1.5 } } color="text.secondary">
             Alcohol: { getLabel('ALCOHOL', alcohol) }%
-          </Typography>
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          </Text>
+          <Text size="md" style={ { mb: 1.5 } } color="text.secondary">
             Sweetness: { getLabel('SWEET', sweet) }
-          </Typography>
-          <Typography variant="h6" component="div">
+          </Text>
+          <Title order={ 6 }>
             Remarks and Review
-          </Typography>
+          </Title>
           <RatingIcon rating={ rating } />
-          <Typography variant="body2" sx={ { mb: 1.5 } } color="text.secondary">
+          <Text size="md" style={ { mb: 1.5 } } color="text.secondary">
             { remarks }
-          </Typography>
+          </Text>
         </div>
       </section>
       <ConfirmDeleteDialog />

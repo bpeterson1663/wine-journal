@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button } from '@mantine/core'
 import { Card } from 'components/card/card.component'
 import PageContainer from 'components/page-container/page-container.component'
 import { useAppSelector } from 'features/hooks'
@@ -15,7 +15,7 @@ export default function Tastings () {
 
   const Actions = () => (
     <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" variant="contained" sx={ { margin: '0 5px ' } } onClick={ () => { handleNewTasting() } }>
+      <Button color="secondary" variant="contained" style={ { margin: '0 5px ' } } onClick={ () => { handleNewTasting() } }>
         New Tasting
       </Button>
     </div>

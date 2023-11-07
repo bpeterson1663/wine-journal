@@ -54,8 +54,7 @@ export default function WineId () {
   }
 
   const ConfirmDeleteDialog = () => (
-    <Modal opened={ opened } onClose={ close } title="Authentication">
-      <Modal.Title>Delete Wine</Modal.Title>
+    <Modal opened={ opened } onClose={ close } title="Delete Wine">
       <Modal.Content>
         Are you sure you want to delete this wine?
       </Modal.Content>

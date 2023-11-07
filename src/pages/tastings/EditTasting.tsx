@@ -1,25 +1,17 @@
-import { Box, Button, Container, Snackbar } from '@mui/material'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
-import PageContainer from '../../components/page-container/page-container.component'
-import React, { useEffect, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { Box, Button } from '@mantine/core'
+import PageContainer from 'components/page-container/page-container.component'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ColorSmell, Details, Review, Taste } from '../../components/form-steps'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
-import { fetchTastingEditStart } from '../../features/tasting/tastingSlice'
-import { TastingFormT, TastingT } from '../../types'
+import { ColorSmell, Details, Review, Taste } from 'components/form-steps'
+import { useAppSelector } from 'features/hooks'
+// import { fetchTastingEditStart } from 'features/tasting/tastingSlice'
+// import { TastingFormT, TastingT } from 'types'
+import styles from 'pages/tastings/tastings.module.css'
 
 const EditTasting = () => {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { message } = useAppSelector(state => state.tasting)
   const { editTasting } = useAppSelector(state => state.tasting)
-  const [open, setOpen] = useState(false)
-
-  const methods = useForm<TastingFormT>({
-    mode: 'all',
-    defaultValues: { ...editTasting }
-  })
 
   useEffect(() => {
     if (!editTasting) {
@@ -27,41 +19,20 @@ const EditTasting = () => {
     }
   }, [editTasting, navigate])
 
-  const onSubmitHandler: SubmitHandler<TastingT> = async data => {
-    dispatch(fetchTastingEditStart(data))
-    setOpen(true)
-    setTimeout(() => { setOpen(false) }, 5000)
-  }
-
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (props, ref) {
-    return <MuiAlert elevation={ 6 } ref={ ref } variant="filled" { ...props } />
-  })
-
-  const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpen(false)
-  }
+  // const onSubmitHandler = async (data: TastingT) => {
+  //   dispatch(fetchTastingEditStart(data))
+  // }
 
   const disableSave = (): boolean => {
-    const { formState } = methods
-    const { errors } = formState
-
-    if (Object.keys(errors).length > 0) {
-      return true
-    } else {
-      return false
-    }
+    return false
   }
 
   const Actions = () => (
     <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" disabled={ disableSave() } type="submit" variant="contained" sx={ { mt: 1, mr: 1 } }>
+      <Button color="secondary" disabled={ disableSave() } type="submit" variant="contained">
         Save
       </Button>
-      <Button color="info" onClick={ () => { navigate('/') } } variant="outlined" sx={ { mt: 1, mr: 1 } }>
+      <Button color="info" onClick={ () => { navigate('/') } } variant="outlined">
         Cancel
       </Button>
     </div>
@@ -69,36 +40,24 @@ const EditTasting = () => {
 
   return (
     <PageContainer actions={ <Actions /> }>
-      <FormProvider { ...methods }>
-        <Container
-          sx={ {
-            display: 'flex',
-            flexFlow: 'column wrap',
-            maxWidth: 600,
-            width: '90%'
-          } }
+        <Box
+          className={ styles['tastings-container'] }
           component="form"
-          onSubmit={ methods.handleSubmit(onSubmitHandler) }
+          // onSubmit={ onSubmitHandler }
         >
-          <Snackbar open={ open } autoHideDuration={ 6000 } onClose={ handleClose }>
-            <Alert onClose={ handleClose } severity="success" sx={ { width: '100%' } }>
-              { message }
-            </Alert>
-          </Snackbar>
-          <Box sx={ { width: '100%', maxWidth: 600, margin: '10px auto' } }>
+          <Box className={ styles.section }>
             <Details />
           </Box>
-          <Box sx={ { width: '100%', maxWidth: 600, margin: '10px auto' } }>
+          <Box className={ styles.section }>
             <ColorSmell />
           </Box>
-          <Box sx={ { width: '100%', maxWidth: 600, margin: '10px auto' } }>
+          <Box className={ styles.section }>
             <Taste />
           </Box>
-          <Box sx={ { width: '100%', maxWidth: 600, margin: '10px auto' } }>
+          <Box className={ styles.section }>
             <Review />
           </Box>
-        </Container>
-      </FormProvider>
+        </Box>
     </PageContainer>
   )
 }

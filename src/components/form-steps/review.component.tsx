@@ -1,71 +1,60 @@
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
-import { Box, FormControl, FormLabel, IconContainerProps, Rating, TextField } from '@mui/material'
-import { Controller, useFormContext } from 'react-hook-form'
-import { TastingT } from '../../types'
+import { Box, Rating, Textarea, Text, rem } from '@mantine/core'
+import {
+  IconMoodCry,
+  IconMoodSad,
+  IconMoodSmile,
+  IconMoodHappy,
+  IconMoodCrazyHappy
+} from '@tabler/icons-react'
 
 export const Review = () => {
-  const { control } = useFormContext<TastingT>()
-  const customIcons: Record<string, {
-    icon: React.ReactElement
-    label: string
-  }> = {
-    1: {
-      icon: <SentimentVeryDissatisfiedIcon fontSize="large" />,
-      label: 'Very Dissatisfied'
-    },
-    2: {
-      icon: <SentimentDissatisfiedIcon fontSize="large" />,
-      label: 'Dissatisfied'
-    },
-    3: {
-      icon: <SentimentSatisfiedIcon fontSize="large" />,
-      label: 'Neutral'
-    },
-    4: {
-      icon: <SentimentSatisfiedAltIcon fontSize="large" />,
-      label: 'Satisfied'
-    },
-    5: {
-      icon: <SentimentVerySatisfiedIcon fontSize="large" />,
-      label: 'Very Satisfied'
+  const getIconStyle = (color?: string) => ({
+    width: rem(24),
+    height: rem(24),
+    color: color ? `var(--mantine-color-${color}-7)` : undefined
+  })
+
+  const getEmptyIcon = (value: number) => {
+    const iconStyle = getIconStyle()
+
+    switch (value) {
+      case 1:
+        return <IconMoodCry style={ iconStyle } />
+      case 2:
+        return <IconMoodSad style={ iconStyle } />
+      case 3:
+        return <IconMoodSmile style={ iconStyle } />
+      case 4:
+        return <IconMoodHappy style={ iconStyle } />
+      case 5:
+        return <IconMoodCrazyHappy style={ iconStyle } />
+      default:
+        return null
     }
   }
 
-  function IconContainer (props: IconContainerProps) {
-    const { value, ...other } = props
-    return <span { ...other }>{ customIcons[value].icon }</span>
+  const getFullIcon = (value: number) => {
+    switch (value) {
+      case 1:
+        return <IconMoodCry style={ getIconStyle('red') } />
+      case 2:
+        return <IconMoodSad style={ getIconStyle('orange') } />
+      case 3:
+        return <IconMoodSmile style={ getIconStyle('yellow') } />
+      case 4:
+        return <IconMoodHappy style={ getIconStyle('lime') } />
+      case 5:
+        return <IconMoodCrazyHappy style={ getIconStyle('green') } />
+      default:
+        return null
+    }
   }
 
   return (
-    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
-      <Controller
-        name="remarks"
-        control={ control }
-        defaultValue=""
-        render={ ({ field }) => (
-          <TextField multiline rows={ 4 } id="remarks" label="Remarks" variant="outlined" { ...field } />
-        ) }
-      />
-      <FormControl>
-        <FormLabel id="rating-label">Rating</FormLabel>
-        <Controller
-          name="rating"
-          control={ control }
-          defaultValue={ 3 }
-          render={ ({ field }) => (
-            <Rating
-              { ...field }
-              aria-labelledby="rating-label"
-              IconContainerComponent={ IconContainer }
-              highlightSelectedOnly
-            />
-          ) }
-        />
-      </FormControl>
+    <Box>
+      <Textarea multiline rows={ 4 } id="remarks" label="Remarks" variant="outlined" />
+      <Text id="rating-label">Rating</Text>
+      <Rating emptySymbol={ getEmptyIcon } fullSymbol={ getFullIcon } highlightSelectedOnly />
     </Box>
   )
 }

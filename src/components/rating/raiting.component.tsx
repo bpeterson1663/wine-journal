@@ -1,24 +1,35 @@
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
+import { rem } from '@mantine/core'
+
+import {
+  IconMoodCry,
+  IconMoodSad,
+  IconMoodSmile,
+  IconMoodHappy,
+  IconMoodCrazyHappy
+} from '@tabler/icons-react'
 
 type FontSizeT = 'large' | 'medium' | 'small'
+
+const getIconStyle = (color?: string) => ({
+  width: rem(24),
+  height: rem(24),
+  color: color ? `var(--mantine-color-${color}-7)` : undefined
+})
+
 const RatingIcon = ({ rating, fontSize = 'large' }: { rating: number, fontSize?: FontSizeT }) => {
   switch (rating * 1) {
     case 1:
-      return <SentimentVeryDissatisfiedIcon fontSize={ fontSize } />
+      return <IconMoodCry style={ getIconStyle('red') }/>
     case 2:
-      return <SentimentDissatisfiedIcon fontSize={ fontSize } />
+      return <IconMoodSad style={ getIconStyle('orange') } />
     case 3:
-      return <SentimentSatisfiedIcon fontSize={ fontSize } />
+      return <IconMoodSmile style={ getIconStyle('yellow') } />
     case 4:
-      return <SentimentSatisfiedAltIcon fontSize={ fontSize } />
+      return <IconMoodHappy style={ getIconStyle('lime') }/>
     case 5:
-      return <SentimentVerySatisfiedIcon fontSize={ fontSize } />
+      return <IconMoodCrazyHappy style={ getIconStyle('green') } />
     default:
-      return <SentimentSatisfiedIcon fontSize={ fontSize } />
+      return <IconMoodSmile style={ getIconStyle('yellow') } />
   }
 }
 

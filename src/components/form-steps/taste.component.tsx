@@ -1,120 +1,58 @@
-import { Box, FormControl, FormLabel, Slider } from '@mui/material'
-import { styled } from '@mui/material/styles'
-import { Controller, useFormContext } from 'react-hook-form'
-import { TastingT } from '../../types'
 import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-tasting/form-tasting.constants'
-
-const StyledSlider = styled(Slider)(() => ({
-  '& .MuiSlider-markLabel': {
-    fontSize: '12px',
-    transform: 'rotate(-45deg)',
-    marginLeft: '-20px'
-  }
-}))
-
-const StyledFormControl = styled(FormControl)(() => ({
-  margin: '10px'
-}))
+import { Box, Slider, Text } from '@mantine/core'
 
 export const Taste = () => {
-  const { control } = useFormContext<TastingT>()
   return (
-    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
-      <StyledFormControl>
-        <FormLabel id="body-label">Body</FormLabel>
-        <Controller
-          name="body"
-          control={ control }
-          defaultValue={ 1 }
-          render={ ({ field }) => (
-            <StyledSlider
-              valueLabelDisplay="off"
-              max={ 5 }
-              min={ 1 }
-              step={ 1 }
-              marks={ BODY_MARKS }
-              { ...field }
-              aria-labelledby="body-label"
-            />
-          ) }
+    <Box>
+        <Text size="sm" mt="xl">Body</Text>
+        <Slider
+          labelAlwaysOn
+          max={ 5 }
+          min={ 1 }
+          step={ 1 }
+          marks={ BODY_MARKS }
+          aria-labelledby="body-label"
         />
-      </StyledFormControl>
-      <StyledFormControl>
-        <FormLabel id="tannin-label">Tannin</FormLabel>
-        <Controller
-          name="tannin"
-          control={ control }
-          defaultValue={ 1 }
-          render={ ({ field }) => (
-            <StyledSlider
-              valueLabelDisplay="off"
-              max={ 5 }
-              min={ 1 }
-              step={ 1 }
-              marks={ TANNIN_ACIDITY_MARKS }
-              { ...field }
-              aria-labelledby="tannin-label"
-            />
-          ) }
+
+        <Text id="tannin-label">Tannin</Text>
+        <Slider
+          labelAlwaysOn
+          max={ 5 }
+          min={ 1 }
+          step={ 1 }
+          marks={ TANNIN_ACIDITY_MARKS }
+          aria-labelledby="tannin-label"
         />
-      </StyledFormControl>
-      <StyledFormControl>
-        <FormLabel id="acidity-label">Acidity</FormLabel>
-        <Controller
-          name="acidity"
-          control={ control }
-          defaultValue={ 1 }
-          render={ ({ field }) => (
-            <StyledSlider
-              valueLabelDisplay="off"
-              max={ 5 }
-              min={ 1 }
-              step={ 1 }
-              marks={ TANNIN_ACIDITY_MARKS }
-              { ...field }
-              aria-labelledby="acidity-label"
-            />
-          ) }
+
+        <Text id="acidity-label">Acidity</Text>
+        <Slider
+          labelAlwaysOn
+          max={ 5 }
+          min={ 1 }
+          step={ 1 }
+          marks={ TANNIN_ACIDITY_MARKS }
+          aria-labelledby="acidity-label"
         />
-      </StyledFormControl>
-      <StyledFormControl>
-        <FormLabel id="alcohol-label">Alcohol(%)</FormLabel>
-        <Controller
-          name="alcohol"
-          control={ control }
-          defaultValue={ 1 }
-          render={ ({ field }) => (
-            <StyledSlider
-              valueLabelDisplay="off"
-              max={ 5 }
-              min={ 1 }
-              step={ 1 }
-              marks={ ALCOHOL_MARKS }
-              { ...field }
-              aria-labelledby="alcohol-label"
-            />
-          ) }
+
+        <Text id="alcohol-label">Alcohol(%)</Text>
+        <Slider
+          labelAlwaysOn
+          max={ 5 }
+          min={ 1 }
+          step={ 1 }
+          marks={ ALCOHOL_MARKS }
+          aria-labelledby="alcohol-label"
         />
-      </StyledFormControl>
-      <StyledFormControl>
-        <FormLabel id="sweet-label">Sweetness</FormLabel>
-        <Controller
-          name="sweet"
-          control={ control }
-          defaultValue={ 1 }
-          render={ ({ field }) => (
-            <StyledSlider
-              valueLabelDisplay="off"
-              max={ 5 }
-              min={ 1 }
-              step={ 1 }
-              marks={ SWEET_MARKS }
-              { ...field }
-              aria-labelledby="sweet-label"
-            />
-          ) }
+
+        <Text id="sweet-label">Sweetness</Text>
+        <Slider
+          labelAlwaysOn
+          max={ 5 }
+          min={ 1 }
+          step={ 1 }
+          marks={ SWEET_MARKS }
+          aria-labelledby="sweet-label"
         />
-      </StyledFormControl>
     </Box>
   )
 }

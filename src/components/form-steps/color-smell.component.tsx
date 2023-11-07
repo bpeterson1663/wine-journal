@@ -1,28 +1,25 @@
 import { Flex, Radio, Group, Textarea } from '@mantine/core'
-import { useFormContext, useWatch } from 'react-hook-form'
-import { useLocation } from 'react-router-dom'
-import { useAppSelector } from 'features/hooks'
-import { ColorT, TastingT } from 'types'
 import ColorPalette from 'components/color-palette/color-palette.component'
 
 export const ColorSmell = () => {
-  const location = useLocation()
-  const { setValue, control } = useFormContext<TastingT>()
-  const { editTasting } = useAppSelector(state => state.tasting)
-
-  const color = useWatch({
-    control,
-    name: 'color',
-    defaultValue: location.pathname === '/tastings/edit' && editTasting ? editTasting.color : 'red'
-  })
-  const hue = useWatch({
-    control,
-    name: 'hue'
-  })
-  const intensity = useWatch({
-    control,
-    name: 'intensity'
-  })
+  // const location = useLocation()
+  // const { editTasting } = useAppSelector(state => state.tasting)
+  const color = 'red'
+  const hue = 'purple'
+  const intensity = 'pale'
+  // const color = useWatch({
+  //   control,
+  //   name: 'color',
+  //   defaultValue: location.pathname === '/tastings/edit' && editTasting ? editTasting.color : 'red'
+  // })
+  // const hue = useWatch({
+  //   control,
+  //   name: 'hue'
+  // })
+  // const intensity = useWatch({
+  //   control,
+  //   name: 'intensity'
+  // })
 
   return (
     <Flex
@@ -35,10 +32,10 @@ export const ColorSmell = () => {
         label="Color"
         defaultValue="red"
         onChange={ val => {
-          if (val === 'red') setValue('hue', 'purple')
-          else if (val === 'white') setValue('hue', 'straw')
-          else if (val === 'rose') setValue('hue', 'pink')
-          setValue('color', val as ColorT)
+          // if (val === 'red') setValue('hue', 'purple')
+          // else if (val === 'white') setValue('hue', 'straw')
+          // else if (val === 'rose') setValue('hue', 'pink')
+          // setValue('color', val as ColorT)
         } }
       >
         <Group mt="xs">
@@ -75,7 +72,7 @@ export const ColorSmell = () => {
          </Group>
         </Radio.Group>
       ) }
-      { color === 'white' && (
+      { /* { color === 'white' && (
         <Radio.Group
           name="hue"
           label="Hue"
@@ -89,8 +86,8 @@ export const ColorSmell = () => {
             <Radio value="brown" label="Brown" />
           </Group>
         </Radio.Group>
-      ) }
-      { color === 'rose' && (
+      ) } */ }
+      { /* { color === 'rose' && (
         <Radio.Group
           name="hue"
           label="Hue"
@@ -102,7 +99,7 @@ export const ColorSmell = () => {
             <Radio value="copper" label="Copper" />
           </Group>
         </Radio.Group>
-      ) }
+      ) } */ }
       <ColorPalette color={ color } hue={ hue } intensity={ intensity } />
 
       <Textarea

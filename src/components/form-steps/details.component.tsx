@@ -1,154 +1,58 @@
-import { Autocomplete, Box, TextField } from '@mui/material'
-import { styled } from '@mui/material/styles'
-import { Controller, useFormContext } from 'react-hook-form'
-import { TastingFormT } from '../../types'
-import { WineLabelPic } from '../camera/camera.component'
-
-const StyledTextField = styled(TextField)({
-  margin: '5px 0'
-})
+import { DatePickerInput } from '@mantine/dates'
+import { Box, TextInput } from '@mantine/core'
+// import { TastingFormT } from 'types'
+import { WineLabelPic } from 'components/camera/camera.component'
 
 export const Details = () => {
-  const { formState, control, setValue } = useFormContext<TastingFormT>()
-  const { errors } = formState
-  const varietals: string[] = []
-
   return (
-    <Box sx={ { display: 'flex', flexDirection: 'column', maxWidth: 600 } }>
-      <Controller
+    <Box>
+      <DatePickerInput
         name="date"
-        defaultValue={ `${new Date().toISOString().split('T')[0]}` }
-        control={ control }
-        rules={ {
-          required: 'Enter a date'
-        } }
-        render={ ({ field }) => (
-          <StyledTextField
-            { ...field }
-            id="date"
-            type="date"
-            label="Date"
-            error={ !!errors.date }
-            helperText={ errors.date ? errors.date?.message : '' }
-          />
-        ) }
+        label="Date"
       />
-      <Controller
-        name="producer"
-        control={ control }
-        defaultValue=""
-        rules={ {
-          required: 'The producer is required'
-        } }
-        render={ ({ field }) => (
-          <StyledTextField
-            { ...field }
-            id="producer"
-            label="Producer / Winery"
-            variant="outlined"
-            error={ !!errors.producer }
-            helperText={ errors.producer ? errors.producer?.message : '' }
-          />
-        ) }
+
+      <TextInput
+        required
+        label="Producer / Winery"
+        variant="outlined"
       />
-      <Controller
-        name="classification"
-        control={ control }
-        defaultValue=""
-        render={ ({ field }) => (
-          <StyledTextField { ...field } id="classification" label="Classification / Name" variant="outlined" />
-        ) }
+
+      <TextInput
+        required
+        label="Classification"
+        variant="outlined"
       />
-      <Controller
-        name="varietal"
-        control={ control }
-        defaultValue={ [] }
-        rules={ {
-          required: 'At least one varietal is required'
-        } }
-        render={ ({ field }) => (
-          <Autocomplete
-            { ...field }
-            defaultValue={ [] }
-            multiple
-            freeSolo
-            filterSelectedOptions
-            options={ varietals }
-            onChange={ (_, option) => { setValue('varietal', option) } }
-            getOptionLabel={ (option: string) => option }
-            renderInput={ params => (
-              <StyledTextField
-                { ...params }
-                id="varietal"
-                label="Varietal(s)"
-                error={ !!errors.varietal }
-                helperText={ errors.varietal ? errors.varietal?.message : '' }
-              />
-            ) }
-          />
-        ) }
+
+      <TextInput
+        required
+        label="Varietal(s)"
+        variant="outlined"
       />
-      <Controller
-        name="vintage"
-        control={ control }
-        defaultValue=""
-        rules={ {
-          required: 'Enter the vintage of the wine or N/V if non vintage'
-        } }
-        render={ ({ field }) => (
-          <StyledTextField
-            { ...field }
-            id="vinatge"
-            label="Vintage"
-            variant="outlined"
-            error={ !!errors.vintage }
-            helperText={ errors.vintage ? errors.vintage?.message : '' }
-          />
-        ) }
+
+      <TextInput
+        required
+        label="Vintage"
+        variant="outlined"
       />
-      <Controller
-        name="country"
-        control={ control }
-        defaultValue=""
-        rules={ {
-          required: 'Enter the country the wine is from'
-        } }
-        render={ ({ field }) => (
-          <StyledTextField
-            { ...field }
-            id="country"
-            label="Country"
-            variant="outlined"
-            error={ !!errors.country }
-            helperText={ errors.country ? errors.country?.message : '' }
-          />
-        ) }
+
+      <TextInput
+        required
+        label="Country"
+        variant="outlined"
       />
-      <Controller
-        name="region"
-        control={ control }
-        defaultValue=""
-        rules={ {
-          required: 'Enter the region the wine is from'
-        } }
-        render={ ({ field }) => (
-          <StyledTextField
-            { ...field }
-            id="region"
-            label="Region"
-            variant="outlined"
-            error={ !!errors.region }
-            helperText={ errors.region ? errors.region?.message : '' }
-          />
-        ) }
+
+      <TextInput
+        required
+        label="Region"
+        variant="outlined"
       />
-      <Controller
-        name="subregion"
-        control={ control }
-        defaultValue=""
-        render={ ({ field }) => <StyledTextField { ...field } id="subregion" label="Subregion" variant="outlined" /> }
+
+      <TextInput
+        required
+        label="Subregion"
+        variant="outlined"
       />
-      <Controller name="labelUri" control={ control } render={ ({ field }) => <WineLabelPic { ...field } /> } />
+      <WineLabelPic value="" onChange={ () => {} } />
     </Box>
   )
 }
