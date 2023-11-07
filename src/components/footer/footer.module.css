@@ -7,6 +7,8 @@
     left: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     background-color: var(--mantine-color-gray-6);
     padding: 10px;
+    height: 46px;
 }

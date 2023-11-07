@@ -47,7 +47,7 @@ const SignInUp = () => {
               </Title>
               <SignUpForm />
               <div className={ styles['action-container'] }>
-                Already have an account yet?&nbsp;<span className={ styles['click-here'] } onClick={ () => { setShowSignIn(true) } }> Click Here</span>
+                Already have an account?&nbsp;<span className={ styles['click-here'] } onClick={ () => { setShowSignIn(true) } }> Click Here</span>
               </div>
             </div>
         }

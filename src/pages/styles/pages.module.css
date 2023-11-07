@@ -17,6 +17,10 @@
 
 .click-here{
   text-decoration: underline;
+  
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .action-container {

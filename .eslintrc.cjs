@@ -57,6 +57,7 @@ module.exports = {
     'react/prop-types': 2,
     'no-extra-boolean-cast': 0,
     'no-console': ['warn', { 'allow': ['error'] }],
+    'no-debugger': 'warn',
     'react/jsx-curly-spacing': [2, { 'when': 'always', 'children': true }],
     'react/jsx-curly-brace-presence': [2, { 'props': 'never', 'children': 'never' }],
     'react/no-unused-prop-types': 2,

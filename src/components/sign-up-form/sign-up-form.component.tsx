@@ -1,16 +1,22 @@
+import { useEffect } from 'react'
 import { Box, TextInput, Button, Group } from '@mantine/core'
-import { useForm } from '@mantine/form'
+import { useForm, zodResolver } from '@mantine/form'
 import { signUp } from 'features/auth/authSlice'
-import { useAppDispatch } from 'features/hooks'
-import { SignUpT } from 'types'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { useNavigate } from 'react-router-dom'
 import styles from 'components/sign-up-form/sign-up-form.module.css'
-
-interface SignUpFormT extends SignUpT {
-  confirmPassword: string
-}
+import { Schema, SignUpFormT } from 'components/sign-up-form/scehma'
 
 const SignUpForm = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { currentUser } = useAppSelector(state => state.auth)
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/')
+    }
+  }, [currentUser, navigate])
 
   const form = useForm({
     initialValues: {
@@ -21,17 +27,11 @@ const SignUpForm = () => {
       confirmPassword: ''
     },
 
-    validate: {
-      email: value => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
-    }
+    validate: zodResolver(Schema)
   })
 
   const onSubmitHandler = (data: SignUpFormT) => {
-    const { password, confirmPassword, email, firstName, lastName } = data
-    if (password !== confirmPassword) {
-      alert('Passwords do not match')
-      return
-    }
+    const { password, email, firstName, lastName } = data
     dispatch(signUp({ email, password, firstName, lastName }))
   }
 
@@ -39,35 +39,35 @@ const SignUpForm = () => {
     <Box className={ styles.container }>
       <form onSubmit={ form.onSubmit(values => { onSubmitHandler(values) }) }>
         <TextInput
-          required
+          withAsterisk
           label="First Name"
           type="text"
           { ...form.getInputProps('firstName') }
         />
 
         <TextInput
-          required
+          withAsterisk
           label="Last Name"
           type="text"
           { ...form.getInputProps('lastName') }
         />
 
         <TextInput
-          required
+          withAsterisk
           label="Email"
           type="email"
           { ...form.getInputProps('email') }
         />
 
         <TextInput
-          required
+          withAsterisk
           label="Password"
           type="password"
           { ...form.getInputProps('password') }
         />
 
         <TextInput
-          required
+          withAsterisk
           label="Confirm Password"
           type="password"
           { ...form.getInputProps('confirmPassword') }

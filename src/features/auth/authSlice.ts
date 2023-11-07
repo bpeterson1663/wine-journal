@@ -57,6 +57,7 @@ export const signUp =
         const { success, data, message } = response
         if (success && data?.email) {
           dispatch(fetchUserCreateStart({ firstName: payload.firstName, lastName: payload.lastName, userId: data.uid }))
+          dispatch(authSuccess(data))
         } else {
           dispatch(authFailure(message))
         }

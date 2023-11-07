@@ -1,15 +1,11 @@
 import { useEffect } from 'react'
 import { Button, Box, Group, TextInput } from '@mantine/core'
-import { useForm } from '@mantine/form'
+import { useForm, zodResolver } from '@mantine/form'
 import { useNavigate } from 'react-router-dom'
-import { login, signInWithGoogle } from '../../features/auth/authSlice'
-import { useAppDispatch, useAppSelector } from '../../features/hooks'
+import { login, signInWithGoogle } from 'features/auth/authSlice'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
 import styles from 'components/sign-in-form/sign-in-form.module.css'
-
-interface SignInFormT {
-  email: string
-  password: string
-}
+import { Schema, SignInFormT } from 'components/sign-in-form/scema'
 
 const SignInForm = () => {
   const navigate = useNavigate()
@@ -33,16 +29,14 @@ const SignInForm = () => {
       password: ''
     },
 
-    validate: {
-      email: value => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
-    }
+    validate: zodResolver(Schema)
   })
 
   return (
     <Box className={ styles.container }>
       <form onSubmit={ form.onSubmit(values => { onSubmitHandler(values) }) }>
         <TextInput
-          required
+          withAsterisk
           type="email"
           label="Email"
           placeholder="your@email.com"
@@ -50,7 +44,7 @@ const SignInForm = () => {
         />
 
         <TextInput
-          required
+          withAsterisk
           label="Password"
           type="password"
           { ...form.getInputProps('password') }
