@@ -17,7 +17,7 @@
 
 .click-here{
   text-decoration: underline;
-  
+
   &:hover {
     cursor: pointer;
   }
@@ -27,6 +27,14 @@
   display: flex;
   justify-content: center;
 }
+
+.form {
+  display: flex;
+  flex-flow: column wrap;
+  margin: 40px auto;
+  max-width: 600px;
+  width: 90%;
+} 
 
 
 @media (min-width: 640px) {

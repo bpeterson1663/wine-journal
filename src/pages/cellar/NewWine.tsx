@@ -1,7 +1,14 @@
 import { Stepper, Group, Button, Box } from '@mantine/core'
+import { zodResolver } from '@mantine/form'
 import { useState } from 'react'
-import { Details, Quantity } from 'components/form-steps'
-// import { notifications } from '@mantine/notifications'
+import { DetailsWine, Quantity } from 'components/form-steps'
+import { WineFormProvider, useWineForm } from 'pages/cellar/form-context'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { WineT, WineSchema } from 'pages/cellar/schema'
+import { notifications } from '@mantine/notifications'
+
+import { fetchWineCreateStart } from 'features/cellar/cellarSlice'
+import styles from 'pages/styles/pages.module.css'
 
 const STEPS = [
   {
@@ -14,24 +21,55 @@ const STEPS = [
 
 export default function NewWine () {
   const [activeStep, setActiveStep] = useState(0)
-  // const dispatch = useAppDispatch()
-  // const { message } = useAppSelector(state => state.cellar)
-  // const { currentUser } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const { message, status } = useAppSelector(state => state.cellar)
+  const { currentUser } = useAppSelector(state => state.auth)
 
-  // const methods = useForm<WineFormT>({
-  //   mode: 'all',
-  //   defaultValues: { varietal: [] }
-  // })
+  const form = useWineForm({
+    validateInputOnBlur: true,
+    initialValues: {
+      id: '',
+      userId: '',
+      producer: '',
+      classification: '',
+      subregion: '',
+      region: '',
+      country: '',
+      vintage: '',
+      quantity: 0,
+      price: 0,
+      description: '',
+      labelUri: '',
+      date: new Date()
+    },
+    validate: zodResolver(WineSchema)
+  })
 
-  // const onSubmitHandler: SubmitHandler<WineT> = async data => {
-  //   dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
-  //   notifications.show({
-  //     message
-  //   })
-  // }
+  const onSubmitHandler = (data: WineT) => {
+    const stringDate = data.date.toISOString()
+    dispatch(fetchWineCreateStart({ ...data, date: stringDate, userId: currentUser?.uid ?? '', varietal: [] }))
+    form.reset()
+    setActiveStep(STEPS.length)
+    if (status === 'error') {
+      notifications.show({
+        message: 'Something went wrong creating wine',
+        color: 'red'
+      })
+    } else {
+      notifications.show({
+        message
+      })
+    }
+  }
 
-  const handleNext = () => { setActiveStep(current => (current < 3 ? current + 1 : current)) }
-  const handleBack = () => { setActiveStep(current => (current > 0 ? current - 1 : current)) }
+  const handleNext = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault()
+    setActiveStep(current => (current < 3 ? current + 1 : current))
+  }
+  const handleBack = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault()
+    setActiveStep(current => (current > 0 ? current - 1 : current))
+  }
 
   const handleReset = () => {
     setActiveStep(0)
@@ -40,7 +78,7 @@ export default function NewWine () {
   const getStepContent = (index: number) => {
     switch (index) {
       case 0:
-        return <Details />
+        return <DetailsWine />
       case 1:
         return <Quantity />
       default:
@@ -49,28 +87,40 @@ export default function NewWine () {
   }
 
   const disableContinue = (): boolean => {
+    if (
+      !form.isTouched('producer') ||
+      !form.isTouched('country') ||
+      !form.isTouched('region') ||
+      !form.isTouched('vintage')
+      // !form.isTouched('varietal')
+    ) {
+      return true
+    }
+
+    if (Object.keys(form.errors).length > 0) {
+      return true
+    }
     return false
   }
 
   return (
-        <Box
-          component="form"
-        >
-          <Stepper active={ activeStep } onStepClick={ setActiveStep } allowNextStepsSelect={ false }>
-            { STEPS.map((step, index) => (
-              <Stepper.Step label={ step.label } description="Create an account">
-                { getStepContent(index) }
-              </Stepper.Step>
-            )) }
-          </Stepper>
-          <Group justify="center" mt="xl">
+    <WineFormProvider form={ form }>
+      <Box className={ styles.form } component="form" onSubmit={ form.onSubmit(onSubmitHandler) }>
+        <Stepper active={ activeStep } onStepClick={ setActiveStep } allowNextStepsSelect={ false }>
+          { STEPS.map((step, index) => (
+            <Stepper.Step label={ step.label }>
+              { getStepContent(index) }
+            </Stepper.Step>
+          )) }
+        </Stepper>
+        { activeStep !== STEPS.length &&
+        <Group justify="center" mt="xl">
           { activeStep === STEPS.length - 1
             ? (
               <Button
                 color="secondary"
                 type="submit"
                 variant="contained"
-                onClick={ handleNext }
               >
                 Submit
               </Button>
@@ -80,23 +130,25 @@ export default function NewWine () {
                 disabled={ disableContinue() }
                 variant="contained"
                 color="secondary"
+                name="continue"
                 onClick={ handleNext }
-
               >
                 Continue
               </Button>
               ) }
-              <Button disabled={ activeStep === 0 } onClick={ handleBack } >
-                Back
-              </Button>
-          </Group>
-          { activeStep === STEPS.length && (
-            <Box>
-              <Button color="secondary" variant="contained" onClick={ handleReset }>
-                Add Another Entry
-              </Button>
-            </Box>
-          ) }
-        </Box>
+            <Button name="back" disabled={ activeStep === 0 } onClick={ handleBack } >
+              Back
+            </Button>
+        </Group>
+        }
+      </Box>
+      { activeStep === STEPS.length && (
+      <Group justify="center">
+        <Button color="secondary" variant="contained" onClick={ handleReset }>
+          Add Another Entry
+        </Button>
+      </Group>
+      ) }
+    </WineFormProvider>
   )
 }

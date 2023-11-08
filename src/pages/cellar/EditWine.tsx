@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { Button, Box } from '@mantine/core'
+import { zodResolver } from '@mantine/form'
 import PageContainer from 'components/page-container/page-container.component'
 // import { notifications } from '@mantine/notifications'
-
+import { WineFormProvider, useWineForm } from 'pages/cellar/form-context'
+import { WineSchema } from 'pages/cellar/schema'
 import { useAppSelector } from 'features/hooks'
-import { Details, Quantity } from 'components/form-steps'
+import { DetailsWine, Quantity } from 'components/form-steps'
 import { useNavigate } from 'react-router-dom'
 
 export default function EditWine () {
@@ -19,6 +21,10 @@ export default function EditWine () {
       navigate('/cellar')
     }
   }, [editWine, navigate])
+
+  const form = useWineForm({
+    validate: zodResolver(WineSchema)
+  })
 
   // const onSubmitHandler = async (data: WineT) => {
   //   dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
@@ -44,11 +50,12 @@ export default function EditWine () {
 
   return (
     <PageContainer actions={ <Actions /> }>
+      <WineFormProvider form={ form }>
         <Box
           component="form"
         >
           <Box>
-            <Details />
+            <DetailsWine />
           </Box>
           <Box>
             <Quantity />
@@ -62,6 +69,7 @@ export default function EditWine () {
             </Button>
           </Box>
         </Box>
+      </WineFormProvider>
     </PageContainer>
   )
 }

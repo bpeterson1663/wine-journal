@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { addWineEntry, deleteWineEntry, getWineById, getWines, updateWineEntry } from '../../api'
-import { FetchStatusT, MessageT, WineT } from '../../types'
-import { AppThunk, RootState } from '../store'
+import { addWineEntry, deleteWineEntry, getWineById, getWines, updateWineEntry } from 'api'
+import { FetchStatusT, MessageT, WineT } from 'types'
+import { AppThunk, RootState } from 'features/store'
 
 export interface InitialCellarState {
   message: MessageT
@@ -126,11 +126,10 @@ export const fetchWineCreateStart =
     async dispatch => {
       try {
         dispatch(cellarStartFetch())
-        const data = prepData(payload)
-        const response = await addWineEntry(data)
-        const { success, message } = response
+        const prepedData = prepData(payload)
+        const { data, success, message } = await addWineEntry(prepedData)
         if (success) {
-          dispatch(wineCreateFetchSuccess({ wine: data, message }))
+          dispatch(wineCreateFetchSuccess({ wine: { ...prepedData, id: data?.id }, message }))
         } else {
           dispatch(cellarFetchFailure(message))
         }

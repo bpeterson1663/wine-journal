@@ -1,5 +1,5 @@
 import { type DocumentData } from 'firebase/firestore/lite'
-import { WineT, WineFormT } from 'types/cellar'
+import { WineT, WineFormT, NewWineT } from 'types/cellar'
 
 export interface TastingT {
   id: string
@@ -86,5 +86,6 @@ export type RoseHueT = 'pink' | 'salmon' | 'copper'
 
 export type {
   WineT,
-  WineFormT
+  WineFormT,
+  NewWineT
 }

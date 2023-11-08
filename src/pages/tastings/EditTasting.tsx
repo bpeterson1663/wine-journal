@@ -1,17 +1,24 @@
 import { Box, Button } from '@mantine/core'
+import { zodResolver } from '@mantine/form'
 import PageContainer from 'components/page-container/page-container.component'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ColorSmell, Details, Review, Taste } from 'components/form-steps'
+import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
 import { useAppSelector } from 'features/hooks'
 // import { fetchTastingEditStart } from 'features/tasting/tastingSlice'
 // import { TastingFormT, TastingT } from 'types'
 import styles from 'pages/tastings/tastings.module.css'
+import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
+import { TastingSchema } from 'pages/tastings/schema'
 
 const EditTasting = () => {
   // const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { editTasting } = useAppSelector(state => state.tasting)
+
+  const form = useTastingForm({
+    validate: zodResolver(TastingSchema)
+  })
 
   useEffect(() => {
     if (!editTasting) {
@@ -40,13 +47,14 @@ const EditTasting = () => {
 
   return (
     <PageContainer actions={ <Actions /> }>
+      <TastingFormProvider form={ form }>
         <Box
           className={ styles['tastings-container'] }
           component="form"
           // onSubmit={ onSubmitHandler }
         >
           <Box className={ styles.section }>
-            <Details />
+            <DetailsTasting />
           </Box>
           <Box className={ styles.section }>
             <ColorSmell />
@@ -58,6 +66,7 @@ const EditTasting = () => {
             <Review />
           </Box>
         </Box>
+      </TastingFormProvider>
     </PageContainer>
   )
 }

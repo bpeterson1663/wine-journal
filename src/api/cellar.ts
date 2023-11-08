@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore/lite'
 import { db } from '../firebase'
-import { ApiResponseT, FirebaseApiResponseT, WineT } from '../types'
+import { ApiResponseT, FirebaseApiResponseT, WineT, NewWineT } from 'types'
 
 export async function getWines (userId: string) {
   try {
@@ -59,12 +59,13 @@ export async function getWineById (id: string): Promise<FirebaseApiResponseT> {
   }
 }
 
-export async function addWineEntry (data: WineT): Promise<ApiResponseT> {
+export async function addWineEntry (data: NewWineT): Promise<FirebaseApiResponseT> {
   const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
   const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
   try {
-    await addDoc(collection(db, 'wines'), { ...data, quantity, price })
+    const docData = await addDoc(collection(db, 'wines'), { ...data, quantity, price })
     return {
+      data: docData,
       success: true,
       message: 'Wine added to cellar'
     }

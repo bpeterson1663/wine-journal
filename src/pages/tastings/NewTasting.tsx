@@ -1,7 +1,10 @@
 import { Stepper, Box, Button } from '@mantine/core'
+import { zodResolver } from '@mantine/form'
 import PageContainer from 'components/page-container/page-container.component'
 import { useState } from 'react'
-import { ColorSmell, Details, Review, Taste } from 'components/form-steps'
+import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
+import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
+import { TastingSchema } from 'pages/tastings/schema'
 
 const STEPS = [
   {
@@ -18,12 +21,14 @@ const STEPS = [
   }
 ]
 
-const NewWine = () => {
+const NewTasting = () => {
   const [activeStep, setActiveStep] = useState(0)
   // const dispatch = useAppDispatch()
   // const { tastingOpen } = useAppSelector(state => state.tasting)
   // const { currentUser } = useAppSelector(state => state.auth)
-
+  const form = useTastingForm({
+    validate: zodResolver(TastingSchema)
+  })
   // const onSubmitHandler: SubmitHandler<TastingT> = async data => {
   //   if (tastingOpen) {
   //     const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
@@ -31,6 +36,7 @@ const NewWine = () => {
   //   }
   //   dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
   // }
+
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
   }
@@ -46,7 +52,7 @@ const NewWine = () => {
   const getStepContent = (index: number) => {
     switch (index) {
       case 0:
-        return <Details />
+        return <DetailsTasting />
       case 1:
         return <ColorSmell />
       case 2:
@@ -59,6 +65,7 @@ const NewWine = () => {
   }
 
   const disableContinue = (): boolean => {
+    console.log(form.errors)
     return false
   }
 
@@ -107,6 +114,7 @@ const NewWine = () => {
 
   return (
     <PageContainer actions={ <Actions /> }>
+      <TastingFormProvider form={ form }>
         <Box
           style={ {
             display: 'flex',
@@ -128,8 +136,9 @@ const NewWine = () => {
             )) }
           </Stepper>
         </Box>
+      </TastingFormProvider>
     </PageContainer>
   )
 }
 
-export default NewWine
+export default NewTasting

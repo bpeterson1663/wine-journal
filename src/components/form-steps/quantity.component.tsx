@@ -1,22 +1,23 @@
-import { Box, TextInput, Textarea } from '@mantine/core'
+import { Box, Textarea, NumberInput } from '@mantine/core'
+import { useWineForm } from 'pages/cellar/form-context'
 
 export const Quantity = () => {
+  const form = useWineForm()
   return (
-    <Box >
-      <TextInput
-        type="number"
+    <Box>
+      <NumberInput
         label="Quantity"
+        { ...form.getInputProps('quantity') }
       />
-      <TextInput
-        type="number"
+      <NumberInput
         label="Price"
+        { ...form.getInputProps('price') }
       />
       <Textarea
         multiline
         rows={ 4 }
-        id="description"
         label="Description"
-        variant="outlined"/>
+        { ...form.getInputProps('description') }/>
     </Box>
   )
 }

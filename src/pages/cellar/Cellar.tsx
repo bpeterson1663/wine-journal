@@ -22,12 +22,12 @@ export default function Cellar () {
   )
 
   return (
-        <PageContainer title="Cellar" actions={ <Actions /> } >
-          <section className={ styles.list }>
-            { wineList.map(wine => (
-              <Card key={ wine.id } wine={ wine } url="cellar" />
-            )) }
-          </section>
-        </PageContainer>
+    <PageContainer title="Cellar" actions={ <Actions /> } >
+      <section className={ styles.list }>
+        { wineList.map(wine => (
+          <Card key={ wine.id } wine={ wine } url="cellar" />
+        )) }
+      </section>
+    </PageContainer>
   )
 }

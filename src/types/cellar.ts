@@ -15,6 +15,8 @@ export interface WineT {
   labelUri: string
 }
 
+export type NewWineT = Omit<WineT, 'id'>
+
 type WineForm = Omit<WineT, 'varietal'>
 
 export interface WineFormT extends WineForm {
