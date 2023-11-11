@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { tastingSetOpen } from 'features/tasting/tastingSlice'
 import PageContainer from 'components/page-container/page-container.component'
 import { WineT } from 'types'
+import Footer from 'components/footer/footer.component'
 
 export default function WineId () {
   const [opened, { open, close }] = useDisclosure(false)
@@ -55,9 +56,7 @@ export default function WineId () {
 
   const ConfirmDeleteDialog = () => (
     <Modal opened={ opened } onClose={ close } title="Delete Wine">
-      <Modal.Content>
-        Are you sure you want to delete this wine?
-      </Modal.Content>
+      <Text>Are you sure you want to delete this wine?</Text>
       <Group>
         <Button autoFocus onClick={ handleConfirmDeleteClose }>
           Cancel
@@ -67,21 +66,6 @@ export default function WineId () {
         </Button>
       </Group>
     </Modal>
-  )
-
-  const Actions = ({ wine }: { wine: WineT }) => (
-    <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } >
-        Open Bottle
-      </Button>
-      <Button color="secondary" variant="contained" onClick={ () => { handleEditClick(wine) } }>
-        Edit
-      </Button>
-      <Button color="info" onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outlined">
-        Delete
-      </Button>
-
-    </div>
   )
 
   const {
@@ -96,7 +80,7 @@ export default function WineId () {
   } = wine
 
   return (
-    <PageContainer title={ producer } actions={ <Actions wine={ wine } /> }>
+    <PageContainer title={ producer }>
       <section className={ styles.container }>
         <div className={ styles.column }>
           <img className={ styles.wineImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />
@@ -113,6 +97,19 @@ export default function WineId () {
 
         </div>
       </section>
+      <Footer>
+        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+          <Button color="secondary" variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } >
+            Open Bottle
+          </Button>
+          <Button color="secondary" variant="contained" onClick={ () => { handleEditClick(wine) } }>
+            Edit
+          </Button>
+          <Button color="info" onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outlined">
+            Delete
+          </Button>
+        </Group>
+      </Footer>
       <ConfirmDeleteDialog />
     </PageContainer>
   )

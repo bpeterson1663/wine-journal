@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import Layout from 'components/layout/layout.component'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
 import NotFound from 'pages/NotFound'
@@ -12,20 +12,9 @@ import SignInUp from 'pages/SignInUp'
 import Tastings from 'pages/tastings/Tastings'
 import { authSuccess } from 'features/auth/authSlice'
 import { fetchUserStart } from 'features/user/userSlice'
-import { MantineProvider, createTheme } from '@mantine/core'
-import { Notifications } from '@mantine/notifications'
-
-import '@mantine/core/styles.css'
-import '@mantine/dates/styles.css'
-import '@mantine/carousel/styles.css'
 
 function App () {
   const dispatch = useAppDispatch()
-  const theme = createTheme({
-    fontFamily: 'Lexend Deca',
-    primaryColor: 'cyan'
-    /** Put your mantine theme override here */
-  })
 
   // Original theme
   //   palette: {
@@ -74,31 +63,28 @@ function App () {
   }
 
   return (
-    <MantineProvider theme={ theme } defaultColorScheme="dark">
-      <Notifications />
-      <Routes>
-        <Route path="/" element={ <Layout /> } >
-          <Route path="/login" element={ <SignInUp /> } />
+    <Routes>
+      <Route path="/" element={ <Layout /> } >
+        <Route path="/login" element={ <SignInUp /> } />
+        <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
+
+        <Route path="/tastings">
           <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
-
-          <Route path="/tastings">
-            <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
-            <Route path=":id" element={ <ProtectedRoute component={ <ViewTasting /> } /> } />
-            <Route path="new" element={ <ProtectedRoute component={ <NewTasting /> } /> } />
-            <Route path="edit" element={ <ProtectedRoute component={ <EditTasting /> } /> } />
-          </Route>
-
-          <Route path="/cellar">
-            <Route index element={ <ProtectedRoute component={ <Cellar /> } /> } />
-            <Route path=":id" element={ <ProtectedRoute component={ <WineId /> } /> } />
-            <Route path="new" element={ <ProtectedRoute component={ <NewWine /> } /> } />
-            <Route path="edit" element={ <ProtectedRoute component={ <EditWine /> } /> } />
-          </Route>
-
-          <Route path="*" element={ <NotFound /> } />
+          <Route path=":id" element={ <ProtectedRoute component={ <ViewTasting /> } /> } />
+          <Route path="new" element={ <ProtectedRoute component={ <NewTasting /> } /> } />
+          <Route path="edit" element={ <ProtectedRoute component={ <EditTasting /> } /> } />
         </Route>
-      </Routes>
-    </MantineProvider>
+
+        <Route path="/cellar">
+          <Route index element={ <ProtectedRoute component={ <Cellar /> } /> } />
+          <Route path=":id" element={ <ProtectedRoute component={ <WineId /> } /> } />
+          <Route path="new" element={ <ProtectedRoute component={ <NewWine /> } /> } />
+          <Route path="edit" element={ <ProtectedRoute component={ <EditWine /> } /> } />
+        </Route>
+
+        <Route path="*" element={ <NotFound /> } />
+      </Route>
+    </Routes>
   )
 }
 

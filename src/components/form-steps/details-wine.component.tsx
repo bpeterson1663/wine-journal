@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DatePickerInput } from '@mantine/dates'
 import { Box, TextInput, Group } from '@mantine/core'
 import { WineLabelPic } from 'components/camera/camera.component'
@@ -7,6 +7,10 @@ import { useWineContext } from 'pages/cellar/form-context'
 export const DetailsWine = () => {
   const [img, setImg] = useState('')
   const form = useWineContext()
+
+  useEffect(() => {
+    setImg(form.values.labelUri)
+  }, [form])
 
   const onDateChange = (value: Date | null) => {
     if (value) {
@@ -39,12 +43,11 @@ export const DetailsWine = () => {
         { ...form.getInputProps('classification') }
       />
 
-      { /* <TextInput
+      <TextInput
         label="Varietal(s)"
         variant="outlined"
-        { ...wineForm?.getInputProps('varietal') }
-        { ...tastingForm?.getInputProps('varietal') }
-      /> */ }
+        { ...form.getInputProps('varietal') }
+      />
 
       <TextInput
         label="Vintage"

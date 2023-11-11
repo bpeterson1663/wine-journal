@@ -126,10 +126,10 @@ export const fetchWineCreateStart =
     async dispatch => {
       try {
         dispatch(cellarStartFetch())
-        const prepedData = prepData(payload)
-        const { data, success, message } = await addWineEntry(prepedData)
+        const preppedData = prepData(payload)
+        const { data, success, message } = await addWineEntry(preppedData)
         if (success) {
-          dispatch(wineCreateFetchSuccess({ wine: { ...prepedData, id: data?.id }, message }))
+          dispatch(wineCreateFetchSuccess({ wine: { ...preppedData, id: data?.id }, message }))
         } else {
           dispatch(cellarFetchFailure(message))
         }
@@ -144,11 +144,11 @@ export const fetchWineEditStart =
     async dispatch => {
       try {
         dispatch(cellarStartFetch())
-        const data = prepData(payload)
-        const response = await updateWineEntry(data)
-        const { success, message } = response
+        const preppedData = prepData(payload)
+        const { success, message, data } = await updateWineEntry(preppedData)
+
         if (success) {
-          dispatch(wineEditFetchSuccess({ message, wine: data }))
+          dispatch(wineEditFetchSuccess({ wine: { ...preppedData, id: data?.id }, message }))
         } else {
           dispatch(cellarFetchFailure(message))
         }

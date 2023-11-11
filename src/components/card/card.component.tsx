@@ -21,7 +21,7 @@ export function Card ({ wine, url, showDate = false }: Props) {
       ) }
       <div className={ styles.row }>
         <div className={ styles.column }>
-          <img className={ styles.cardImage } src={ labelUri ?? require('images/wine-tasting.jpg') } alt={ producer } />
+          <img className={ styles.cardImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />
         </div>
         <div className={ styles.column }>
           <Title order={ 3 }>{ producer }</Title>

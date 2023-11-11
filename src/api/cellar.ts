@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore/lite'
 import { db } from '../firebase'
-import { ApiResponseT, FirebaseApiResponseT, WineT, NewWineT } from 'types'
+import { ApiResponseT, FirebaseApiResponseT, NewWineT, WineT } from 'types'
 
 export async function getWines (userId: string) {
   try {
@@ -78,7 +78,7 @@ export async function addWineEntry (data: NewWineT): Promise<FirebaseApiResponse
   }
 }
 
-export async function updateWineEntry (data: WineT): Promise<ApiResponseT> {
+export async function updateWineEntry (data: WineT): Promise<FirebaseApiResponseT> {
   try {
     const wineRef = doc(db, 'wines', data.id)
     const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity

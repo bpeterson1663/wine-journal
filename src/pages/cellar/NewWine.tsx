@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { DetailsWine, Quantity } from 'components/form-steps'
 import { WineFormProvider, useWineForm } from 'pages/cellar/form-context'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
-import { WineT, WineSchema } from 'pages/cellar/schema'
+import { WineT, WineSchema, INITIAL_VALUES } from 'schemas/cellar'
 import { notifications } from '@mantine/notifications'
-
+import Footer from 'components/footer/footer.component'
 import { fetchWineCreateStart } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
 
@@ -28,19 +28,7 @@ export default function NewWine () {
   const form = useWineForm({
     validateInputOnBlur: true,
     initialValues: {
-      id: '',
-      userId: '',
-      producer: '',
-      classification: '',
-      subregion: '',
-      region: '',
-      country: '',
-      vintage: '',
-      quantity: 0,
-      price: 0,
-      description: '',
-      labelUri: '',
-      date: new Date()
+      ...INITIAL_VALUES
     },
     validate: zodResolver(WineSchema)
   })
@@ -113,42 +101,44 @@ export default function NewWine () {
             </Stepper.Step>
           )) }
         </Stepper>
+        <Footer>
         { activeStep !== STEPS.length &&
-        <Group justify="center" mt="xl">
-          { activeStep === STEPS.length - 1
-            ? (
-              <Button
-                color="secondary"
-                type="submit"
-                variant="contained"
-              >
-                Submit
+          <Group justify="flex-end">
+            { activeStep === STEPS.length - 1
+              ? (
+                <Button
+                  color="secondary"
+                  type="submit"
+                  variant="contained"
+                >
+                  Submit
+                </Button>
+                )
+              : (
+                <Button
+                  disabled={ disableContinue() }
+                  variant="contained"
+                  color="secondary"
+                  name="continue"
+                  onClick={ handleNext }
+                >
+                  Continue
+                </Button>
+                ) }
+              <Button name="back" disabled={ activeStep === 0 } onClick={ handleBack } >
+                Back
               </Button>
-              )
-            : (
-              <Button
-                disabled={ disableContinue() }
-                variant="contained"
-                color="secondary"
-                name="continue"
-                onClick={ handleNext }
-              >
-                Continue
-              </Button>
-              ) }
-            <Button name="back" disabled={ activeStep === 0 } onClick={ handleBack } >
-              Back
-            </Button>
-        </Group>
+          </Group>
         }
+        { activeStep === STEPS.length &&
+          <Group justify="center">
+            <Button color="secondary" variant="contained" onClick={ handleReset }>
+              Add Another Entry
+            </Button>
+          </Group>
+        }
+        </Footer>
       </Box>
-      { activeStep === STEPS.length && (
-      <Group justify="center">
-        <Button color="secondary" variant="contained" onClick={ handleReset }>
-          Add Another Entry
-        </Button>
-      </Group>
-      ) }
     </WineFormProvider>
   )
 }
