@@ -5,7 +5,7 @@ import NotFound from 'pages/NotFound'
 import EditTasting from 'pages/tastings/EditTasting'
 import NewTasting from 'pages/tastings/NewTasting'
 import ViewTasting from 'pages/tastings/ViewTasting'
-import { Cellar, WineId, NewWine, EditWine } from 'pages/cellar'
+import { Cellar, ViewWine, NewWine, EditWine } from 'pages/cellar'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { getAuth, onAuthStateChanged, type User } from 'firebase/auth'
 import SignInUp from 'pages/SignInUp'
@@ -77,7 +77,7 @@ function App () {
 
         <Route path="/cellar">
           <Route index element={ <ProtectedRoute component={ <Cellar /> } /> } />
-          <Route path=":id" element={ <ProtectedRoute component={ <WineId /> } /> } />
+          <Route path=":id" element={ <ProtectedRoute component={ <ViewWine /> } /> } />
           <Route path="new" element={ <ProtectedRoute component={ <NewWine /> } /> } />
           <Route path="edit" element={ <ProtectedRoute component={ <EditWine /> } /> } />
         </Route>

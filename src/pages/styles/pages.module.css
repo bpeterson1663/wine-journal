@@ -36,6 +36,12 @@
   width: 90%;
 } 
 
+.delete-dialog {
+
+  .content {
+    margin-bottom: 20px;
+  }
+}
 
 @media (min-width: 640px) {
   .container {

@@ -90,15 +90,21 @@ const NewTasting = () => {
   const Actions = () => {
     if (activeStep !== STEPS.length) {
       return (
-        <Group justify="flex-end">
+        <Group style={ { width: '100%' } } justify="space-between">
+           <Button
+            disabled={ activeStep === 0 }
+            color="info"
+            variant="outline"
+            onClick={ handleBack }
+            style={ { mt: 1, mr: 1 } }
+          >
+            Back
+          </Button>
           { activeStep === STEPS.length - 1
-            ? (
-            <Button color="secondary" type="submit" variant="contained" style={ { mt: 1, mr: 1 } }>
+            ? <Button color="secondary" type="submit" variant="contained">
               Submit
             </Button>
-              )
-            : (
-            <Button
+            : <Button
               disabled={ disableContinue() }
               variant="contained"
               color="secondary"
@@ -107,16 +113,8 @@ const NewTasting = () => {
             >
               Continue
             </Button>
-              ) }
-          <Button
-            disabled={ activeStep === 0 }
-            color="info"
-            variant="outlined"
-            onClick={ handleBack }
-            style={ { mt: 1, mr: 1 } }
-          >
-            Back
-          </Button>
+          }
+
         </Group>
       )
     }
@@ -133,10 +131,16 @@ const NewTasting = () => {
   return (
     <PageContainer>
       <TastingFormProvider form={ form }>
-        <Box className={ styles.form } component="form" onChange={ () => {
-          console.log(form.values)
-        } } onSubmit={ form.onSubmit(onSubmitHandler) }>
-          <Stepper active={ activeStep } allowNextStepsSelect={ false }>
+        <Box className={ styles.form } component="form" onSubmit={ form.onSubmit(onSubmitHandler) }>
+          <Stepper
+            styles={ {
+              stepBody: {
+                display: 'none'
+              }
+            } }
+            active={ activeStep }
+            allowNextStepsSelect={ false }
+          >
             { STEPS.map((step, index) => (
               <Stepper.Step key={ step.label } label={ step.label }>
                   <Box style={ { width: '100%' } }>{ getStepContent(index) }</Box>

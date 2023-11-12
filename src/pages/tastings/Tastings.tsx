@@ -24,7 +24,7 @@ export default function Tastings () {
           )) }
       </section>
       <Footer>
-        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+        <Group justify="flex-end">
           <Button color="secondary" variant="contained" style={ { margin: '0 5px ' } } onClick={ () => { handleNewTasting() } }>
             New Tasting
           </Button>

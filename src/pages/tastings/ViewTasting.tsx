@@ -1,5 +1,6 @@
 import { Button, Modal, Group, Title, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
 import ColorPalette from 'components/color-palette/color-palette.component'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectTastingById } from 'features/tasting/tastingSelectors'
@@ -10,7 +11,6 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Footer from 'components/footer/footer.component'
 import RatingIcon from 'components/rating/raiting.component'
-
 import PageContainer from 'components/page-container/page-container.component'
 import { TastingT } from 'schemas/tastings'
 
@@ -42,6 +42,9 @@ export default function TastingId () {
   const handleDelete = () => {
     dispatch(fetchTastingDeleteStart(itemToDelete))
     if (status === 'success') {
+      notifications.show({
+        message: 'Tasting was deleted'
+      })
       navigate('/')
     }
   }
@@ -52,16 +55,13 @@ export default function TastingId () {
   }
 
   const ConfirmDeleteDialog = () => (
-    <Modal opened={ opened } onClose={ close } title="Authentication">
-      <Modal.Title>Delete Tasting</Modal.Title>
-      <Modal.Content>
-        Are you sure you want to delete this tasting?
-      </Modal.Content>
-      <Group>
-        <Button autoFocus onClick={ handleConfirmDeleteClose }>
+    <Modal className={ styles['delete-dialog'] } opened={ opened } onClose={ close } title="Delete Tasting">
+      <Text className={ styles.content }>Are you sure you want to delete this tasting?</Text>
+      <Group justify='flex-end'>
+        <Button variant="outline" onClick={ handleConfirmDeleteClose }>
           Cancel
         </Button>
-        <Button onClick={ handleDelete } autoFocus>
+        <Button onClick={ handleDelete } autoFocus >
           Delete
         </Button>
       </Group>
@@ -142,12 +142,12 @@ export default function TastingId () {
         </div>
       </section>
       <Footer>
-        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-          <Button color="secondary" variant="contained" style={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(tasting) } }>
-            Edit
-          </Button>
-          <Button color="info" onClick={ () => { handleConfirmDeleteOpen(tasting.id) } } variant="outlined" style={ { mt: 1, mr: 1 } }>
+        <Group style={ { width: '100%' } } justify="space-between">
+          <Button onClick={ () => { handleConfirmDeleteOpen(tasting.id) } } variant="outline">
             Delete
+          </Button>
+          <Button style={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(tasting) } }>
+            Edit
           </Button>
         </Group>
       </Footer>

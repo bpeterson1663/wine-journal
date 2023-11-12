@@ -1,57 +1,87 @@
-import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from '../form-tasting/form-tasting.constants'
-import { Box, Slider, Text } from '@mantine/core'
+import { useTastingContext } from 'pages/tastings/form-context'
+import { getLabel } from 'helpers'
 
+import { ALCOHOL_MARKS, BODY_MARKS, SWEET_MARKS, TANNIN_ACIDITY_MARKS } from 'components/form-tasting/form-tasting.constants'
+import { Box, Slider, Text } from '@mantine/core'
+import styles from 'components/form-steps/form-steps.module.css'
 export const Taste = () => {
+  const form = useTastingContext()
+
   return (
     <Box>
-        <Text size="sm" mt="xl">Body</Text>
+      <Text className={ styles.label }>Body</Text>
         <Slider
-          labelAlwaysOn
+          classNames={ {
+            root: styles.slider,
+            markLabel: styles['mark-label']
+          } }
+          showLabelOnHover={ false }
           max={ 5 }
           min={ 1 }
           step={ 1 }
           marks={ BODY_MARKS }
-          aria-labelledby="body-label"
+          label={ getLabel('BODY', form.values.body) }
+          { ...form.getInputProps('body') }
         />
 
-        <Text id="tannin-label">Tannin</Text>
+        <Text className={ styles.label }>Tannin</Text>
         <Slider
-          labelAlwaysOn
+          classNames={ {
+            root: styles.slider,
+            markLabel: styles['mark-label']
+          } }
+          showLabelOnHover={ false }
           max={ 5 }
           min={ 1 }
           step={ 1 }
           marks={ TANNIN_ACIDITY_MARKS }
-          aria-labelledby="tannin-label"
+          label={ getLabel('TANNIN', form.values.tannin) }
+          { ...form.getInputProps('tannin') }
         />
 
-        <Text id="acidity-label">Acidity</Text>
+        <Text className={ styles.label }>Acidity</Text>
         <Slider
-          labelAlwaysOn
+          classNames={ {
+            root: styles.slider,
+            markLabel: styles['mark-label']
+          } }
+          showLabelOnHover={ false }
           max={ 5 }
           min={ 1 }
           step={ 1 }
           marks={ TANNIN_ACIDITY_MARKS }
-          aria-labelledby="acidity-label"
+          label={ getLabel('ACIDITY', form.values.acidity) }
+          { ...form.getInputProps('acidity') }
         />
 
-        <Text id="alcohol-label">Alcohol(%)</Text>
+        <Text className={ styles.label }>Alcohol(%)</Text>
         <Slider
-          labelAlwaysOn
+          classNames={ {
+            root: styles.slider,
+            markLabel: styles['mark-label']
+          } }
+          showLabelOnHover={ false }
           max={ 5 }
           min={ 1 }
           step={ 1 }
           marks={ ALCOHOL_MARKS }
-          aria-labelledby="alcohol-label"
+          label={ getLabel('ALCOHOL', form.values.alcohol) }
+          { ...form.getInputProps('alcohol') }
         />
 
-        <Text id="sweet-label">Sweetness</Text>
+        <Text className={ styles.label }>Sweetness</Text>
         <Slider
-          labelAlwaysOn
+          classNames={ {
+            root: styles.slider,
+            markLabel: styles['mark-label']
+          } }
+          showLabelOnHover={ false }
           max={ 5 }
           min={ 1 }
           step={ 1 }
           marks={ SWEET_MARKS }
-          aria-labelledby="sweet-label"
+          label={ getLabel('SWEET', form.values.sweet) }
+          { ...form.getInputProps('sweet') }
         />
     </Box>
   )

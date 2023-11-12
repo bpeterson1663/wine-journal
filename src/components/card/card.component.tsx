@@ -3,6 +3,7 @@ import styles from 'components/card/card.module.css'
 import { useNavigate } from 'react-router-dom'
 import type { WineT } from 'schemas/cellar'
 import type { TastingT } from 'schemas/tastings'
+import dayjs from 'dayjs'
 
 interface Props {
   wine: WineT | TastingT
@@ -17,7 +18,7 @@ export function Card ({ wine, url, showDate = false }: Props) {
     <div key={ id } className={ `${styles.glass} ${styles.container}` } onClick={ () => { navigate(`/${url}/${id}`) } }>
       { showDate && (
         <div className={ styles.row }>
-          <Text size="sm">{ date.toString() }</Text>
+          <Text size="sm">{ dayjs(date).format('MM/DD/YYYY') }</Text>
         </div>
       ) }
       <div className={ styles.row }>

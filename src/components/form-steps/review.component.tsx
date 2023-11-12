@@ -6,8 +6,12 @@ import {
   IconMoodHappy,
   IconMoodCrazyHappy
 } from '@tabler/icons-react'
+import styles from 'components/form-steps/form-steps.module.css'
+import { useTastingContext } from 'pages/tastings/form-context'
 
 export const Review = () => {
+  const form = useTastingContext()
+
   const getIconStyle = (color?: string) => ({
     width: rem(24),
     height: rem(24),
@@ -52,9 +56,21 @@ export const Review = () => {
 
   return (
     <Box>
-      <Textarea multiline rows={ 4 } id="remarks" label="Remarks" variant="outlined" />
-      <Text id="rating-label">Rating</Text>
-      { /* <Rating emptySymbol={ getEmptyIcon } fullSymbol={ getFullIcon } highlightSelectedOnly /> */ }
+      <Textarea
+        multiline
+        rows={ 4 }
+        id="remarks"
+        label="Remarks"
+        { ...form.getInputProps('remarks') }
+      />
+      <Text className={ styles.label }>Rating</Text>
+      <Rating
+        className={ styles.rating }
+        emptySymbol={ getEmptyIcon }
+        fullSymbol={ getFullIcon }
+        highlightSelectedOnly
+        { ...form.getInputProps('rating') }
+      />
     </Box>
   )
 }

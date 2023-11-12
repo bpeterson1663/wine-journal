@@ -60,12 +60,12 @@ export default function EditWine () {
             <Quantity />
           </Box>
           <Footer>
-            <Group justify="flex-end">
+            <Group style={ { width: '100%' } } justify="space-between">
+              <Button onClick={ () => { navigate('/cellar') } } variant="outline">
+                Cancel
+              </Button>
               <Button disabled={ disableSave() } type="submit">
                 Save
-              </Button>
-              <Button onClick={ () => { navigate('/cellar') } } variant="outlined">
-                Cancel
               </Button>
             </Group>
           </Footer>

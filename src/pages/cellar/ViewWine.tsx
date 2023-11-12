@@ -11,7 +11,7 @@ import PageContainer from 'components/page-container/page-container.component'
 import { WineT } from 'schemas/cellar'
 import Footer from 'components/footer/footer.component'
 
-export default function WineId () {
+export default function ViewWine () {
   const [opened, { open, close }] = useDisclosure(false)
 
   const params = useParams()
@@ -98,16 +98,20 @@ export default function WineId () {
         </div>
       </section>
       <Footer>
-        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-          <Button color="secondary" variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } >
-            Open Bottle
-          </Button>
-          <Button color="secondary" variant="contained" onClick={ () => { handleEditClick(wine) } }>
-            Edit
-          </Button>
-          <Button color="info" onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outlined">
-            Delete
-          </Button>
+        <Group style={ { width: '100%' } } justify="space-between">
+          <Group>
+            <Button onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outline">
+              Delete
+            </Button>
+            <Button variant="contained" onClick={ () => { handleEditClick(wine) } }>
+              Edit
+            </Button>
+          </Group>
+          <Group>
+            <Button variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } >
+              Open Bottle
+            </Button>
+          </Group>
         </Group>
       </Footer>
       <ConfirmDeleteDialog />

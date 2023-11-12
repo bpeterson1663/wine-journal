@@ -1,4 +1,5 @@
 import { Box, Button, Group } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { zodResolver } from '@mantine/form'
 import PageContainer from 'components/page-container/page-container.component'
 import { useEffect } from 'react'
@@ -6,9 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
 import { fetchTastingEditStart } from 'features/tasting/tastingSlice'
-import styles from 'pages/tastings/tastings.module.css'
+import styles from 'pages/styles/pages.module.css'
 import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
-import { TastingSchema, TastingT } from 'schemas/tastings'
+import { TastingSchema, TastingT, INITIAL_VALUES } from 'schemas/tastings'
 import Footer from 'components/footer/footer.component'
 
 const EditTasting = () => {
@@ -17,6 +18,10 @@ const EditTasting = () => {
   const { editTasting } = useAppSelector(state => state.tasting)
 
   const form = useTastingForm({
+    initialValues: {
+      ...INITIAL_VALUES,
+      ...editTasting
+    },
     validate: zodResolver(TastingSchema)
   })
 
@@ -28,9 +33,15 @@ const EditTasting = () => {
 
   const onSubmitHandler = async (data: TastingT) => {
     dispatch(fetchTastingEditStart(data))
+    notifications.show({
+      message: 'Your tasting was updated'
+    })
   }
 
   const disableSave = (): boolean => {
+    if (Object.keys(form.errors).length > 0) {
+      return true
+    }
     return false
   }
 
@@ -38,9 +49,9 @@ const EditTasting = () => {
     <PageContainer>
       <TastingFormProvider form={ form }>
         <Box
-          className={ styles['tastings-container'] }
+          className={ styles.form }
           component="form"
-          // onSubmit={ form.onSubmit(onSubmitHandler) }
+          onSubmit={ form.onSubmit(onSubmitHandler) }
         >
           <Box className={ styles.section }>
             <DetailsTasting />
@@ -54,17 +65,17 @@ const EditTasting = () => {
           <Box className={ styles.section }>
             <Review />
           </Box>
+          <Footer>
+            <Group style={ { width: '100%' } } justify="space-between">
+              <Button onClick={ () => { navigate('/') } } variant="outline">
+                Cancel
+              </Button>
+              <Button disabled={ disableSave() } type="submit" variant="contained">
+                Save
+              </Button>
+            </Group>
+          </Footer>
         </Box>
-        <Footer>
-        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-          <Button color="secondary" disabled={ disableSave() } type="submit" variant="contained">
-            Save
-          </Button>
-          <Button color="info" onClick={ () => { navigate('/') } } variant="outlined">
-            Cancel
-          </Button>
-        </Group>
-        </Footer>
       </TastingFormProvider>
     </PageContainer>
   )

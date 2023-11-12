@@ -102,19 +102,19 @@ export default function NewWine () {
         </Stepper>
         <Footer>
         { activeStep !== STEPS.length &&
-          <Group justify="flex-end">
+          <Group style={ { width: '100%' } } justify="space-between">
+            <Button disabled={ activeStep === 0 } onClick={ handleBack } >
+              Back
+            </Button>
             { activeStep === STEPS.length - 1
-              ? (
-                <Button
+              ? <Button
                   color="secondary"
                   type="submit"
                   variant="contained"
                 >
                   Submit
                 </Button>
-                )
-              : (
-                <Button
+              : <Button
                   disabled={ disableContinue() }
                   variant="contained"
                   color="secondary"
@@ -123,10 +123,8 @@ export default function NewWine () {
                 >
                   Continue
                 </Button>
-                ) }
-              <Button name="back" disabled={ activeStep === 0 } onClick={ handleBack } >
-                Back
-              </Button>
+            }
+
           </Group>
         }
         { activeStep === STEPS.length &&
