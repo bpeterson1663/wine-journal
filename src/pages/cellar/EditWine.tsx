@@ -35,8 +35,7 @@ export default function EditWine () {
   })
 
   const onSubmitHandler = (data: WineT) => {
-    const stringDate = data.date.toISOString()
-    dispatch(fetchWineEditStart({ ...data, date: stringDate, varietal: [] }))
+    dispatch(fetchWineEditStart({ ...data, varietal: [] }))
     notifications.show({
       message: 'Edits were saved'
     })

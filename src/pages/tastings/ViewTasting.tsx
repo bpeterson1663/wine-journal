@@ -8,11 +8,11 @@ import { getLabel, uppercaseFirstLetter } from 'helpers'
 import styles from 'pages/styles/pages.module.css'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import Footer from 'components/footer/footer.component'
 import RatingIcon from 'components/rating/raiting.component'
 
 import PageContainer from 'components/page-container/page-container.component'
-import { TastingT } from 'types'
+import { TastingT } from 'schemas/tastings'
 
 export default function TastingId () {
   const params = useParams()
@@ -68,17 +68,6 @@ export default function TastingId () {
     </Modal>
   )
 
-  const Actions = () => (
-    <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" variant="contained" style={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(tasting) } }>
-        Edit
-      </Button>
-      <Button color="info" onClick={ () => { handleConfirmDeleteOpen(tasting.id) } } variant="outlined" style={ { mt: 1, mr: 1 } }>
-        Delete
-      </Button>
-    </div>
-  )
-
   const {
     producer,
     labelUri,
@@ -102,7 +91,7 @@ export default function TastingId () {
   } = tasting
 
   return (
-    <PageContainer title={ producer } actions={ <Actions /> }>
+    <PageContainer title={ producer }>
       <section className={ styles.container }>
         <div className={ styles.column }>
           <img className={ styles.wineImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />
@@ -152,6 +141,16 @@ export default function TastingId () {
           </Text>
         </div>
       </section>
+      <Footer>
+        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+          <Button color="secondary" variant="contained" style={ { mt: 1, mr: 1 } } onClick={ () => { handleEditClick(tasting) } }>
+            Edit
+          </Button>
+          <Button color="info" onClick={ () => { handleConfirmDeleteOpen(tasting.id) } } variant="outlined" style={ { mt: 1, mr: 1 } }>
+            Delete
+          </Button>
+        </Group>
+      </Footer>
       <ConfirmDeleteDialog />
     </PageContainer>
   )

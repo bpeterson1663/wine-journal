@@ -1,16 +1,20 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore/lite'
 import { db } from '../firebase'
-import { type ApiResponseT, type FirebaseApiResponseT, type TastingT } from '../types'
+import { type ApiResponseT, type FirebaseApiResponseT } from '../types'
+import { TastingT } from 'schemas/tastings'
 
 export async function getTastings (userId: string) {
   try {
     const fbq = query(collection(db, 'tastings'), where('userId', '==', userId))
     const tastingsSnapshot = await getDocs(fbq)
-
-    const tastingList = tastingsSnapshot.docs.map(doc => ({
-      ...doc.data(),
-      id: doc.id
-    }))
+    const tastingList = tastingsSnapshot.docs.map(doc => {
+      const data = doc.data()
+      return {
+        ...data,
+        date: data.date.toDate(),
+        id: doc.id
+      }
+    })
     const data = tastingList.map(tasting => tasting as TastingT)
     return {
       success: true,

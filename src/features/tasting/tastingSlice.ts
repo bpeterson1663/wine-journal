@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { addTastingEntry, deleteTastingEntry, getTastingById, getTastings, updateTastingEntry } from '../../api'
-import { FetchStatusT, MessageT, TastingT, WineT } from '../../types'
+import { FetchStatusT, MessageT } from 'types'
 import { AppThunk, RootState } from '../store'
+import { TastingT } from 'schemas/tastings'
+import { WineT } from 'schemas/cellar'
 
 interface InitialTastingState {
   message: MessageT
@@ -26,6 +28,7 @@ export const tastingSlice = createSlice({
       state.status = 'loading'
     },
     tastingListFetchSuccess: (state, action: PayloadAction<TastingT[]>) => {
+      console.log(action.payload)
       state.status = 'success'
       state.tastingList = action.payload
       state.message = null

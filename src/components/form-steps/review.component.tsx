@@ -54,7 +54,7 @@ export const Review = () => {
     <Box>
       <Textarea multiline rows={ 4 } id="remarks" label="Remarks" variant="outlined" />
       <Text id="rating-label">Rating</Text>
-      <Rating emptySymbol={ getEmptyIcon } fullSymbol={ getFullIcon } highlightSelectedOnly />
+      { /* <Rating emptySymbol={ getEmptyIcon } fullSymbol={ getFullIcon } highlightSelectedOnly /> */ }
     </Box>
   )
 }

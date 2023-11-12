@@ -1,10 +1,15 @@
-import { Stepper, Box, Button } from '@mantine/core'
+import { Stepper, Box, Button, Group } from '@mantine/core'
 import { zodResolver } from '@mantine/form'
 import PageContainer from 'components/page-container/page-container.component'
 import { useState } from 'react'
 import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
 import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
-import { TastingSchema } from 'pages/tastings/schema'
+import { INITIAL_VALUES, TastingSchema, TastingT } from 'schemas/tastings'
+import { useAppSelector, useAppDispatch } from 'features/hooks'
+import { fetchWineEditStart } from 'features/cellar/cellarSlice'
+import { fetchTastingCreateStart } from 'features/tasting/tastingSlice'
+import Footer from 'components/footer/footer.component'
+import styles from 'pages/styles/pages.module.css'
 
 const STEPS = [
   {
@@ -23,25 +28,39 @@ const STEPS = [
 
 const NewTasting = () => {
   const [activeStep, setActiveStep] = useState(0)
-  // const dispatch = useAppDispatch()
-  // const { tastingOpen } = useAppSelector(state => state.tasting)
-  // const { currentUser } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const { tastingOpen } = useAppSelector(state => state.tasting)
+  const { currentUser } = useAppSelector(state => state.auth)
   const form = useTastingForm({
+    validateInputOnBlur: true,
+    initialValues: {
+      ...INITIAL_VALUES,
+      ...tastingOpen,
+      date: new Date(),
+      varietal: ['cab'],
+      smell: 'test'
+    },
     validate: zodResolver(TastingSchema)
   })
-  // const onSubmitHandler: SubmitHandler<TastingT> = async data => {
-  //   if (tastingOpen) {
-  //     const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
-  //     dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))
-  //   }
-  //   dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
-  // }
 
-  const handleNext = () => {
+  const onSubmitHandler = (data: TastingT) => {
+    console.log(data)
+
+    if (tastingOpen) {
+      const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
+      dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))
+    }
+    dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
+    setActiveStep(STEPS.length)
+  }
+
+  const handleNext = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault()
     setActiveStep(prevActiveStep => prevActiveStep + 1)
   }
 
-  const handleBack = () => {
+  const handleBack = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault()
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
@@ -65,17 +84,16 @@ const NewTasting = () => {
   }
 
   const disableContinue = (): boolean => {
-    console.log(form.errors)
     return false
   }
 
   const Actions = () => {
     if (activeStep !== STEPS.length) {
       return (
-        <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+        <Group justify="flex-end">
           { activeStep === STEPS.length - 1
             ? (
-            <Button color="secondary" type="submit" variant="contained" onClick={ handleNext } style={ { mt: 1, mr: 1 } }>
+            <Button color="secondary" type="submit" variant="contained" style={ { mt: 1, mr: 1 } }>
               Submit
             </Button>
               )
@@ -99,43 +117,37 @@ const NewTasting = () => {
           >
             Back
           </Button>
-        </div>
+        </Group>
       )
     }
 
     return (
-      <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+      <Group justify="flex-end">
         <Button color="secondary" variant="contained" onClick={ handleReset } style={ { mt: 1, mr: 1 } }>
           Add Another Entry
         </Button>
-      </div>
+      </Group>
     )
   }
 
   return (
-    <PageContainer actions={ <Actions /> }>
+    <PageContainer>
       <TastingFormProvider form={ form }>
-        <Box
-          style={ {
-            display: 'flex',
-            flexFlow: 'column wrap',
-            maxWidth: 600,
-            width: '90%'
-          } }
-          component="form"
-        >
-          <Stepper
-            active={ activeStep }
-            orientation="vertical"
-            style={ { maxWidth: 600, width: '100%', margin: '0 auto' } }
-          >
+        <Box className={ styles.form } component="form" onChange={ () => {
+          console.log(form.values)
+        } } onSubmit={ form.onSubmit(onSubmitHandler) }>
+          <Stepper active={ activeStep } allowNextStepsSelect={ false }>
             { STEPS.map((step, index) => (
               <Stepper.Step key={ step.label } label={ step.label }>
                   <Box style={ { width: '100%' } }>{ getStepContent(index) }</Box>
               </Stepper.Step>
             )) }
           </Stepper>
+          <Footer>
+            <Actions />
+          </Footer>
         </Box>
+
       </TastingFormProvider>
     </PageContainer>
   )

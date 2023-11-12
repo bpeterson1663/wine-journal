@@ -1,7 +1,8 @@
 import { Title, Text } from '@mantine/core'
 import styles from 'components/card/card.module.css'
 import { useNavigate } from 'react-router-dom'
-import type { TastingT, WineT } from 'types'
+import type { WineT } from 'schemas/cellar'
+import type { TastingT } from 'schemas/tastings'
 
 interface Props {
   wine: WineT | TastingT
@@ -16,7 +17,7 @@ export function Card ({ wine, url, showDate = false }: Props) {
     <div key={ id } className={ `${styles.glass} ${styles.container}` } onClick={ () => { navigate(`/${url}/${id}`) } }>
       { showDate && (
         <div className={ styles.row }>
-          <Text size="sm">{ date }</Text>
+          <Text size="sm">{ date.toString() }</Text>
         </div>
       ) }
       <div className={ styles.row }>

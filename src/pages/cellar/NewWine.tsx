@@ -34,8 +34,7 @@ export default function NewWine () {
   })
 
   const onSubmitHandler = (data: WineT) => {
-    const stringDate = data.date.toISOString()
-    dispatch(fetchWineCreateStart({ ...data, date: stringDate, userId: currentUser?.uid ?? '', varietal: [] }))
+    dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '', varietal: [] }))
     form.reset()
     setActiveStep(STEPS.length)
     if (status === 'error') {

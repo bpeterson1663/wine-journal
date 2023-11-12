@@ -8,7 +8,7 @@ import styles from 'pages/styles/pages.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { tastingSetOpen } from 'features/tasting/tastingSlice'
 import PageContainer from 'components/page-container/page-container.component'
-import { WineT } from 'types'
+import { WineT } from 'schemas/cellar'
 import Footer from 'components/footer/footer.component'
 
 export default function WineId () {

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { addWineEntry, deleteWineEntry, getWineById, getWines, updateWineEntry } from 'api'
-import { FetchStatusT, MessageT, WineT } from 'types'
+import { FetchStatusT, MessageT } from 'types'
 import { AppThunk, RootState } from 'features/store'
+import { WineT } from 'schemas/cellar'
 
 export interface InitialCellarState {
   message: MessageT

@@ -8,5 +8,5 @@ export const selectWineById = (id: string) => {
 }
 
 export const selectAllWines = () => {
-  return createSelector([wines], wines => wines.sort((a, b) => b.date.localeCompare(a.date)))
+  return createSelector([wines], wines => wines.sort((a, b) => b.date.toISOString().localeCompare(a.date.toISOString())))
 }

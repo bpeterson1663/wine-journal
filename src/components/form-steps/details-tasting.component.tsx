@@ -1,10 +1,10 @@
 import { DatePickerInput } from '@mantine/dates'
 import { Box, TextInput } from '@mantine/core'
 import { WineLabelPic } from 'components/camera/camera.component'
-import { useTastingForm } from 'pages/tastings/form-context'
+import { useTastingContext } from 'pages/tastings/form-context'
 
 export const DetailsTasting = () => {
-  const form = useTastingForm()
+  const form = useTastingContext()
 
   const onDateChange = (value: Date | null) => {
     if (value) {

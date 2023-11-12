@@ -1,18 +1,18 @@
-import { Box, Button } from '@mantine/core'
+import { Box, Button, Group } from '@mantine/core'
 import { zodResolver } from '@mantine/form'
 import PageContainer from 'components/page-container/page-container.component'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
-import { useAppSelector } from 'features/hooks'
-// import { fetchTastingEditStart } from 'features/tasting/tastingSlice'
-// import { TastingFormT, TastingT } from 'types'
+import { useAppSelector, useAppDispatch } from 'features/hooks'
+import { fetchTastingEditStart } from 'features/tasting/tastingSlice'
 import styles from 'pages/tastings/tastings.module.css'
 import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
-import { TastingSchema } from 'pages/tastings/schema'
+import { TastingSchema, TastingT } from 'schemas/tastings'
+import Footer from 'components/footer/footer.component'
 
 const EditTasting = () => {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { editTasting } = useAppSelector(state => state.tasting)
 
@@ -26,32 +26,21 @@ const EditTasting = () => {
     }
   }, [editTasting, navigate])
 
-  // const onSubmitHandler = async (data: TastingT) => {
-  //   dispatch(fetchTastingEditStart(data))
-  // }
+  const onSubmitHandler = async (data: TastingT) => {
+    dispatch(fetchTastingEditStart(data))
+  }
 
   const disableSave = (): boolean => {
     return false
   }
 
-  const Actions = () => (
-    <div style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
-      <Button color="secondary" disabled={ disableSave() } type="submit" variant="contained">
-        Save
-      </Button>
-      <Button color="info" onClick={ () => { navigate('/') } } variant="outlined">
-        Cancel
-      </Button>
-    </div>
-  )
-
   return (
-    <PageContainer actions={ <Actions /> }>
+    <PageContainer>
       <TastingFormProvider form={ form }>
         <Box
           className={ styles['tastings-container'] }
           component="form"
-          // onSubmit={ onSubmitHandler }
+          // onSubmit={ form.onSubmit(onSubmitHandler) }
         >
           <Box className={ styles.section }>
             <DetailsTasting />
@@ -66,6 +55,16 @@ const EditTasting = () => {
             <Review />
           </Box>
         </Box>
+        <Footer>
+        <Group style={ { width: '100%', display: 'flex', justifyContent: 'flex-end' } }>
+          <Button color="secondary" disabled={ disableSave() } type="submit" variant="contained">
+            Save
+          </Button>
+          <Button color="info" onClick={ () => { navigate('/') } } variant="outlined">
+            Cancel
+          </Button>
+        </Group>
+        </Footer>
       </TastingFormProvider>
     </PageContainer>
   )
