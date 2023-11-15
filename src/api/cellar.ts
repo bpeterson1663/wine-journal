@@ -12,9 +12,11 @@ export async function getWines (userId: string) {
       const data = doc.data()
       const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
       const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+
       return {
         ...data,
         id: doc.id,
+        date: data.date.toDate(),
         quantity,
         price
       }
@@ -48,6 +50,7 @@ export async function getWineById (id: string): Promise<FirebaseApiResponseT> {
       data: {
         ...data,
         id: docSnap.id,
+        date: data.date.toDate(),
         quantity,
         price
       }

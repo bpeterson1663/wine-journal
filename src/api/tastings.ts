@@ -35,12 +35,14 @@ export async function getTastingById (id: string): Promise<FirebaseApiResponseT>
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
+    const data = docSnap.data()
     return {
       success: true,
       message: '',
       data: {
-        ...docSnap.data(),
-        id: docSnap.id
+        ...data,
+        id: docSnap.id,
+        date: data.date.toDate()
       }
     }
   } else {

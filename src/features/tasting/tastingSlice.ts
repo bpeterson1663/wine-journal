@@ -28,7 +28,6 @@ export const tastingSlice = createSlice({
       state.status = 'loading'
     },
     tastingListFetchSuccess: (state, action: PayloadAction<TastingT[]>) => {
-      console.log(action.payload)
       state.status = 'success'
       state.tastingList = action.payload
       state.message = null

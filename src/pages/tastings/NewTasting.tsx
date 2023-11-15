@@ -36,16 +36,12 @@ const NewTasting = () => {
     initialValues: {
       ...INITIAL_VALUES,
       ...tastingOpen,
-      date: new Date(),
-      varietal: ['cab'],
-      smell: 'test'
+      date: new Date()
     },
     validate: zodResolver(TastingSchema)
   })
 
   const onSubmitHandler = (data: TastingT) => {
-    console.log(data)
-
     if (tastingOpen) {
       const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
       dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))

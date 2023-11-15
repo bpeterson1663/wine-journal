@@ -23,13 +23,11 @@ export default function EditWine () {
       navigate('/cellar')
     }
   }, [editWine, navigate])
-
   const form = useWineForm({
     initialValues: {
       ...INITIAL_VALUES,
       ...editWine,
-      date: editWine ? new Date(editWine.date) : new Date(),
-      varietal: ['cab']
+      date: editWine ? editWine.date : new Date()
     },
     validate: zodResolver(WineSchema)
   })
