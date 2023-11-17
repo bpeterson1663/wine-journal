@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { WineT, WineSchema, INITIAL_VALUES } from 'schemas/cellar'
 import { notifications } from '@mantine/notifications'
 import Footer from 'components/footer/footer.component'
-import { fetchWineCreateStart } from 'features/cellar/cellarSlice'
+import { createWine } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
 
 const STEPS = [
@@ -33,8 +33,8 @@ export default function NewWine () {
     validate: zodResolver(WineSchema)
   })
 
-  const onSubmitHandler = (data: WineT) => {
-    dispatch(fetchWineCreateStart({ ...data, userId: currentUser?.uid ?? '', varietal: [] }))
+  const onSubmitHandler = async (data: WineT) => {
+    await dispatch(createWine({ ...data, userId: currentUser?.uid ?? '', varietal: [] }))
     form.reset()
     setActiveStep(STEPS.length)
     if (status === 'error') {

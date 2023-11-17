@@ -10,30 +10,30 @@ import { useAppSelector, useAppDispatch } from 'features/hooks'
 import { DetailsWine, Quantity } from 'components/form-steps'
 import { useNavigate } from 'react-router-dom'
 import { WineT, WineSchema, INITIAL_VALUES } from 'schemas/cellar'
-import { fetchWineEditStart } from 'features/cellar/cellarSlice'
+import { editWine } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
 
 export default function EditWine () {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const { editWine } = useAppSelector(state => state.cellar)
+  const { wine } = useAppSelector(state => state.cellar)
   useEffect(() => {
-    if (!editWine) {
+    if (!wine) {
       navigate('/cellar')
     }
-  }, [editWine, navigate])
+  }, [wine, navigate])
   const form = useWineForm({
     initialValues: {
       ...INITIAL_VALUES,
-      ...editWine,
-      date: editWine ? editWine.date : new Date()
+      ...wine,
+      date: wine ? wine.date : new Date()
     },
     validate: zodResolver(WineSchema)
   })
 
-  const onSubmitHandler = (data: WineT) => {
-    dispatch(fetchWineEditStart({ ...data, varietal: [] }))
+  const onSubmitHandler = async (data: WineT) => {
+    await dispatch(editWine({ ...data }))
     notifications.show({
       message: 'Edits were saved'
     })

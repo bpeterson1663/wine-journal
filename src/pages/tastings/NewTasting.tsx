@@ -6,7 +6,7 @@ import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps
 import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
 import { INITIAL_VALUES, TastingSchema, TastingT } from 'schemas/tastings'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
-import { fetchWineEditStart } from 'features/cellar/cellarSlice'
+import { editWine } from 'features/cellar/cellarSlice'
 import { fetchTastingCreateStart } from 'features/tasting/tastingSlice'
 import Footer from 'components/footer/footer.component'
 import styles from 'pages/styles/pages.module.css'
@@ -41,10 +41,10 @@ const NewTasting = () => {
     validate: zodResolver(TastingSchema)
   })
 
-  const onSubmitHandler = (data: TastingT) => {
+  const onSubmitHandler = async (data: TastingT) => {
     if (tastingOpen) {
       const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
-      dispatch(fetchWineEditStart({ ...tastingOpen, quantity }))
+      await dispatch(editWine({ ...tastingOpen, quantity }))
     }
     dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
     setActiveStep(STEPS.length)

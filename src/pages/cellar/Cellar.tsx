@@ -1,18 +1,27 @@
+import { useEffect } from 'react'
 import PageContainer from 'components/page-container/page-container.component'
 import { Card } from 'components/card/card.component'
-import { useAppSelector } from 'features/hooks'
+import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { Button, Group } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
 import styles from 'pages/styles/pages.module.css'
 import Footer from 'components/footer/footer.component'
+import { fetchWines } from 'features/cellar/cellarSlice'
 
 export default function Cellar () {
+  const dispatch = useAppDispatch()
   const { wineList } = useAppSelector(state => state.cellar)
+  const { currentUser } = useAppSelector(state => state.auth)
+
   const navigate = useNavigate()
 
   const handleNewWine = () => {
     navigate('/cellar/new')
   }
+
+  useEffect(() => {
+    dispatch(fetchWines(currentUser?.uid ?? '')).catch(() => { console.error('error') })
+  }, [dispatch, currentUser?.uid])
 
   return (
     <PageContainer title="Cellar">

@@ -3,7 +3,7 @@ import { Group, Modal, Button, Title, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectWineById } from 'features/cellar/cellarSelectors'
-import { fetchWineDeleteStart, wineSetEdit } from 'features/cellar/cellarSlice'
+import { deleteWine, wineSetEdit } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { tastingSetOpen } from 'features/tasting/tastingSlice'
@@ -37,8 +37,8 @@ export default function ViewWine () {
     close()
   }
 
-  const handleDelete = () => {
-    dispatch(fetchWineDeleteStart(itemToDelete))
+  const handleDelete = async () => {
+    await dispatch(deleteWine(itemToDelete))
     if (status === 'success') {
       navigate('/cellar')
     }
