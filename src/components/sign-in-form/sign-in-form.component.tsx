@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Button, Box, Group, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { useNavigate } from 'react-router-dom'
-import { login, signInWithGoogle } from 'features/auth/authSlice'
+import { fetchLogin, fetchSignInWithGoogle } from 'features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import styles from 'components/sign-in-form/sign-in-form.module.css'
 import { Schema, SignInFormT } from 'components/sign-in-form/scema'
@@ -18,9 +18,9 @@ const SignInForm = () => {
     }
   }, [currentUser, navigate])
 
-  const onSubmitHandler = (data: SignInFormT) => {
+  const onSubmitHandler = async (data: SignInFormT) => {
     const { password, email } = data
-    dispatch(login(email, password))
+    await dispatch(fetchLogin({ email, password }))
   }
 
   const form = useForm({
@@ -32,9 +32,13 @@ const SignInForm = () => {
     validate: zodResolver(Schema)
   })
 
+  const handleSignInWIthGoogle = async () => {
+    await dispatch(fetchSignInWithGoogle(null))
+  }
+
   return (
     <Box className={ styles.container }>
-      <form onSubmit={ form.onSubmit(values => { onSubmitHandler(values) }) }>
+      <form onSubmit={ form.onSubmit(onSubmitHandler) }>
         <TextInput
           withAsterisk
           type="email"
@@ -51,7 +55,7 @@ const SignInForm = () => {
         />
 
         <Group justify="flex-end" mt="md">
-          <Button mt="10px" mb="20px" variant="contained" color="primary" onClick={ () => { dispatch(signInWithGoogle()) } }>Sign In With Google</Button>
+          <Button mt="10px" mb="20px" variant="contained" color="primary" onClick={ handleSignInWIthGoogle }>Sign In With Google</Button>
           <Button type="submit">Submit</Button>
         </Group>
       </form>

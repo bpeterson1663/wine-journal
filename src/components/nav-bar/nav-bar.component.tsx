@@ -1,6 +1,6 @@
 import { ActionIcon, Button, Container, Group } from '@mantine/core'
 import { Link, useNavigate } from 'react-router-dom'
-import { logout } from 'features/auth/authSlice'
+import { fetchLogout } from 'features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 
 import styles from 'components/nav-bar/nav-bar.module.css'
@@ -11,8 +11,8 @@ const NavBar = () => {
   const { currentUser } = useAppSelector(state => state.auth)
   const { userProfile } = useAppSelector(state => state.user)
 
-  const handleLogout = () => {
-    dispatch(logout())
+  const handleLogout = async () => {
+    await dispatch(fetchLogout(null))
     if (!currentUser) {
       navigate('/')
     }

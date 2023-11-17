@@ -36,6 +36,11 @@ export interface UserExtendT extends UserT {
 
 export type SignUpT = Omit<UserExtendT, '_id'>
 
+export interface LoginT {
+  email: string
+  password: string
+}
+
 export type FetchStatusT = 'idle' | 'loading' | 'success' | 'error'
 
 export type CurrentUser = AuthUserT | null

@@ -10,8 +10,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { getAuth, onAuthStateChanged, type User } from 'firebase/auth'
 import SignInUp from 'pages/SignInUp'
 import Tastings from 'pages/tastings/Tastings'
-import { authSuccess } from 'features/auth/authSlice'
-import { fetchUserStart } from 'features/user/userSlice'
+import { setAuth } from 'features/auth/authSlice'
+import { getUserProfileById } from 'features/user/userSlice'
 
 function App () {
   const dispatch = useAppDispatch()
@@ -35,15 +35,15 @@ function App () {
     const [loading, setLoading] = useState(true)
     const { userProfile } = useAppSelector(state => state.user)
 
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, async user => {
       if (user) {
         const { email, uid } = user
         if (email && uid) {
-          dispatch(authSuccess({ email, uid }))
+          dispatch(setAuth({ email, uid }))
           setUser(user)
           setLoading(false)
           if (!userProfile?.firstName) {
-            dispatch(fetchUserStart(uid))
+            await dispatch(getUserProfileById(uid))
           }
         }
       } else {

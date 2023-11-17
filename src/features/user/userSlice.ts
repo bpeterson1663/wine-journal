@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { createUserProfile, getUserProfileById } from '../../api'
-import { FetchStatusT, MessageT, UserProfileT } from '../../types'
-import { AppThunk, RootState } from '../store'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { FetchStatusT, MessageT, UserProfileT } from 'types'
+import { RootState } from '../store'
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore/lite'
+import { db } from '../../firebase'
 
 interface InitialUserState {
   userProfile: UserProfileT | null
@@ -19,59 +20,62 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    userStart: state => {
-      state.status = 'loading'
-    },
-    userFetchSuccess: (state, action: PayloadAction<UserProfileT>) => {
-      state.status = 'success'
-      state.userProfile = action.payload
-    },
-    userFetchFailure: (state, action: PayloadAction<MessageT>) => {
-      state.status = 'error'
-      state.userProfile = null
-      state.message = action.payload
-    }
+  },
+  extraReducers (builder) {
+    builder
+      .addCase(createUserProfile.fulfilled, (state, action) => {
+        state.userProfile = action.payload
+      })
+      .addCase(getUserProfileById.fulfilled, (state, action) => {
+        state.userProfile = action.payload
+      })
   }
 })
-
-export const { userStart, userFetchSuccess, userFetchFailure } = userSlice.actions
-
-export const fetchUserStart =
-  (id: string): AppThunk =>
-    async dispatch => {
-      try {
-        dispatch(userStart())
-        const response = await getUserProfileById(id)
-        const { success, message, data } = response
-        if (success) {
-          dispatch(userFetchSuccess(data as UserProfileT))
-        } else {
-          dispatch(userFetchFailure(message))
-        }
-      } catch (err) {
-        console.error(err)
-        dispatch(userFetchFailure('error occurred'))
-      }
-    }
-
-export const fetchUserCreateStart =
-  (profile: UserProfileT): AppThunk =>
-    async dispatch => {
-      try {
-        dispatch(userStart())
-        const response = await createUserProfile(profile)
-        const { success, message, data } = response
-        if (success) {
-          dispatch(userFetchSuccess(data as UserProfileT))
-        } else {
-          dispatch(userFetchFailure(message))
-        }
-      } catch (err) {
-        console.error(err)
-        dispatch(userFetchFailure('error occurred'))
-      }
-    }
 
 export const userSelector = (state: RootState) => state.user
 
 export default userSlice.reducer
+
+export const createUserProfile = createAsyncThunk<UserProfileT, UserProfileT, {
+  state: RootState
+}>(
+  'user/createUserProfile',
+  async (data, { rejectWithValue }) => {
+    try {
+      const { firstName, lastName, userId } = data
+      const docData = await addDoc(collection(db, 'users'), { firstName, lastName, userId })
+      const userProfile = {
+        ...data,
+        id: docData.id
+      }
+      return userProfile as UserProfileT
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)
+
+export const getUserProfileById = createAsyncThunk<UserProfileT | null, string, {
+  state: RootState
+}>(
+  'user/getUserProfileById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const docRef = doc(db, 'tastings', id)
+      const docdata = await getDoc(docRef)
+      if (docdata.exists()) {
+        const data = docdata.data()
+
+        const userProfile = {
+          ...data,
+          userId: data.id
+        }
+        return userProfile as UserProfileT
+      } else {
+        return null
+      }
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)

@@ -1,9 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { createAuthenticatedUser, loginUser, logoutUser } from '../../api'
-import { signInWithGooglePopup } from '../../firebase/index'
-import { AuthUserT, CurrentUser, FetchStatusT, MessageT, SignUpT } from '../../types'
-import { AppThunk, RootState } from '../store'
-import { fetchUserCreateStart } from '../user/userSlice'
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { signInWithGooglePopup, auth } from '../../firebase'
+import { AuthUserT, CurrentUser, FetchStatusT, MessageT, SignUpT, LoginT } from 'types'
+import { RootState } from '../store'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 
 interface InitialAuthState {
   currentUser: CurrentUser
@@ -21,95 +20,94 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    authStart: state => {
-      state.status = 'loading'
-    },
-    authSuccess: (state, action: PayloadAction<AuthUserT>) => {
-      state.status = 'success'
+    setAuth: (state, action: PayloadAction<AuthUserT>) => {
       state.currentUser = action.payload
-      state.message = null
-    },
-    logoutSuccess: (state, action: PayloadAction<MessageT>) => {
-      state.status = 'success'
-      state.currentUser = null
-      state.message = action.payload
-    },
-    authFailure: (state, action: PayloadAction<MessageT>) => {
-      state.status = 'error'
-      state.currentUser = null
-      state.message = action.payload
-    },
-    signOut: state => {
-      state.currentUser = null
-      state.message = 'success'
     }
+  },
+  extraReducers (builder) {
+    builder
+      .addCase(fetchSignUp.fulfilled, (state, action) => {
+        state.currentUser = action.payload
+      })
+      .addCase(fetchLogin.fulfilled, (state, action) => {
+        state.currentUser = action.payload
+      })
+      .addCase(fetchLogout.fulfilled, (state, _) => {
+        state.currentUser = null
+      })
   }
 })
-
-export const { authStart, authSuccess, authFailure, signOut, logoutSuccess } = authSlice.actions
-
-export const signUp =
-  (payload: SignUpT): AppThunk =>
-    async dispatch => {
-      try {
-        dispatch(authStart())
-        const response = await createAuthenticatedUser(payload)
-        const { success, data, message } = response
-        if (success && data?.email) {
-          dispatch(fetchUserCreateStart({ firstName: payload.firstName, lastName: payload.lastName, userId: data.uid }))
-          dispatch(authSuccess(data))
-        } else {
-          dispatch(authFailure(message))
-        }
-      } catch (err) {
-        console.error(err)
-        dispatch(authFailure('error signing up'))
-      }
-    }
-
-export const logout = (): AppThunk => async dispatch => {
-  try {
-    dispatch(authStart())
-    const response = await logoutUser()
-    const { success, message } = response
-    if (success) {
-      dispatch(logoutSuccess(message))
-    }
-  } catch (err) {}
-}
-
-export const login =
-  (email: string, password: string): AppThunk =>
-    async dispatch => {
-      try {
-        dispatch(authStart())
-        const { success, data, message } = await loginUser(email, password)
-        if (success && data) {
-          dispatch(authSuccess(data))
-        } else {
-          dispatch(authFailure(message))
-        }
-      } catch (err) {
-        console.error(err)
-        dispatch(authFailure('error logging '))
-      }
-    }
-
-export const signInWithGoogle = (): AppThunk => async dispatch => {
-  try {
-    dispatch(authStart())
-    const { user } = await signInWithGooglePopup()
-    if (user.email) {
-      dispatch(authSuccess({ email: user.email, uid: user.uid }))
-    } else {
-      dispatch(authFailure('could not get auth email'))
-    }
-  } catch (err) {
-    console.error(err)
-    dispatch(authFailure('Error logging in'))
-  }
-}
+export const { setAuth } = authSlice.actions
 
 export const authSelector = (state: RootState) => state.auth
 
 export default authSlice.reducer
+
+export const fetchSignUp = createAsyncThunk<AuthUserT, SignUpT, {
+  state: RootState
+}>(
+  'auth/signUp',
+  async (data, { rejectWithValue }) => {
+    try {
+      const { email, password } = data
+      const authData = await createUserWithEmailAndPassword(auth, email, password)
+      const authUser = {
+        uid: authData.user.uid,
+        email
+      }
+      return authUser
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)
+
+export const fetchLogin = createAsyncThunk<AuthUserT, LoginT, {
+  state: RootState
+}>(
+  'auth/login',
+  async (data, { rejectWithValue }) => {
+    try {
+      const { email, password } = data
+      const authData = await signInWithEmailAndPassword(auth, email, password)
+      const authUser = {
+        uid: authData.user.uid,
+        email
+      }
+      return authUser
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)
+
+export const fetchLogout = createAsyncThunk<boolean, null, {
+  state: RootState
+}>(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await signOut(auth)
+      return true
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)
+
+export const fetchSignInWithGoogle = createAsyncThunk<boolean, null, {
+  state: RootState
+}>(
+  'auth/signInWithGoogle',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { user } = await signInWithGooglePopup()
+      if (user.email) {
+        return true
+      }
+      return false
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)
