@@ -4,7 +4,7 @@ import { notifications } from '@mantine/notifications'
 import ColorPalette from 'components/color-palette/color-palette.component'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectTastingById } from 'features/tasting/tastingSelectors'
-import { fetchTastingDeleteStart, tastingSetEdit } from 'features/tasting/tastingSlice'
+import { deleteTasting, tastingSetEdit } from 'features/tasting/tastingSlice'
 import { getLabel, uppercaseFirstLetter } from 'helpers'
 import styles from 'pages/styles/pages.module.css'
 import { useState } from 'react'
@@ -39,8 +39,8 @@ export default function TastingId () {
     close()
   }
 
-  const handleDelete = () => {
-    dispatch(fetchTastingDeleteStart(itemToDelete))
+  const handleDelete = async () => {
+    await dispatch(deleteTasting(itemToDelete))
     if (status === 'success') {
       notifications.show({
         message: 'Tasting was deleted'

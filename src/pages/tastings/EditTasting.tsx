@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
-import { fetchTastingEditStart } from 'features/tasting/tastingSlice'
+import { editTasting } from 'features/tasting/tastingSlice'
 import styles from 'pages/styles/pages.module.css'
 import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context'
 import { TastingSchema, TastingT, INITIAL_VALUES } from 'schemas/tastings'
@@ -15,24 +15,24 @@ import Footer from 'components/footer/footer.component'
 const EditTasting = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { editTasting } = useAppSelector(state => state.tasting)
+  const { tasting } = useAppSelector(state => state.tasting)
 
   const form = useTastingForm({
     initialValues: {
       ...INITIAL_VALUES,
-      ...editTasting
+      ...tasting
     },
     validate: zodResolver(TastingSchema)
   })
 
   useEffect(() => {
-    if (!editTasting) {
+    if (!tasting) {
       navigate('/')
     }
-  }, [editTasting, navigate])
+  }, [tasting, navigate])
 
   const onSubmitHandler = async (data: TastingT) => {
-    dispatch(fetchTastingEditStart(data))
+    await dispatch(editTasting(data))
     notifications.show({
       message: 'Your tasting was updated'
     })

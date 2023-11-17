@@ -1,4 +1,4 @@
-import { type Action, configureStore, type ThunkAction, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { type Action, configureStore, type ThunkAction } from '@reduxjs/toolkit'
 import authReducer from 'features/auth/authSlice'
 import tastingReducer from 'features/tasting/tastingSlice'
 import userReducer from 'features/user/userSlice'

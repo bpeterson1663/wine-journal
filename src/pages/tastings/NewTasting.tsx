@@ -7,7 +7,7 @@ import { TastingFormProvider, useTastingForm } from 'pages/tastings/form-context
 import { INITIAL_VALUES, TastingSchema, TastingT } from 'schemas/tastings'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
 import { editWine } from 'features/cellar/cellarSlice'
-import { fetchTastingCreateStart } from 'features/tasting/tastingSlice'
+import { createTasting } from 'features/tasting/tastingSlice'
 import Footer from 'components/footer/footer.component'
 import styles from 'pages/styles/pages.module.css'
 
@@ -46,7 +46,7 @@ const NewTasting = () => {
       const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
       await dispatch(editWine({ ...tastingOpen, quantity }))
     }
-    dispatch(fetchTastingCreateStart({ ...data, userId: currentUser?.uid ?? '' }))
+    await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? '' }))
     setActiveStep(STEPS.length)
   }
 

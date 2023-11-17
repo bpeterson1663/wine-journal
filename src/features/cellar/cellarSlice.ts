@@ -91,7 +91,7 @@ export default cellarSlice.reducer
 export const fetchWines = createAsyncThunk<QuerySnapshot, string, {
   state: RootState
 }>(
-  'wines/fetchWines',
+  'wine/fetchWines',
   async (userId, { rejectWithValue }) => {
     try {
       const fbq = query(collection(db, 'wines'), where('userId', '==', userId))
@@ -105,7 +105,7 @@ export const fetchWines = createAsyncThunk<QuerySnapshot, string, {
 export const fetchWineById = createAsyncThunk<DocumentSnapshot, string, {
   state: RootState
 }>(
-  'wines/fetchWineById',
+  'wine/fetchWineById',
   async (id, { rejectWithValue }) => {
     try {
       const docRef = doc(db, 'wines', id)
@@ -119,7 +119,7 @@ export const fetchWineById = createAsyncThunk<DocumentSnapshot, string, {
 export const createWine = createAsyncThunk<WineT, WineT, {
   state: RootState
 }>(
-  'wines/createWine',
+  'wine/createWine',
   async (data, { rejectWithValue }) => {
     const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
     const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
@@ -139,7 +139,7 @@ export const createWine = createAsyncThunk<WineT, WineT, {
 export const editWine = createAsyncThunk<WineT, WineT, {
   state: RootState
 }>(
-  'wines/editWine',
+  'wine/editWine',
   async (data, { rejectWithValue }) => {
     const wineRef = doc(db, 'wines', data.id)
     const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
@@ -157,7 +157,7 @@ export const editWine = createAsyncThunk<WineT, WineT, {
 export const deleteWine = createAsyncThunk<string, string, {
   state: RootState
 }>(
-  'wines/deleteWine',
+  'wine/deleteWine',
   async (id, { rejectWithValue }) => {
     try {
       await deleteDoc(doc(db, 'wines', id))
