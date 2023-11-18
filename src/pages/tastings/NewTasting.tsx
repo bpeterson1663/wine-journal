@@ -1,5 +1,6 @@
 import { Stepper, Box, Button, Group } from '@mantine/core'
 import { zodResolver } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
 import PageContainer from 'components/page-container/page-container.component'
 import { useState } from 'react'
 import { ColorSmell, DetailsTasting, Review, Taste } from 'components/form-steps'
@@ -42,12 +43,23 @@ const NewTasting = () => {
   })
 
   const onSubmitHandler = async (data: TastingT) => {
-    if (tastingOpen) {
-      const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
-      await dispatch(editWine({ ...tastingOpen, quantity }))
+    try {
+      if (tastingOpen) {
+        const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0
+        await dispatch(editWine({ ...tastingOpen, quantity })).unwrap()
+      }
+      await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? '' })).unwrap()
+      setActiveStep(STEPS.length)
+      notifications.show({
+        message: 'Your tasting notes were saved.'
+      })
+    } catch (err) {
+      console.error(err)
+      notifications.show({
+        color: 'red',
+        message: 'Something went wrong creating your tasting notes.'
+      })
     }
-    await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? '' }))
-    setActiveStep(STEPS.length)
   }
 
   const handleNext = (evt: React.MouseEvent<HTMLElement>) => {

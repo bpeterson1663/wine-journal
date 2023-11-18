@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
+import { AuthError } from 'firebase/auth'
 import { Box, TextInput, Button, Group } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import { fetchSignUp } from 'features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
@@ -7,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from 'components/sign-up-form/sign-up-form.module.css'
 import { Schema, SignUpFormT } from 'components/sign-up-form/scehma'
 import { createUserProfile } from 'features/user/userSlice'
+import { generateAuthErrorMessage } from 'helpers'
 
 const SignUpForm = () => {
   const dispatch = useAppDispatch()
@@ -33,8 +36,15 @@ const SignUpForm = () => {
 
   const onSubmitHandler = async (data: SignUpFormT) => {
     const { password, email, firstName, lastName } = data
-    const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap()
-    await dispatch(createUserProfile({ firstName, lastName, userId: uid }))
+    try {
+      const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap()
+      await dispatch(createUserProfile({ firstName, lastName, userId: uid })).unwrap()
+    } catch (err) {
+      notifications.show({
+        color: 'red',
+        message: generateAuthErrorMessage(err as AuthError)
+      })
+    }
   }
 
   return (

@@ -22,7 +22,6 @@ const STEPS = [
 export default function NewWine () {
   const [activeStep, setActiveStep] = useState(0)
   const dispatch = useAppDispatch()
-  const { message, status } = useAppSelector(state => state.cellar)
   const { currentUser } = useAppSelector(state => state.auth)
 
   const form = useWineForm({
@@ -34,17 +33,18 @@ export default function NewWine () {
   })
 
   const onSubmitHandler = async (data: WineT) => {
-    await dispatch(createWine({ ...data, userId: currentUser?.uid ?? '', varietal: [] }))
-    form.reset()
-    setActiveStep(STEPS.length)
-    if (status === 'error') {
+    try {
+      await dispatch(createWine({ ...data, userId: currentUser?.uid ?? '', varietal: [] })).unwrap()
+      form.reset()
+      setActiveStep(STEPS.length)
       notifications.show({
-        message: 'Something went wrong creating wine',
-        color: 'red'
+        message: 'Wine was added to your cellar.'
       })
-    } else {
+    } catch (err) {
+      console.error(err)
       notifications.show({
-        message
+        message: 'Something went wrong adding your wine.',
+        color: 'red'
       })
     }
   }

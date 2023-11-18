@@ -33,10 +33,18 @@ export default function EditWine () {
   })
 
   const onSubmitHandler = async (data: WineT) => {
-    await dispatch(editWine({ ...data }))
-    notifications.show({
-      message: 'Edits were saved'
-    })
+    try {
+      await dispatch(editWine({ ...data })).unwrap()
+      notifications.show({
+        message: 'Edits were saved.'
+      })
+    } catch (err) {
+      console.error(err)
+      notifications.show({
+        color: 'red',
+        message: 'An error occurred trying to save your edits. Please try again later.'
+      })
+    }
   }
 
   const disableSave = (): boolean => {

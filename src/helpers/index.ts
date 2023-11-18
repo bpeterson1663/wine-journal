@@ -4,6 +4,7 @@ import {
   SWEET_MARKS,
   TANNIN_ACIDITY_MARKS
 } from '../components/form-tasting/form-tasting.constants'
+import { AuthError } from 'firebase/auth'
 
 export const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEET', value: number) => {
   switch (type) {
@@ -33,4 +34,18 @@ export const getLabel = (type: 'BODY' | 'TANNIN' | 'ACIDITY' | 'ALCOHOL' | 'SWEE
 
 export const uppercaseFirstLetter = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export const generateAuthErrorMessage = (err: AuthError): string => {
+  const { code } = err
+  switch (code) {
+    case 'auth/wrong-password':
+      return 'The password you entered appears incorrect.'
+    case 'auth/user-not-found':
+      return 'Email address does not appear to be in use.'
+    case 'auth/email-already-in-use':
+      return 'Email address is already being used.'
+    default:
+      return 'An error occurred'
+  }
 }

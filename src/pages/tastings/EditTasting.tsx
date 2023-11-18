@@ -32,10 +32,18 @@ const EditTasting = () => {
   }, [tasting, navigate])
 
   const onSubmitHandler = async (data: TastingT) => {
-    await dispatch(editTasting(data))
-    notifications.show({
-      message: 'Your tasting was updated'
-    })
+    try {
+      await dispatch(editTasting(data)).unwrap()
+      notifications.show({
+        message: 'Your tasting was updated.'
+      })
+    } catch (err) {
+      console.error(err)
+      notifications.show({
+        color: 'red',
+        message: 'Something went wrong updating your tasting.'
+      })
+    }
   }
 
   const disableSave = (): boolean => {

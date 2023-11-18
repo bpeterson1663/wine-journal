@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Group, Modal, Button, Title, Text } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { useDisclosure } from '@mantine/hooks'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { selectWineById } from 'features/cellar/cellarSelectors'
@@ -20,9 +21,12 @@ export default function ViewWine () {
   const id = params.id ?? ''
   const wine = useAppSelector(selectWineById(id))
   const [itemToDelete, setItemToDelete] = useState('')
-  const { status } = useAppSelector(state => state.tasting)
 
   if (!wine) {
+    notifications.show({
+      color: 'red',
+      message: 'That wine does not appear to exist in your cellar'
+    })
     navigate('/cellar')
     return null
   }
@@ -38,9 +42,18 @@ export default function ViewWine () {
   }
 
   const handleDelete = async () => {
-    await dispatch(deleteWine(itemToDelete))
-    if (status === 'success') {
+    try {
+      await dispatch(deleteWine(itemToDelete)).unwrap()
+      notifications.show({
+        message: 'Your wine was removed from cellar.'
+      })
       navigate('/cellar')
+    } catch (err) {
+      console.error(err)
+      notifications.show({
+        color: 'red',
+        message: 'Something went wrong removing your wine.'
+      })
     }
   }
 

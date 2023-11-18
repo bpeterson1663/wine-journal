@@ -41,15 +41,14 @@ function App () {
         if (email && uid) {
           dispatch(setAuth({ email, uid }))
           setUser(user)
-          setLoading(false)
           if (!userProfile?.firstName) {
             await dispatch(getUserProfileById(uid))
           }
         }
       } else {
-        setLoading(false)
         setUser(null)
       }
+      setLoading(false)
     })
 
     if (loading) {

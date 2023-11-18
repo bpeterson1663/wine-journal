@@ -21,10 +21,13 @@ export default function TastingId () {
   const id = params.id ?? ''
   const tasting = useAppSelector(selectTastingById(id))
   const [itemToDelete, setItemToDelete] = useState('')
-  const { status } = useAppSelector(state => state.tasting)
   const [opened, { open, close }] = useDisclosure(false)
 
   if (!tasting) {
+    notifications.show({
+      color: 'red',
+      message: 'That tasting does not appear to exist.'
+    })
     navigate('/')
     return null
   }
@@ -40,12 +43,18 @@ export default function TastingId () {
   }
 
   const handleDelete = async () => {
-    await dispatch(deleteTasting(itemToDelete))
-    if (status === 'success') {
+    try {
+      await dispatch(deleteTasting(itemToDelete)).unwrap()
       notifications.show({
-        message: 'Tasting was deleted'
+        message: 'Tasting was deleted.'
       })
       navigate('/')
+    } catch (err) {
+      console.error(err)
+      notifications.show({
+        color: 'red',
+        message: 'Soemthing went wrong trying to delete your tasting notes.'
+      })
     }
   }
 
