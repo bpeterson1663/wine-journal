@@ -1,21 +1,16 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useContext } from 'react'
 import Layout from 'components/layout/layout.component'
-import { useAppSelector, useAppDispatch } from 'features/hooks'
 import NotFound from 'pages/NotFound'
 import EditTasting from 'pages/tastings/EditTasting'
 import NewTasting from 'pages/tastings/NewTasting'
 import ViewTasting from 'pages/tastings/ViewTasting'
 import { Cellar, ViewWine, NewWine, EditWine } from 'pages/cellar'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { getAuth, onAuthStateChanged, type User } from 'firebase/auth'
 import SignInUp from 'pages/SignInUp'
 import Tastings from 'pages/tastings/Tastings'
-import { setAuth } from 'features/auth/authSlice'
-import { getUserProfileById } from 'features/user/userSlice'
+import { UserContext } from 'context/user.context'
 
 function App () {
-  const dispatch = useAppDispatch()
-
   // Original theme
   //   palette: {
   //     primary: {
@@ -30,31 +25,12 @@ function App () {
   //   },
 
   const ProtectedRoute = ({ component }: { component: ReactNode }) => {
-    const auth = getAuth()
-    const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true)
-    const { userProfile } = useAppSelector(state => state.user)
-
-    onAuthStateChanged(auth, async user => {
-      if (user) {
-        const { email, uid } = user
-        if (email && uid) {
-          dispatch(setAuth({ email, uid }))
-          setUser(user)
-          if (!userProfile?.firstName) {
-            await dispatch(getUserProfileById(uid))
-          }
-        }
-      } else {
-        setUser(null)
-      }
-      setLoading(false)
-    })
+    const { currentUser, loading } = useContext(UserContext)
 
     if (loading) {
       return <div>Loading....</div>
     }
-    if (!user) {
+    if (!currentUser?.uid) {
       return <Navigate to="/login" replace />
     }
 

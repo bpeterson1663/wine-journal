@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { notifications } from '@mantine/notifications'
 import PageContainer from 'components/page-container/page-container.component'
 import { Card } from 'components/card/card.component'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
@@ -20,8 +21,14 @@ export default function Cellar () {
   }
 
   useEffect(() => {
-    dispatch(fetchWines(currentUser?.uid ?? '')).catch(() => { console.error('error') })
-  }, [dispatch, currentUser?.uid])
+    dispatch(fetchWines(currentUser?.uid ?? '')).catch(err => {
+      console.error(err)
+      notifications.show({
+        color: 'red',
+        message: 'An error occurred loading your wines from your cellar'
+      })
+    })
+  }, [dispatch, currentUser])
 
   return (
     <PageContainer title="Cellar">

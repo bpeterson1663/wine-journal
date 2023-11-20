@@ -12,6 +12,7 @@ import '@mantine/carousel/styles.css'
 import '@mantine/notifications/styles.css'
 
 import './index.css'
+import { UserProvider } from 'context/user.context'
 
 const theme = createTheme({
   fontFamily: 'Lexend Deca',
@@ -26,8 +27,10 @@ root.render(
     <Provider store={ store }>
       <BrowserRouter>
         <MantineProvider theme={ theme } defaultColorScheme="dark">
-          <Notifications position="top-right" zIndex={ 1000 } />
-          <App />
+          <UserProvider>
+            <Notifications position="top-right" zIndex={ 1000 } />
+            <App />
+          </UserProvider>
         </MantineProvider>
       </BrowserRouter>
     </Provider>
