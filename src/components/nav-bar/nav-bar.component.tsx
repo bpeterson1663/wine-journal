@@ -1,21 +1,17 @@
-import { ActionIcon, Button, Container, Group } from '@mantine/core'
-import { Link, useNavigate } from 'react-router-dom'
-import { fetchLogout } from 'features/auth/authSlice'
-import { useAppDispatch, useAppSelector } from 'features/hooks'
+import { ActionIcon, Avatar, Container, Group } from '@mantine/core'
+import { Link } from 'react-router-dom'
+import { useAppSelector } from 'features/hooks'
 
 import styles from 'components/nav-bar/nav-bar.module.css'
 
 const NavBar = () => {
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const { currentUser } = useAppSelector(state => state.auth)
   const { userProfile } = useAppSelector(state => state.user)
 
-  const handleLogout = async () => {
-    await dispatch(fetchLogout(null))
-    if (!currentUser) {
-      navigate('/')
-    }
+  function getInitials () {
+    const first = userProfile?.firstName[0] ?? ''
+    const last = userProfile?.lastName[0] ?? ''
+    return `${first}${last}`
   }
 
   return (
@@ -35,10 +31,7 @@ const NavBar = () => {
               </Link>
             </Group>
             <Group justify="flex-end">
-              <Button variant="text" onClick={ handleLogout }>
-                Sign Out
-              </Button>
-              { userProfile?.firstName && <span>Hello, { userProfile?.firstName }</span> }
+              <Avatar component={ Link } to="/profile" color="cyan" className={ `${styles.icon} ${styles['nav-link']}` } radius="xl">{ getInitials() }</Avatar>
             </Group>
           </Container>
         ) }

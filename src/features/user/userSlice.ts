@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { FetchStatusT, MessageT, UserProfileT } from 'types'
+import { FetchStatusT, MessageT } from 'types'
+import { UserProfileT } from 'schemas/user'
 import { RootState } from '../store'
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore/lite'
+import { addDoc, collection, query, getDocs, where } from 'firebase/firestore/lite'
 import { db } from '../../firebase'
 
 interface InitialUserState {
@@ -61,19 +62,21 @@ export const getUserProfileById = createAsyncThunk<UserProfileT | null, string, 
   'user/getUserProfileById',
   async (id, { rejectWithValue }) => {
     try {
-      const docRef = doc(db, 'tastings', id)
-      const docdata = await getDoc(docRef)
-      if (docdata.exists()) {
-        const data = docdata.data()
-
-        const userProfile = {
+      const fbq = query(collection(db, 'users'), where('userId', '==', id))
+      const { docs } = (await getDocs(fbq))
+      const profile = docs.map(doc => {
+        const data = doc.data()
+        return {
           ...data,
           userId: data.id
         }
-        return userProfile as UserProfileT
-      } else {
-        return null
+      })
+
+      if (profile.length === 1) {
+        return profile[0] as UserProfileT
       }
+
+      return null
     } catch (err) {
       return rejectWithValue(err)
     }

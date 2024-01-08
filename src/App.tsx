@@ -8,6 +8,7 @@ import { Cellar, ViewWine, NewWine, EditWine } from 'pages/cellar'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import SignInUp from 'pages/SignInUp'
 import Tastings from 'pages/tastings/Tastings'
+import { Profile } from 'pages/profile'
 import { UserContext } from 'context/user.context'
 
 function App () {
@@ -55,6 +56,10 @@ function App () {
           <Route path=":id" element={ <ProtectedRoute component={ <ViewWine /> } /> } />
           <Route path="new" element={ <ProtectedRoute component={ <NewWine /> } /> } />
           <Route path="edit" element={ <ProtectedRoute component={ <EditWine /> } /> } />
+        </Route>
+
+        <Route path="/profile">
+          <Route index element={ <ProtectedRoute component={ <Profile /> } /> } />
         </Route>
 
         <Route path="*" element={ <NotFound /> } />

@@ -3,6 +3,8 @@ import { type DocumentData } from 'firebase/firestore/lite'
 export interface UserProfileT {
   firstName: string
   lastName: string
+  avatar?: string
+  displayName?: string
   userId: string
 }
 
