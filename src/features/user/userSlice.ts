@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { FetchStatusT, MessageT } from 'types'
 import { UserProfileT } from 'schemas/user'
 import { RootState } from '../store'
-import { addDoc, collection, query, getDocs, where } from 'firebase/firestore/lite'
+import { addDoc, collection, query, getDocs, where, doc, updateDoc } from 'firebase/firestore/lite'
 import { db } from '../../firebase'
 
 interface InitialUserState {
@@ -28,6 +28,9 @@ export const userSlice = createSlice({
         state.userProfile = action.payload
       })
       .addCase(getUserProfileById.fulfilled, (state, action) => {
+        state.userProfile = action.payload
+      })
+      .addCase(editUserProfile.fulfilled, (state, action) => {
         state.userProfile = action.payload
       })
   }
@@ -68,7 +71,8 @@ export const getUserProfileById = createAsyncThunk<UserProfileT | null, string, 
         const data = doc.data()
         return {
           ...data,
-          userId: data.id
+          userId: data.userId,
+          id: doc.id
         }
       })
 
@@ -77,6 +81,21 @@ export const getUserProfileById = createAsyncThunk<UserProfileT | null, string, 
       }
 
       return null
+    } catch (err) {
+      return rejectWithValue(err)
+    }
+  }
+)
+
+export const editUserProfile = createAsyncThunk<UserProfileT, UserProfileT, {
+  state: RootState
+}>(
+  'user/editUserProfile',
+  async (data, { rejectWithValue }) => {
+    const userRef = doc(db, 'users', data.id)
+    try {
+      await updateDoc(userRef, { ...data })
+      return data
     } catch (err) {
       return rejectWithValue(err)
     }

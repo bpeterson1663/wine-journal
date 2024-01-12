@@ -38,7 +38,7 @@ const SignUpForm = () => {
     const { password, email, firstName, lastName } = data
     try {
       const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap()
-      await dispatch(createUserProfile({ firstName, lastName, userId: uid, email, displayName: '', avatar: '' })).unwrap()
+      await dispatch(createUserProfile({ firstName, lastName, userId: uid, email, displayName: '', avatar: '', id: '' })).unwrap()
     } catch (err) {
       notifications.show({
         color: 'red',

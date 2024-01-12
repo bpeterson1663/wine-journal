@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from 'features/hooks'
 import { fetchLogout } from 'features/auth/authSlice'
 import styles from 'pages/styles/pages.module.css'
 import { useForm, zodResolver } from '@mantine/form'
+import { editUserProfile } from 'features/user/userSlice'
+import { notifications } from '@mantine/notifications'
 
 export default function Profile () {
   const dispatch = useAppDispatch()
@@ -24,8 +26,18 @@ export default function Profile () {
     }
   }
 
-  const onSubmitHandler = async (_: UserProfileT) => {
-
+  const onSubmitHandler = async (data: UserProfileT) => {
+    try {
+      await dispatch(editUserProfile(data))
+      notifications.show({
+        message: 'Your profile was saved.'
+      })
+    } catch (err) {
+      notifications.show({
+        color: 'red',
+        message: 'An error occurred trying to save your profile. Please try again later.'
+      })
+    }
   }
 
   const form = useForm({
@@ -34,9 +46,10 @@ export default function Profile () {
       lastName: '',
       avatar: '',
       displayName: '',
-      userId: '',
-      email: '',
-      ...userProfile
+      ...userProfile,
+      id: userProfile?.id ?? '',
+      userId: currentUser?.uid ?? '',
+      email: currentUser?.email ?? ''
     },
     validate: zodResolver(UserProfileSchema)
   })
@@ -61,6 +74,7 @@ export default function Profile () {
               <TextInput
                 type="email"
                 label="Email"
+                disabled
                 { ...form.getInputProps('email') }
               />
               <TextInput
@@ -71,6 +85,14 @@ export default function Profile () {
               <FileInput
                   leftSection={ <IconUpload style={ { width: rem(18), height: rem(18) } } /> }
                   placeholder="Upload avatar" value={ fileValue } onChange={ setValue } />
+
+              <Button
+                color="secondary"
+                type="submit"
+                variant="contained"
+              >
+                Save
+              </Button>
             </form>
           </Group>
         </section>

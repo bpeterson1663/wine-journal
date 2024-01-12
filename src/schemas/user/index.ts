@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const UserProfileSchema = z.object({
+  id: z.string().default(''),
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
   avatar: z.string().default(''),
