@@ -13,7 +13,8 @@ module.exports = {
   'extends': [
     'standard-with-typescript',
     'plugin:react/jsx-runtime',
-    "react-app"
+    "react-app",
+    "plugin:prettier/recommended"
   ],
   'overrides': [
     {
@@ -44,13 +45,13 @@ module.exports = {
     'space-infix-ops': 2,
     'array-bracket-spacing': [2, 'never'],
     'object-curly-spacing': [2, 'always'],
-    'space-in-parens': [2, 'never'],
     'block-spacing': [2, 'always'],
     'brace-style': [2, '1tbs', { 'allowSingleLine': true }],
     'comma-spacing': [2, { 'before': false, 'after': true }],
-    'comma-style': [2, 'last'],
     'prefer-arrow-callback': [2, { 'allowNamedFunctions': true }],
     'prefer-const': 1,
+    "space-before-function-paren": "off",
+    "@typescript-eslint/space-before-function-paren":[ 'warn', { 'allow': ['error'] }],
     'react/no-multi-comp': [2, { 'ignoreStateless': true }],
     'react/no-did-mount-set-state': 2,
     'react/no-unescaped-entities': 0,
@@ -58,7 +59,6 @@ module.exports = {
     'no-extra-boolean-cast': 0,
     'no-console': ['warn', { 'allow': ['error'] }],
     'no-debugger': 'warn',
-    'react/jsx-curly-spacing': [2, { 'when': 'always', 'children': true }],
     'react/jsx-curly-brace-presence': [2, { 'props': 'never', 'children': 'never' }],
     'react/no-unused-prop-types': 2,
     'arrow-parens': [2, 'as-needed'],
