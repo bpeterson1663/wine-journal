@@ -37,5 +37,5 @@ export const COLOR_INDEX = {
   'rose-medium-copper': '#F08241',
   'rose-deep-pink': '#E22242',
   'rose-deep-salmon': '#EB5837',
-  'rose-deep-copper': '#DC5827'
+  'rose-deep-copper': '#DC5827',
 }

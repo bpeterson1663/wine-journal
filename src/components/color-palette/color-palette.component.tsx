@@ -5,7 +5,7 @@ import styles from 'components/color-palette/color-palette.module.css'
 const ColorPalette = ({
   color,
   hue,
-  intensity
+  intensity,
 }: {
   color: ColorT
   hue: RedHueT | WhiteHueT | RoseHueT
@@ -14,9 +14,9 @@ const ColorPalette = ({
   const backgroundColor: keyof typeof COLOR_INDEX = `${color}-${intensity}-${hue}` as keyof typeof COLOR_INDEX
   return (
     <Box
-      className={ styles['color-palette-container'] }
-      bg={ `radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)` }
-      data-testid={ `${color}-${intensity}-${hue}` }
+      className={styles['color-palette-container']}
+      bg={`radial-gradient(ellipse at bottom, ${COLOR_INDEX[backgroundColor]} 58%, #FFFFFF 71%)`}
+      data-testid={`${color}-${intensity}-${hue}`}
     />
   )
 }

@@ -10,7 +10,7 @@ type CurrentUserT = AuthUserT | null
 export const UserContext = createContext({
   setCurrentUser: (() => undefined) as Dispatch<any>,
   currentUser: null as CurrentUserT,
-  loading: true
+  loading: true,
 })
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
@@ -20,17 +20,17 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(false)
 
   const value = { currentUser, setCurrentUser, loading }
-  const { userProfile } = useAppSelector(state => state.user)
+  const { userProfile } = useAppSelector((state) => state.user)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async user => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const { email, uid } = user
         if (email && uid) {
           dispatch(setAuth({ email, uid }))
           setCurrentUser({
             uid,
-            email
+            email,
           })
           if (!userProfile?.firstName) {
             await dispatch(getUserProfileById(uid))
@@ -46,5 +46,5 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     }
   }, [auth, userProfile, dispatch])
 
-  return <UserContext.Provider value={ value }>{ children }</UserContext.Provider>
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

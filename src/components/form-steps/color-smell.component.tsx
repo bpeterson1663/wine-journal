@@ -27,22 +27,18 @@ export const ColorSmell = () => {
   // })
 
   return (
-    <Flex
-      direction="column"
-      wrap="wrap"
-      maw={ 600 }
-    >
+    <Flex direction="column" wrap="wrap" maw={600}>
       <Radio.Group
         name="color"
         label="Color"
         defaultValue="red"
-        { ...form.getInputProps('color') }
-        onChange={ val => {
+        {...form.getInputProps('color')}
+        onChange={(val) => {
           if (val === 'red') form.setValues({ hue: 'purple' })
           else if (val === 'white') form.setValues({ hue: 'straw' })
           else if (val === 'rose') form.setValues({ hue: 'pink' })
           form.setValues({ color: val as ColorT })
-        } }
+        }}
       >
         <Group mt="xs">
           <Radio value="red" label="Red" />
@@ -51,12 +47,7 @@ export const ColorSmell = () => {
         </Group>
       </Radio.Group>
 
-      <Radio.Group
-        name="intensity"
-        label="Intensity"
-        defaultValue="pale"
-        { ...form.getInputProps('intensity') }
-      >
+      <Radio.Group name="intensity" label="Intensity" defaultValue="pale" {...form.getInputProps('intensity')}>
         <Group mt="xs">
           <Radio value="pale" label="Pale" />
           <Radio value="medium" label="Medium" />
@@ -64,29 +55,19 @@ export const ColorSmell = () => {
         </Group>
       </Radio.Group>
 
-      { color === 'red' && (
-         <Radio.Group
-          name="hue"
-          label="Hue"
-          defaultValue="purple"
-          { ...form.getInputProps('hue') }
-        >
-         <Group mt="xs">
-           <Radio value="purple" label="Purple" />
-           <Radio value="ruby" label="Ruby" />
-           <Radio value="garnet" label="Garnet" />
-           <Radio value="tawny" label="Tawny" />
-           <Radio value="brown" label="Brown" />
-         </Group>
+      {color === 'red' && (
+        <Radio.Group name="hue" label="Hue" defaultValue="purple" {...form.getInputProps('hue')}>
+          <Group mt="xs">
+            <Radio value="purple" label="Purple" />
+            <Radio value="ruby" label="Ruby" />
+            <Radio value="garnet" label="Garnet" />
+            <Radio value="tawny" label="Tawny" />
+            <Radio value="brown" label="Brown" />
+          </Group>
         </Radio.Group>
-      ) }
-      { color === 'white' && (
-        <Radio.Group
-          name="hue"
-          label="Hue"
-          defaultValue="straw"
-          { ...form.getInputProps('hue') }
-        >
+      )}
+      {color === 'white' && (
+        <Radio.Group name="hue" label="Hue" defaultValue="straw" {...form.getInputProps('hue')}>
           <Group mt="xs">
             <Radio value="straw" label="Straw" />
             <Radio value="yellow" label="Yellow" />
@@ -95,31 +76,19 @@ export const ColorSmell = () => {
             <Radio value="brown" label="Brown" />
           </Group>
         </Radio.Group>
-      ) }
-      { color === 'rose' && (
-        <Radio.Group
-          name="hue"
-          label="Hue"
-          defaultValue="pink"
-          { ...form.getInputProps('hue') }
-        >
+      )}
+      {color === 'rose' && (
+        <Radio.Group name="hue" label="Hue" defaultValue="pink" {...form.getInputProps('hue')}>
           <Group mt="xs">
             <Radio value="pink" label="Pink" />
             <Radio value="salmon" label="Salmon" />
             <Radio value="copper" label="Copper" />
           </Group>
         </Radio.Group>
-      ) }
-      <ColorPalette color={ color } hue={ hue } intensity={ intensity } />
+      )}
+      <ColorPalette color={color} hue={hue} intensity={intensity} />
 
-      <Textarea
-        multiline
-        rows={ 4 }
-        name="smell"
-        label="Smell"
-        { ...form.getInputProps('smell') }
-      />
-
+      <Textarea multiline rows={4} name="smell" label="Smell" {...form.getInputProps('smell')} />
     </Flex>
   )
 }

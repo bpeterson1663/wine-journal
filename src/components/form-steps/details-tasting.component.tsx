@@ -17,8 +17,11 @@ export const DetailsTasting = () => {
   }, [form])
 
   const handleRemove = (val: string) => {
-    form.setFieldValue('varietal', varietals.filter(varietal => varietal !== val))
-    setVarietals(varietals.filter(varietal => varietal !== val))
+    form.setFieldValue(
+      'varietal',
+      varietals.filter((varietal) => varietal !== val),
+    )
+    setVarietals(varietals.filter((varietal) => varietal !== val))
   }
 
   const onDateChange = (value: Date | null) => {
@@ -49,62 +52,49 @@ export const DetailsTasting = () => {
   return (
     <Box>
       <DatePickerInput
-        { ...form.getInputProps('date') }
+        {...form.getInputProps('date')}
         valueFormat="YYYY MMM DD"
         name="date"
         label="Date"
-        onChange={ onDateChange }
+        onChange={onDateChange}
       />
 
-      <TextInput
-        required
-        label="Producer / Winery"
-        { ...form.getInputProps('producer') }
-      />
+      <TextInput required label="Producer / Winery" {...form.getInputProps('producer')} />
 
-      <TextInput
-        label="Classification"
-        { ...form.getInputProps('classification') }
-      />
+      <TextInput label="Classification" {...form.getInputProps('classification')} />
 
-      <PillsInput label="Varietal(s)" { ...form.getInputProps('varietal') }>
+      <PillsInput label="Varietal(s)" {...form.getInputProps('varietal')}>
         <Pill.Group>
-          { varietals.map(varietal => (
+          {varietals.map((varietal) => (
             <Pill
-              key={ varietal }
-              onRemove={ () => { handleRemove(varietal) } }
-              withRemoveButton> { varietal }
-            </Pill>))
-          }
+              key={varietal}
+              onRemove={() => {
+                handleRemove(varietal)
+              }}
+              withRemoveButton
+            >
+              {' '}
+              {varietal}
+            </Pill>
+          ))}
           <PillsInput.Field
-            value={ currentVarietal }
-            onKeyDown={ onVarietalKeyDown }
-            onChange={ onVarietalChange }
-            placeholder="Enter Varietal" />
+            value={currentVarietal}
+            onKeyDown={onVarietalKeyDown}
+            onChange={onVarietalChange}
+            placeholder="Enter Varietal"
+          />
         </Pill.Group>
       </PillsInput>
 
-      <TextInput
-        label="Vintage"
-        { ...form.getInputProps('vintage') }
-      />
+      <TextInput label="Vintage" {...form.getInputProps('vintage')} />
 
-      <TextInput
-        label="Country"
-        { ...form.getInputProps('country') }
-      />
+      <TextInput label="Country" {...form.getInputProps('country')} />
 
-      <TextInput
-        label="Region"
-        { ...form.getInputProps('region') }
-      />
+      <TextInput label="Region" {...form.getInputProps('region')} />
 
-      <TextInput
-        label="Subregion"
-        { ...form.getInputProps('subregion') }
-      />
+      <TextInput label="Subregion" {...form.getInputProps('subregion')} />
       <Group justify="center" mt="md">
-        <WineLabelPic value={ img } onChange={ onCameraChange } />
+        <WineLabelPic value={img} onChange={onCameraChange} />
       </Group>
     </Box>
   )

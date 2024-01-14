@@ -16,7 +16,7 @@ import { UserProvider } from 'context/user.context'
 
 const theme = createTheme({
   fontFamily: 'Lexend Deca',
-  primaryColor: 'cyan'
+  primaryColor: 'cyan',
   /** Put your mantine theme override here */
 })
 
@@ -24,15 +24,15 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <React.StrictMode>
-    <Provider store={ store }>
+    <Provider store={store}>
       <BrowserRouter>
-        <MantineProvider theme={ theme } defaultColorScheme="dark">
+        <MantineProvider theme={theme} defaultColorScheme="dark">
           <UserProvider>
-            <Notifications position="top-right" zIndex={ 1000 } />
+            <Notifications position="top-right" zIndex={1000} />
             <App />
           </UserProvider>
         </MantineProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

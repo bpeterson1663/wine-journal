@@ -9,11 +9,12 @@ export const store = configureStore({
     auth: authReducer,
     tasting: tastingReducer,
     user: userReducer,
-    cellar: cellarReducer
+    cellar: cellarReducer,
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware({
-    serializableCheck: false
-  })
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

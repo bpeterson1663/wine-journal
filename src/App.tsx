@@ -11,7 +11,7 @@ import Tastings from 'pages/tastings/Tastings'
 import { Profile } from 'pages/profile'
 import { UserContext } from 'context/user.context'
 
-function App () {
+function App() {
   // Original theme
   //   palette: {
   //     primary: {
@@ -40,29 +40,29 @@ function App () {
 
   return (
     <Routes>
-      <Route path="/" element={ <Layout /> } >
-        <Route path="/login" element={ <SignInUp /> } />
-        <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
+      <Route path="/" element={<Layout />}>
+        <Route path="/login" element={<SignInUp />} />
+        <Route index element={<ProtectedRoute component={<Tastings />} />} />
 
         <Route path="/tastings">
-          <Route index element={ <ProtectedRoute component={ <Tastings /> } /> } />
-          <Route path=":id" element={ <ProtectedRoute component={ <ViewTasting /> } /> } />
-          <Route path="new" element={ <ProtectedRoute component={ <NewTasting /> } /> } />
-          <Route path="edit" element={ <ProtectedRoute component={ <EditTasting /> } /> } />
+          <Route index element={<ProtectedRoute component={<Tastings />} />} />
+          <Route path=":id" element={<ProtectedRoute component={<ViewTasting />} />} />
+          <Route path="new" element={<ProtectedRoute component={<NewTasting />} />} />
+          <Route path="edit" element={<ProtectedRoute component={<EditTasting />} />} />
         </Route>
 
         <Route path="/cellar">
-          <Route index element={ <ProtectedRoute component={ <Cellar /> } /> } />
-          <Route path=":id" element={ <ProtectedRoute component={ <ViewWine /> } /> } />
-          <Route path="new" element={ <ProtectedRoute component={ <NewWine /> } /> } />
-          <Route path="edit" element={ <ProtectedRoute component={ <EditWine /> } /> } />
+          <Route index element={<ProtectedRoute component={<Cellar />} />} />
+          <Route path=":id" element={<ProtectedRoute component={<ViewWine />} />} />
+          <Route path="new" element={<ProtectedRoute component={<NewWine />} />} />
+          <Route path="edit" element={<ProtectedRoute component={<EditWine />} />} />
         </Route>
 
         <Route path="/profile">
-          <Route index element={ <ProtectedRoute component={ <Profile /> } /> } />
+          <Route index element={<ProtectedRoute component={<Profile />} />} />
         </Route>
 
-        <Route path="*" element={ <NotFound /> } />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   )

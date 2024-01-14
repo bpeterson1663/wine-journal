@@ -8,13 +8,13 @@ interface Props {
   title?: string
 }
 
-export default function PageContainer ({ children, title = '' }: Props) {
+export default function PageContainer({ children, title = '' }: Props) {
   return (
-    <main className={ styles.main }>
-      <header className={ styles['header-row'] }>
-        <Title order={ 2 }> { title } </Title>
+    <main className={styles.main}>
+      <header className={styles['header-row']}>
+        <Title order={2}> {title} </Title>
       </header>
-      { children }
+      {children}
     </main>
   )
 }

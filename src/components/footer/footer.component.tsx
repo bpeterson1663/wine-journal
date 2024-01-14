@@ -9,8 +9,8 @@ interface Props {
 
 const Footer = ({ children }: Props) => {
   return (
-    <footer className={ styles.footer }>
-      <Group justify="flex-end">{ children }</Group>
+    <footer className={styles.footer}>
+      <Group justify="flex-end">{children}</Group>
     </footer>
   )
 }

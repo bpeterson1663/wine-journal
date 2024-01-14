@@ -12,7 +12,7 @@ import { generateAuthErrorMessage } from 'helpers'
 
 const SignInForm = () => {
   const navigate = useNavigate()
-  const { currentUser } = useAppSelector(state => state.auth)
+  const { currentUser } = useAppSelector((state) => state.auth)
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -29,7 +29,7 @@ const SignInForm = () => {
       console.error(err)
       notifications.show({
         color: 'red',
-        message: generateAuthErrorMessage(err as AuthError)
+        message: generateAuthErrorMessage(err as AuthError),
       })
     }
   }
@@ -37,10 +37,10 @@ const SignInForm = () => {
   const form = useForm({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
     },
 
-    validate: zodResolver(Schema)
+    validate: zodResolver(Schema),
   })
 
   const handleSignInWIthGoogle = async () => {
@@ -49,31 +49,28 @@ const SignInForm = () => {
     } catch (err) {
       console.error(err)
       notifications.show({
-        message: generateAuthErrorMessage(err as AuthError)
+        message: generateAuthErrorMessage(err as AuthError),
       })
     }
   }
 
   return (
-    <Box className={ styles.container }>
-      <form onSubmit={ form.onSubmit(onSubmitHandler) }>
+    <Box className={styles.container}>
+      <form onSubmit={form.onSubmit(onSubmitHandler)}>
         <TextInput
           withAsterisk
           type="email"
           label="Email"
           placeholder="your@email.com"
-          { ...form.getInputProps('email') }
+          {...form.getInputProps('email')}
         />
 
-        <TextInput
-          withAsterisk
-          label="Password"
-          type="password"
-          { ...form.getInputProps('password') }
-        />
+        <TextInput withAsterisk label="Password" type="password" {...form.getInputProps('password')} />
 
         <Group justify="flex-end" mt="md">
-          <Button mt="10px" mb="20px" variant="contained" color="primary" onClick={ handleSignInWIthGoogle }>Sign In With Google</Button>
+          <Button mt="10px" mb="20px" variant="contained" color="primary" onClick={handleSignInWIthGoogle}>
+            Sign In With Google
+          </Button>
           <Button type="submit">Submit</Button>
         </Group>
       </form>

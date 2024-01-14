@@ -14,7 +14,7 @@ import { generateAuthErrorMessage } from 'helpers'
 const SignUpForm = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { currentUser } = useAppSelector(state => state.auth)
+  const { currentUser } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     if (currentUser) {
@@ -28,62 +28,39 @@ const SignUpForm = () => {
       lastName: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     },
 
-    validate: zodResolver(Schema)
+    validate: zodResolver(Schema),
   })
 
   const onSubmitHandler = async (data: SignUpFormT) => {
     const { password, email, firstName, lastName } = data
     try {
       const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap()
-      await dispatch(createUserProfile({ firstName, lastName, userId: uid, email, displayName: '', avatar: '', id: '' })).unwrap()
+      await dispatch(
+        createUserProfile({ firstName, lastName, userId: uid, email, displayName: '', avatar: '', id: '' }),
+      ).unwrap()
     } catch (err) {
       notifications.show({
         color: 'red',
-        message: generateAuthErrorMessage(err as AuthError)
+        message: generateAuthErrorMessage(err as AuthError),
       })
     }
   }
 
   return (
-    <Box className={ styles.container }>
-      <form onSubmit={ form.onSubmit(onSubmitHandler) }>
-        <TextInput
-          withAsterisk
-          label="First Name"
-          type="text"
-          { ...form.getInputProps('firstName') }
-        />
+    <Box className={styles.container}>
+      <form onSubmit={form.onSubmit(onSubmitHandler)}>
+        <TextInput withAsterisk label="First Name" type="text" {...form.getInputProps('firstName')} />
 
-        <TextInput
-          withAsterisk
-          label="Last Name"
-          type="text"
-          { ...form.getInputProps('lastName') }
-        />
+        <TextInput withAsterisk label="Last Name" type="text" {...form.getInputProps('lastName')} />
 
-        <TextInput
-          withAsterisk
-          label="Email"
-          type="email"
-          { ...form.getInputProps('email') }
-        />
+        <TextInput withAsterisk label="Email" type="email" {...form.getInputProps('email')} />
 
-        <TextInput
-          withAsterisk
-          label="Password"
-          type="password"
-          { ...form.getInputProps('password') }
-        />
+        <TextInput withAsterisk label="Password" type="password" {...form.getInputProps('password')} />
 
-        <TextInput
-          withAsterisk
-          label="Confirm Password"
-          type="password"
-          { ...form.getInputProps('confirmPassword') }
-        />
+        <TextInput withAsterisk label="Confirm Password" type="password" {...form.getInputProps('confirmPassword')} />
         <Group justify="flex-end" mt="md">
           <Button type="submit" variant="contained">
             Sign Up

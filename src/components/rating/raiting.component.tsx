@@ -1,35 +1,29 @@
 import { rem } from '@mantine/core'
 
-import {
-  IconMoodCry,
-  IconMoodSad,
-  IconMoodSmile,
-  IconMoodHappy,
-  IconMoodCrazyHappy
-} from '@tabler/icons-react'
+import { IconMoodCry, IconMoodSad, IconMoodSmile, IconMoodHappy, IconMoodCrazyHappy } from '@tabler/icons-react'
 
 type FontSizeT = 'large' | 'medium' | 'small'
 
 const getIconStyle = (color?: string) => ({
   width: rem(24),
   height: rem(24),
-  color: color ? `var(--mantine-color-${color}-7)` : undefined
+  color: color ? `var(--mantine-color-${color}-7)` : undefined,
 })
 
-const RatingIcon = ({ rating, fontSize = 'large' }: { rating: number, fontSize?: FontSizeT }) => {
+const RatingIcon = ({ rating, fontSize = 'large' }: { rating: number; fontSize?: FontSizeT }) => {
   switch (rating * 1) {
     case 1:
-      return <IconMoodCry style={ getIconStyle('red') }/>
+      return <IconMoodCry style={getIconStyle('red')} />
     case 2:
-      return <IconMoodSad style={ getIconStyle('orange') } />
+      return <IconMoodSad style={getIconStyle('orange')} />
     case 3:
-      return <IconMoodSmile style={ getIconStyle('yellow') } />
+      return <IconMoodSmile style={getIconStyle('yellow')} />
     case 4:
-      return <IconMoodHappy style={ getIconStyle('lime') }/>
+      return <IconMoodHappy style={getIconStyle('lime')} />
     case 5:
-      return <IconMoodCrazyHappy style={ getIconStyle('green') } />
+      return <IconMoodCrazyHappy style={getIconStyle('green')} />
     default:
-      return <IconMoodSmile style={ getIconStyle('yellow') } />
+      return <IconMoodSmile style={getIconStyle('yellow')} />
   }
 }
 
