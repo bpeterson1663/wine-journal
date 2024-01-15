@@ -1,5 +1,17 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where, QuerySnapshot, DocumentSnapshot } from 'firebase/firestore/lite'
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+  QuerySnapshot,
+  DocumentSnapshot,
+} from 'firebase/firestore/lite'
 import { FetchStatusT, MessageT } from 'types'
 import { RootState } from '../store'
 import { TastingT } from 'schemas/tastings'
@@ -18,7 +30,7 @@ const initialState: InitialTastingState = {
   status: 'idle',
   tastingList: [],
   tasting: null,
-  tastingOpen: null
+  tastingOpen: null,
 }
 
 export const tastingSlice = createSlice({
@@ -30,12 +42,12 @@ export const tastingSlice = createSlice({
     },
     tastingSetOpen: (state, action: PayloadAction<WineT | null>) => {
       state.tastingOpen = action.payload
-    }
+    },
   },
-  extraReducers (builder) {
+  extraReducers(builder) {
     builder
       .addCase(fetchTastings.fulfilled, (state, action) => {
-        const tastingList = action.payload.docs.map(doc => {
+        const tastingList = action.payload.docs.map((doc) => {
           const data = doc.data()
           const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
           const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
@@ -45,11 +57,11 @@ export const tastingSlice = createSlice({
             id: doc.id,
             date: data.date.toDate(),
             quantity,
-            price
+            price,
           }
         })
 
-        const data = tastingList.map(tasting => tasting as TastingT)
+        const data = tastingList.map((tasting) => tasting as TastingT)
 
         state.tastingList = data
       })
@@ -65,7 +77,7 @@ export const tastingSlice = createSlice({
             id: docSnap.id,
             date: data.date.toDate(),
             quantity,
-            price
+            price,
           }
           state.tasting = tasting as TastingT
         } else {
@@ -77,102 +89,104 @@ export const tastingSlice = createSlice({
         state.tastingList = tastings
       })
       .addCase(editTasting.fulfilled, (state, action) => {
-        const index = state.tastingList.findIndex(el => el.id === action.payload.id)
+        const index = state.tastingList.findIndex((el) => el.id === action.payload.id)
         if (index >= 0) {
           state.tastingList[index] = action.payload
         }
       })
       .addCase(deleteTasting.fulfilled, (state, action) => {
-        state.tastingList = state.tastingList.filter(tasting => tasting.id !== action.payload)
+        state.tastingList = state.tastingList.filter((tasting) => tasting.id !== action.payload)
       })
-  }
+  },
 })
 
-export const {
-  tastingSetEdit,
-  tastingSetOpen
-} = tastingSlice.actions
+export const { tastingSetEdit, tastingSetOpen } = tastingSlice.actions
 
 export const tastingListSelector = (state: RootState) => state.tasting
 
 export default tastingSlice.reducer
 
-export const fetchTastings = createAsyncThunk<QuerySnapshot, string, {
-  state: RootState
-}>(
-  'tasting/fetchTastings',
-  async (userId, { rejectWithValue }) => {
-    try {
-      const fbq = query(collection(db, 'tastings'), where('userId', '==', userId))
-      return await getDocs(fbq)
-    } catch (err) {
-      return rejectWithValue(err)
-    }
+export const fetchTastings = createAsyncThunk<
+  QuerySnapshot,
+  string,
+  {
+    state: RootState
   }
-)
-
-export const fetchTastingById = createAsyncThunk<DocumentSnapshot, string, {
-  state: RootState
-}>(
-  'tasting/fetchTastingById',
-  async (id, { rejectWithValue }) => {
-    try {
-      const docRef = doc(db, 'tastings', id)
-      return await getDoc(docRef)
-    } catch (err) {
-      return rejectWithValue(err)
-    }
+>('tasting/fetchTastings', async (userId, { rejectWithValue }) => {
+  try {
+    const fbq = query(collection(db, 'tastings'), where('userId', '==', userId))
+    return await getDocs(fbq)
+  } catch (err) {
+    return rejectWithValue(err)
   }
-)
+})
 
-export const createTasting = createAsyncThunk<TastingT, TastingT, {
-  state: RootState
-}>(
-  'tasting/createTasting',
-  async (data, { rejectWithValue }) => {
-    const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
-    const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
-    try {
-      const docData = await addDoc(collection(db, 'tastings'), { ...data, quantity, price })
-      const tasting = {
-        ...data,
-        id: docData.id
-      }
-      return tasting as TastingT
-    } catch (err) {
-      return rejectWithValue(err)
-    }
+export const fetchTastingById = createAsyncThunk<
+  DocumentSnapshot,
+  string,
+  {
+    state: RootState
   }
-)
-
-export const editTasting = createAsyncThunk<TastingT, TastingT, {
-  state: RootState
-}>(
-  'tasting/editTasting',
-  async (data, { rejectWithValue }) => {
-    const tastingRef = doc(db, 'tastings', data.id)
-    const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
-    const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
-
-    try {
-      await updateDoc(tastingRef, { ...data, quantity, price })
-      return data
-    } catch (err) {
-      return rejectWithValue(err)
-    }
+>('tasting/fetchTastingById', async (id, { rejectWithValue }) => {
+  try {
+    const docRef = doc(db, 'tastings', id)
+    return await getDoc(docRef)
+  } catch (err) {
+    return rejectWithValue(err)
   }
-)
+})
 
-export const deleteTasting = createAsyncThunk<string, string, {
-  state: RootState
-}>(
-  'tasting/deleteTasting',
-  async (id, { rejectWithValue }) => {
-    try {
-      await deleteDoc(doc(db, 'tastings', id))
-      return id
-    } catch (err) {
-      return rejectWithValue(err)
-    }
+export const createTasting = createAsyncThunk<
+  TastingT,
+  TastingT,
+  {
+    state: RootState
   }
-)
+>('tasting/createTasting', async (data, { rejectWithValue }) => {
+  const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+  const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+  try {
+    const docData = await addDoc(collection(db, 'tastings'), { ...data, quantity, price })
+    const tasting = {
+      ...data,
+      id: docData.id,
+    }
+    return tasting as TastingT
+  } catch (err) {
+    return rejectWithValue(err)
+  }
+})
+
+export const editTasting = createAsyncThunk<
+  TastingT,
+  TastingT,
+  {
+    state: RootState
+  }
+>('tasting/editTasting', async (data, { rejectWithValue }) => {
+  const tastingRef = doc(db, 'tastings', data.id)
+  const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+  const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+
+  try {
+    await updateDoc(tastingRef, { ...data, quantity, price })
+    return data
+  } catch (err) {
+    return rejectWithValue(err)
+  }
+})
+
+export const deleteTasting = createAsyncThunk<
+  string,
+  string,
+  {
+    state: RootState
+  }
+>('tasting/deleteTasting', async (id, { rejectWithValue }) => {
+  try {
+    await deleteDoc(doc(db, 'tastings', id))
+    return id
+  } catch (err) {
+    return rejectWithValue(err)
+  }
+})

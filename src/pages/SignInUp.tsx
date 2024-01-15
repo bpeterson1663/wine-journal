@@ -11,46 +11,67 @@ const SignInUp = () => {
 
   return (
     <main>
-      <Title order={ 1 } style={ { fontSize: '2rem' } }>
+      <Title order={1} style={{ fontSize: '2rem' }}>
         Wine Journal
       </Title>
       <div
-        style={ {
+        style={{
           display: 'flex',
           flexFlow: 'row wrap',
-          justifyContent: 'center'
-        } }
+          justifyContent: 'center',
+        }}
       >
-        { showSignIn
-          ? <div
-              style={ {
-                display: 'flex',
-                flexDirection: 'column',
-                width: 500
-              } }>
-              <Title order={ 2 } style={ { fontSize: '1.5rem' } }>
-                Sign In
-              </Title>
-              <SignInForm />
-              <div className={ styles['action-container'] }>
-                Dont have an account yet?&nbsp;<span className={ styles['click-here'] } onClick={ () => { setShowSignIn(false) } }> Click Here</span>
-              </div>
+        {showSignIn ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: 500,
+            }}
+          >
+            <Title order={2} style={{ fontSize: '1.5rem' }}>
+              Sign In
+            </Title>
+            <SignInForm />
+            <div className={styles['action-container']}>
+              Dont have an account yet?&nbsp;
+              <span
+                className={styles['click-here']}
+                onClick={() => {
+                  setShowSignIn(false)
+                }}
+              >
+                {' '}
+                Click Here
+              </span>
             </div>
-          : <div
-              style={ {
-                display: 'flex',
-                flexDirection: 'column',
-                width: 500
-              } }>
-              <Title order={ 2 } style={ { fontSize: '1.5rem' } }>
-                Sign Up
-              </Title>
-              <SignUpForm />
-              <div className={ styles['action-container'] }>
-                Already have an account?&nbsp;<span className={ styles['click-here'] } onClick={ () => { setShowSignIn(true) } }> Click Here</span>
-              </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: 500,
+            }}
+          >
+            <Title order={2} style={{ fontSize: '1.5rem' }}>
+              Sign Up
+            </Title>
+            <SignUpForm />
+            <div className={styles['action-container']}>
+              Already have an account?&nbsp;
+              <span
+                className={styles['click-here']}
+                onClick={() => {
+                  setShowSignIn(true)
+                }}
+              >
+                {' '}
+                Click Here
+              </span>
             </div>
-        }
+          </div>
+        )}
       </div>
       <Footer />
     </main>
