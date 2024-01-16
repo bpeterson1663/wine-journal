@@ -14,7 +14,7 @@ export const WineSchema = z.object({
   quantity: z.number().default(0),
   price: z.number().default(0),
   description: z.string().default(''),
-  labelUri: z.string().default('')
+  labelUri: z.string().default(''),
 })
 
 export type WineT = z.infer<typeof WineSchema>
@@ -33,5 +33,5 @@ export const INITIAL_VALUES: WineT = {
   description: '',
   labelUri: '',
   varietal: [],
-  date: new Date()
+  date: new Date(),
 }

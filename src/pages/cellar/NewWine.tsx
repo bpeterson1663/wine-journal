@@ -12,24 +12,24 @@ import styles from 'pages/styles/pages.module.css'
 
 const STEPS = [
   {
-    label: 'Details'
+    label: 'Details',
   },
   {
-    label: 'Quantity'
-  }
+    label: 'Quantity',
+  },
 ]
 
-export default function NewWine () {
+export default function NewWine() {
   const [activeStep, setActiveStep] = useState(0)
   const dispatch = useAppDispatch()
-  const { currentUser } = useAppSelector(state => state.auth)
+  const { currentUser } = useAppSelector((state) => state.auth)
 
   const form = useWineForm({
     validateInputOnBlur: true,
     initialValues: {
-      ...INITIAL_VALUES
+      ...INITIAL_VALUES,
     },
-    validate: zodResolver(WineSchema)
+    validate: zodResolver(WineSchema),
   })
 
   const onSubmitHandler = async (data: WineT) => {
@@ -38,24 +38,24 @@ export default function NewWine () {
       form.reset()
       setActiveStep(STEPS.length)
       notifications.show({
-        message: 'Wine was added to your cellar.'
+        message: 'Wine was added to your cellar.',
       })
     } catch (err) {
       console.error(err)
       notifications.show({
         message: 'Something went wrong adding your wine.',
-        color: 'red'
+        color: 'red',
       })
     }
   }
 
   const handleNext = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault()
-    setActiveStep(current => (current < 3 ? current + 1 : current))
+    setActiveStep((current) => (current < 3 ? current + 1 : current))
   }
   const handleBack = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault()
-    setActiveStep(current => (current > 0 ? current - 1 : current))
+    setActiveStep((current) => (current > 0 ? current - 1 : current))
   }
 
   const handleReset = () => {
@@ -91,49 +91,43 @@ export default function NewWine () {
   }
 
   return (
-    <WineFormProvider form={ form }>
-      <Box className={ styles.form } component="form" onSubmit={ form.onSubmit(onSubmitHandler) }>
-        <Stepper active={ activeStep } onStepClick={ setActiveStep } allowNextStepsSelect={ false }>
-          { STEPS.map((step, index) => (
-            <Stepper.Step label={ step.label }>
-              { getStepContent(index) }
-            </Stepper.Step>
-          )) }
+    <WineFormProvider form={form}>
+      <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
+        <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
+          {STEPS.map((step, index) => (
+            <Stepper.Step label={step.label}>{getStepContent(index)}</Stepper.Step>
+          ))}
         </Stepper>
         <Footer>
-        { activeStep !== STEPS.length &&
-          <Group style={ { width: '100%' } } justify="space-between">
-            <Button disabled={ activeStep === 0 } onClick={ handleBack } >
-              Back
-            </Button>
-            { activeStep === STEPS.length - 1
-              ? <Button
-                  color="secondary"
-                  type="submit"
-                  variant="contained"
-                >
+          {activeStep !== STEPS.length && (
+            <Group style={{ width: '100%' }} justify="space-between">
+              <Button disabled={activeStep === 0} onClick={handleBack}>
+                Back
+              </Button>
+              {activeStep === STEPS.length - 1 ? (
+                <Button color="secondary" type="submit" variant="contained">
                   Submit
                 </Button>
-              : <Button
-                  disabled={ disableContinue() }
+              ) : (
+                <Button
+                  disabled={disableContinue()}
                   variant="contained"
                   color="secondary"
                   name="continue"
-                  onClick={ handleNext }
+                  onClick={handleNext}
                 >
                   Continue
                 </Button>
-            }
-
-          </Group>
-        }
-        { activeStep === STEPS.length &&
-          <Group justify="center">
-            <Button color="secondary" variant="contained" onClick={ handleReset }>
-              Add Another Entry
-            </Button>
-          </Group>
-        }
+              )}
+            </Group>
+          )}
+          {activeStep === STEPS.length && (
+            <Group justify="center">
+              <Button color="secondary" variant="contained" onClick={handleReset}>
+                Add Another Entry
+              </Button>
+            </Group>
+          )}
         </Footer>
       </Box>
     </WineFormProvider>

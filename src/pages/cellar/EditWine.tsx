@@ -13,11 +13,11 @@ import { WineT, WineSchema, INITIAL_VALUES } from 'schemas/cellar'
 import { editWine } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
 
-export default function EditWine () {
+export default function EditWine() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const { wine } = useAppSelector(state => state.cellar)
+  const { wine } = useAppSelector((state) => state.cellar)
   useEffect(() => {
     if (!wine) {
       navigate('/cellar')
@@ -27,22 +27,22 @@ export default function EditWine () {
     initialValues: {
       ...INITIAL_VALUES,
       ...wine,
-      date: wine ? wine.date : new Date()
+      date: wine ? wine.date : new Date(),
     },
-    validate: zodResolver(WineSchema)
+    validate: zodResolver(WineSchema),
   })
 
   const onSubmitHandler = async (data: WineT) => {
     try {
       await dispatch(editWine({ ...data })).unwrap()
       notifications.show({
-        message: 'Edits were saved.'
+        message: 'Edits were saved.',
       })
     } catch (err) {
       console.error(err)
       notifications.show({
         color: 'red',
-        message: 'An error occurred trying to save your edits. Please try again later.'
+        message: 'An error occurred trying to save your edits. Please try again later.',
       })
     }
   }
@@ -56,21 +56,26 @@ export default function EditWine () {
   }
 
   return (
-    <WineFormProvider form={ form }>
+    <WineFormProvider form={form}>
       <PageContainer>
-        <Box className={ styles.form } component="form" onSubmit={ form.onSubmit(onSubmitHandler) }>
+        <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Box>
             <DetailsWine />
           </Box>
-          <Box style={ { marginBottom: '100px' } }>
+          <Box style={{ marginBottom: '100px' }}>
             <Quantity />
           </Box>
           <Footer>
-            <Group style={ { width: '100%' } } justify="space-between">
-              <Button onClick={ () => { navigate('/cellar') } } variant="outline">
+            <Group style={{ width: '100%' }} justify="space-between">
+              <Button
+                onClick={() => {
+                  navigate('/cellar')
+                }}
+                variant="outline"
+              >
                 Cancel
               </Button>
-              <Button disabled={ disableSave() } type="submit">
+              <Button disabled={disableSave()} type="submit">
                 Save
               </Button>
             </Group>
@@ -78,6 +83,5 @@ export default function EditWine () {
         </Box>
       </PageContainer>
     </WineFormProvider>
-
   )
 }

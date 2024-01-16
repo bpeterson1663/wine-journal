@@ -14,32 +14,32 @@ import styles from 'pages/styles/pages.module.css'
 
 const STEPS = [
   {
-    label: 'Details'
+    label: 'Details',
   },
   {
-    label: 'Color and Smell'
+    label: 'Color and Smell',
   },
   {
-    label: 'Taste'
+    label: 'Taste',
   },
   {
-    label: 'Remarks and Review'
-  }
+    label: 'Remarks and Review',
+  },
 ]
 
 const NewTasting = () => {
   const [activeStep, setActiveStep] = useState(0)
   const dispatch = useAppDispatch()
-  const { tastingOpen } = useAppSelector(state => state.tasting)
-  const { currentUser } = useAppSelector(state => state.auth)
+  const { tastingOpen } = useAppSelector((state) => state.tasting)
+  const { currentUser } = useAppSelector((state) => state.auth)
   const form = useTastingForm({
     validateInputOnBlur: true,
     initialValues: {
       ...INITIAL_VALUES,
       ...tastingOpen,
-      date: new Date()
+      date: new Date(),
     },
-    validate: zodResolver(TastingSchema)
+    validate: zodResolver(TastingSchema),
   })
 
   const onSubmitHandler = async (data: TastingT) => {
@@ -51,25 +51,25 @@ const NewTasting = () => {
       await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? '' })).unwrap()
       setActiveStep(STEPS.length)
       notifications.show({
-        message: 'Your tasting notes were saved.'
+        message: 'Your tasting notes were saved.',
       })
     } catch (err) {
       console.error(err)
       notifications.show({
         color: 'red',
-        message: 'Something went wrong creating your tasting notes.'
+        message: 'Something went wrong creating your tasting notes.',
       })
     }
   }
 
   const handleNext = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault()
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
+    setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
 
   const handleBack = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault()
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
   const handleReset = () => {
@@ -98,38 +98,38 @@ const NewTasting = () => {
   const Actions = () => {
     if (activeStep !== STEPS.length) {
       return (
-        <Group style={ { width: '100%' } } justify="space-between">
-           <Button
-            disabled={ activeStep === 0 }
+        <Group style={{ width: '100%' }} justify="space-between">
+          <Button
+            disabled={activeStep === 0}
             color="info"
             variant="outline"
-            onClick={ handleBack }
-            style={ { mt: 1, mr: 1 } }
+            onClick={handleBack}
+            style={{ mt: 1, mr: 1 }}
           >
             Back
           </Button>
-          { activeStep === STEPS.length - 1
-            ? <Button color="secondary" type="submit" variant="contained">
+          {activeStep === STEPS.length - 1 ? (
+            <Button color="secondary" type="submit" variant="contained">
               Submit
             </Button>
-            : <Button
-              disabled={ disableContinue() }
+          ) : (
+            <Button
+              disabled={disableContinue()}
               variant="contained"
               color="secondary"
-              onClick={ handleNext }
-              style={ { mt: 1, mr: 1 } }
+              onClick={handleNext}
+              style={{ mt: 1, mr: 1 }}
             >
               Continue
             </Button>
-          }
-
+          )}
         </Group>
       )
     }
 
     return (
       <Group justify="flex-end">
-        <Button color="secondary" variant="contained" onClick={ handleReset } style={ { mt: 1, mr: 1 } }>
+        <Button color="secondary" variant="contained" onClick={handleReset} style={{ mt: 1, mr: 1 }}>
           Add Another Entry
         </Button>
       </Group>
@@ -138,28 +138,27 @@ const NewTasting = () => {
 
   return (
     <PageContainer>
-      <TastingFormProvider form={ form }>
-        <Box className={ styles.form } component="form" onSubmit={ form.onSubmit(onSubmitHandler) }>
+      <TastingFormProvider form={form}>
+        <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Stepper
-            styles={ {
+            styles={{
               stepBody: {
-                display: 'none'
-              }
-            } }
-            active={ activeStep }
-            allowNextStepsSelect={ false }
+                display: 'none',
+              },
+            }}
+            active={activeStep}
+            allowNextStepsSelect={false}
           >
-            { STEPS.map((step, index) => (
-              <Stepper.Step key={ step.label } label={ step.label }>
-                  <Box style={ { width: '100%' } }>{ getStepContent(index) }</Box>
+            {STEPS.map((step, index) => (
+              <Stepper.Step key={step.label} label={step.label}>
+                <Box style={{ width: '100%' }}>{getStepContent(index)}</Box>
               </Stepper.Step>
-            )) }
+            ))}
           </Stepper>
           <Footer>
             <Actions />
           </Footer>
         </Box>
-
       </TastingFormProvider>
     </PageContainer>
   )

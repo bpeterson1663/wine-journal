@@ -7,7 +7,7 @@ export const UserProfileSchema = z.object({
   avatar: z.string().default(''),
   displayName: z.string().default(''),
   userId: z.string().default(''),
-  email: z.string().email({ message: 'Not a valid email' })
+  email: z.string().email({ message: 'Not a valid email' }),
 })
 
 export type UserProfileT = z.infer<typeof UserProfileSchema>

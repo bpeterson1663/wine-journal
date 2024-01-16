@@ -12,7 +12,7 @@ import PageContainer from 'components/page-container/page-container.component'
 import { WineT } from 'schemas/cellar'
 import Footer from 'components/footer/footer.component'
 
-export default function ViewWine () {
+export default function ViewWine() {
   const [opened, { open, close }] = useDisclosure(false)
 
   const params = useParams()
@@ -25,7 +25,7 @@ export default function ViewWine () {
   if (!wine) {
     notifications.show({
       color: 'red',
-      message: 'That wine does not appear to exist in your cellar'
+      message: 'That wine does not appear to exist in your cellar',
     })
     navigate('/cellar')
     return null
@@ -45,14 +45,14 @@ export default function ViewWine () {
     try {
       await dispatch(deleteWine(itemToDelete)).unwrap()
       notifications.show({
-        message: 'Your wine was removed from cellar.'
+        message: 'Your wine was removed from cellar.',
       })
       navigate('/cellar')
     } catch (err) {
       console.error(err)
       notifications.show({
         color: 'red',
-        message: 'Something went wrong removing your wine.'
+        message: 'Something went wrong removing your wine.',
       })
     }
   }
@@ -68,60 +68,65 @@ export default function ViewWine () {
   }
 
   const ConfirmDeleteDialog = () => (
-    <Modal opened={ opened } onClose={ close } title="Delete Wine">
+    <Modal opened={opened} onClose={close} title="Delete Wine">
       <Text>Are you sure you want to delete this wine?</Text>
       <Group>
-        <Button autoFocus onClick={ handleConfirmDeleteClose }>
+        <Button autoFocus onClick={handleConfirmDeleteClose}>
           Cancel
         </Button>
-        <Button onClick={ handleDelete } autoFocus>
+        <Button onClick={handleDelete} autoFocus>
           Delete
         </Button>
       </Group>
     </Modal>
   )
 
-  const {
-    producer,
-    labelUri,
-    varietal,
-    vintage,
-    region,
-    country,
-    subregion,
-    classification
-  } = wine
+  const { producer, labelUri, varietal, vintage, region, country, subregion, classification } = wine
 
   return (
-    <PageContainer title={ producer }>
-      <section className={ styles.container }>
-        <div className={ styles.column }>
-          <img className={ styles.wineImage } src={ labelUri || require('images/wine-tasting.jpg') } alt={ producer } />
+    <PageContainer title={producer}>
+      <section className={styles.container}>
+        <div className={styles.column}>
+          <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
         </div>
-        <div className={ styles.column }>
-          { producer && <Title order={ 6 }>Winery: { producer }</Title> }
-          { classification && <Title order={ 6 }>Name: { classification }</Title> }
-          <Text size="sm">Varietal(s): { varietal.join(', ') }</Text>
-          <Text size="sm">Vintage: { vintage }</Text>
-          <Text size="sm">Country: { country }</Text>
+        <div className={styles.column}>
+          {producer && <Title order={6}>Winery: {producer}</Title>}
+          {classification && <Title order={6}>Name: {classification}</Title>}
+          <Text size="sm">Varietal(s): {varietal.join(', ')}</Text>
+          <Text size="sm">Vintage: {vintage}</Text>
+          <Text size="sm">Country: {country}</Text>
 
-          <Text size="sm">Region: { region }</Text>
-          { subregion && <Text size="sm">Subregion: { subregion }</Text> }
-
+          <Text size="sm">Region: {region}</Text>
+          {subregion && <Text size="sm">Subregion: {subregion}</Text>}
         </div>
       </section>
       <Footer>
-        <Group style={ { width: '100%' } } justify="space-between">
+        <Group style={{ width: '100%' }} justify="space-between">
           <Group>
-            <Button onClick={ () => { handleConfirmDeleteOpen(wine.id) } } variant="outline">
+            <Button
+              onClick={() => {
+                handleConfirmDeleteOpen(wine.id)
+              }}
+              variant="outline"
+            >
               Delete
             </Button>
-            <Button variant="contained" onClick={ () => { handleEditClick(wine) } }>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleEditClick(wine)
+              }}
+            >
               Edit
             </Button>
           </Group>
           <Group>
-            <Button variant="contained" onClick={ () => { handleOpenBottleClick(wine) } } >
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleOpenBottleClick(wine)
+              }}
+            >
               Open Bottle
             </Button>
           </Group>

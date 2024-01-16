@@ -29,7 +29,7 @@ export const TastingSchema = WineSchema.extend({
   sweet: z.number().min(1).max(5).default(1),
   body: z.number().min(1).max(5).default(1),
   rating: z.number().min(1).max(5).default(3),
-  remarks: z.string().default('')
+  remarks: z.string().default(''),
 })
 
 export type TastingT = z.infer<typeof TastingSchema>
@@ -59,5 +59,5 @@ export const INITIAL_VALUES: TastingT = {
   sweet: 1,
   body: 1,
   rating: 3,
-  remarks: ''
+  remarks: '',
 }

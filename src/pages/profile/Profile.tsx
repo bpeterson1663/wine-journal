@@ -12,11 +12,11 @@ import { useForm, zodResolver } from '@mantine/form'
 import { editUserProfile } from 'features/user/userSlice'
 import { notifications } from '@mantine/notifications'
 
-export default function Profile () {
+export default function Profile() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { currentUser } = useAppSelector(state => state.auth)
-  const { userProfile } = useAppSelector(state => state.user)
+  const { currentUser } = useAppSelector((state) => state.auth)
+  const { userProfile } = useAppSelector((state) => state.user)
   const [fileValue, setValue] = useState<File | null>(null)
 
   const handleLogout = async () => {
@@ -30,12 +30,12 @@ export default function Profile () {
     try {
       await dispatch(editUserProfile(data))
       notifications.show({
-        message: 'Your profile was saved.'
+        message: 'Your profile was saved.',
       })
     } catch (err) {
       notifications.show({
         color: 'red',
-        message: 'An error occurred trying to save your profile. Please try again later.'
+        message: 'An error occurred trying to save your profile. Please try again later.',
       })
     }
   }
@@ -49,58 +49,40 @@ export default function Profile () {
       ...userProfile,
       id: userProfile?.id ?? '',
       userId: currentUser?.uid ?? '',
-      email: currentUser?.email ?? ''
+      email: currentUser?.email ?? '',
     },
-    validate: zodResolver(UserProfileSchema)
+    validate: zodResolver(UserProfileSchema),
   })
 
   return (
     <PageContainer title="Profile">
-        <section className={ styles.container }>
-          <Group className={ styles.column }>
-            <Avatar radius="sm" size="xl" />
+      <section className={styles.container}>
+        <Group className={styles.column}>
+          <Avatar radius="sm" size="xl" />
 
-            <form onSubmit={ form.onSubmit(onSubmitHandler) }>
-              <TextInput
-                type="firstName"
-                label="First Name"
-                { ...form.getInputProps('firstName') }
-              />
-              <TextInput
-                type="lastName"
-                label="Last Name"
-                { ...form.getInputProps('lastName') }
-              />
-              <TextInput
-                type="email"
-                label="Email"
-                disabled
-                { ...form.getInputProps('email') }
-              />
-              <TextInput
-                type="displayName"
-                label="Display Name"
-                { ...form.getInputProps('displayName') }
-              />
-              <FileInput
-                  leftSection={ <IconUpload style={ { width: rem(18), height: rem(18) } } /> }
-                  placeholder="Upload avatar" value={ fileValue } onChange={ setValue } />
+          <form onSubmit={form.onSubmit(onSubmitHandler)}>
+            <TextInput type="firstName" label="First Name" {...form.getInputProps('firstName')} />
+            <TextInput type="lastName" label="Last Name" {...form.getInputProps('lastName')} />
+            <TextInput type="email" label="Email" disabled {...form.getInputProps('email')} />
+            <TextInput type="displayName" label="Display Name" {...form.getInputProps('displayName')} />
+            <FileInput
+              leftSection={<IconUpload style={{ width: rem(18), height: rem(18) }} />}
+              placeholder="Upload avatar"
+              value={fileValue}
+              onChange={setValue}
+            />
 
-              <Button
-                color="secondary"
-                type="submit"
-                variant="contained"
-              >
-                Save
-              </Button>
-            </form>
-          </Group>
-        </section>
-        <Footer >
-          <Button variant="text" onClick={ handleLogout }>
-            Sign Out
-          </Button>
-        </Footer>
+            <Button color="secondary" type="submit" variant="contained">
+              Save
+            </Button>
+          </form>
+        </Group>
+      </section>
+      <Footer>
+        <Button variant="text" onClick={handleLogout}>
+          Sign Out
+        </Button>
+      </Footer>
     </PageContainer>
   )
 }

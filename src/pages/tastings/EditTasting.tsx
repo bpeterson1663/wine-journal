@@ -15,14 +15,14 @@ import Footer from 'components/footer/footer.component'
 const EditTasting = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { tasting } = useAppSelector(state => state.tasting)
+  const { tasting } = useAppSelector((state) => state.tasting)
 
   const form = useTastingForm({
     initialValues: {
       ...INITIAL_VALUES,
-      ...tasting
+      ...tasting,
     },
-    validate: zodResolver(TastingSchema)
+    validate: zodResolver(TastingSchema),
   })
 
   useEffect(() => {
@@ -35,13 +35,13 @@ const EditTasting = () => {
     try {
       await dispatch(editTasting(data)).unwrap()
       notifications.show({
-        message: 'Your tasting was updated.'
+        message: 'Your tasting was updated.',
       })
     } catch (err) {
       console.error(err)
       notifications.show({
         color: 'red',
-        message: 'Something went wrong updating your tasting.'
+        message: 'Something went wrong updating your tasting.',
       })
     }
   }
@@ -55,30 +55,31 @@ const EditTasting = () => {
 
   return (
     <PageContainer>
-      <TastingFormProvider form={ form }>
-        <Box
-          className={ styles.form }
-          component="form"
-          onSubmit={ form.onSubmit(onSubmitHandler) }
-        >
-          <Box className={ styles.section }>
+      <TastingFormProvider form={form}>
+        <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
+          <Box className={styles.section}>
             <DetailsTasting />
           </Box>
-          <Box className={ styles.section }>
+          <Box className={styles.section}>
             <ColorSmell />
           </Box>
-          <Box className={ styles.section }>
+          <Box className={styles.section}>
             <Taste />
           </Box>
-          <Box className={ styles.section }>
+          <Box className={styles.section}>
             <Review />
           </Box>
           <Footer>
-            <Group style={ { width: '100%' } } justify="space-between">
-              <Button onClick={ () => { navigate('/') } } variant="outline">
+            <Group style={{ width: '100%' }} justify="space-between">
+              <Button
+                onClick={() => {
+                  navigate('/')
+                }}
+                variant="outline"
+              >
                 Cancel
               </Button>
-              <Button disabled={ disableSave() } type="submit" variant="contained">
+              <Button disabled={disableSave()} type="submit" variant="contained">
                 Save
               </Button>
             </Group>
