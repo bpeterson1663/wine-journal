@@ -23,8 +23,6 @@ export const WineLabelPic = ({ value, onChange }: Props): JSX.Element => {
     <Box>
       {value === '' ? (
         <Button
-          color="secondary"
-          variant="contained"
           onClick={() => {
             setPictureMode((currentState) => !currentState)
           }}
@@ -34,9 +32,7 @@ export const WineLabelPic = ({ value, onChange }: Props): JSX.Element => {
       ) : null}
       {pictureMode && value !== '' && (
         <Button
-          color="secondary"
           type="submit"
-          variant="contained"
           onClick={() => {
             onChange('')
           }}

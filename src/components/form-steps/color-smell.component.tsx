@@ -88,7 +88,7 @@ export const ColorSmell = () => {
       )}
       <ColorPalette color={color} hue={hue} intensity={intensity} />
 
-      <Textarea multiline rows={4} name="smell" label="Smell" {...form.getInputProps('smell')} />
+      <Textarea autosize maxRows={4} name="smell" label="Smell" {...form.getInputProps('smell')} />
     </Flex>
   )
 }

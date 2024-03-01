@@ -1,10 +1,11 @@
-import { ActionIcon, Avatar, Container, Group } from '@mantine/core'
-import { Link } from 'react-router-dom'
+import { Avatar, Button, Container, Group } from '@mantine/core'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAppSelector } from 'features/hooks'
 
 import styles from 'components/nav-bar/nav-bar.module.css'
 
 const NavBar = () => {
+  const navigate = useNavigate()
   const { currentUser } = useAppSelector((state) => state.auth)
   const { userProfile } = useAppSelector((state) => state.user)
 
@@ -14,27 +15,26 @@ const NavBar = () => {
     return `${first}${last}`
   }
 
+  function handleNavigate(url: string) {
+    navigate(url)
+  }
+
   return (
     <header className={styles['nav-bar']}>
       {currentUser && (
         <Container className={styles.inner} fluid>
           <Group>
-            <Link className={styles['nav-link']} to="/">
-              <ActionIcon className={styles.icon} variant="subtle" aria-label="Tastings">
-                <span className="iconify" data-icon="emojione-monotone:wine-glass"></span>
-              </ActionIcon>
-            </Link>
-            <Link className={styles['nav-link']} to="/cellar">
-              <ActionIcon className={styles.icon} variant="subtle" aria-label="Cellar">
-                <span className="iconify" data-icon="game-icons:cellar-barrels"></span>
-              </ActionIcon>
-            </Link>
+            <Button onClick={() => handleNavigate("/")}>
+              Tastings
+            </Button>
+            <Button onClick={() => handleNavigate("/cellar")}>
+              Cellar
+            </Button>
           </Group>
           <Group justify="flex-end">
             <Avatar
               component={Link}
               to="/profile"
-              color="cyan"
               className={`${styles.icon} ${styles['nav-link']}`}
               radius="xl"
             >

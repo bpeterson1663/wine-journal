@@ -112,7 +112,6 @@ export default function ViewWine() {
               Delete
             </Button>
             <Button
-              variant="contained"
               onClick={() => {
                 handleEditClick(wine)
               }}
@@ -122,7 +121,6 @@ export default function ViewWine() {
           </Group>
           <Group>
             <Button
-              variant="contained"
               onClick={() => {
                 handleOpenBottleClick(wine)
               }}

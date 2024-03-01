@@ -105,14 +105,12 @@ export default function NewWine() {
                 Back
               </Button>
               {activeStep === STEPS.length - 1 ? (
-                <Button color="secondary" type="submit" variant="contained">
+                <Button type="submit">
                   Submit
                 </Button>
               ) : (
                 <Button
                   disabled={disableContinue()}
-                  variant="contained"
-                  color="secondary"
                   name="continue"
                   onClick={handleNext}
                 >
@@ -123,7 +121,7 @@ export default function NewWine() {
           )}
           {activeStep === STEPS.length && (
             <Group justify="center">
-              <Button color="secondary" variant="contained" onClick={handleReset}>
+              <Button onClick={handleReset}>
                 Add Another Entry
               </Button>
             </Group>

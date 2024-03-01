@@ -101,22 +101,19 @@ const NewTasting = () => {
         <Group style={{ width: '100%' }} justify="space-between">
           <Button
             disabled={activeStep === 0}
-            color="info"
-            variant="outline"
             onClick={handleBack}
             style={{ mt: 1, mr: 1 }}
           >
             Back
           </Button>
           {activeStep === STEPS.length - 1 ? (
-            <Button color="secondary" type="submit" variant="contained">
+            <Button type="submit">
               Submit
             </Button>
           ) : (
             <Button
               disabled={disableContinue()}
-              variant="contained"
-              color="secondary"
+
               onClick={handleNext}
               style={{ mt: 1, mr: 1 }}
             >
@@ -129,7 +126,7 @@ const NewTasting = () => {
 
     return (
       <Group justify="flex-end">
-        <Button color="secondary" variant="contained" onClick={handleReset} style={{ mt: 1, mr: 1 }}>
+        <Button onClick={handleReset} style={{ mt: 1, mr: 1 }}>
           Add Another Entry
         </Button>
       </Group>

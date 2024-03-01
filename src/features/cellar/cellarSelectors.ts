@@ -1,5 +1,5 @@
 import { RootState } from 'features/store'
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 
 const wines = (state: RootState) => state.cellar.wineList
 

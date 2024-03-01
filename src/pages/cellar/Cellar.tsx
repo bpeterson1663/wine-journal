@@ -40,8 +40,6 @@ export default function Cellar() {
       <Footer>
         <Group justify="flex-end">
           <Button
-            color="secondary"
-            variant="contained"
             onClick={() => {
               handleNewWine()
             }}

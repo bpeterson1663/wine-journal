@@ -41,8 +41,6 @@ export default function Tastings() {
       <Footer>
         <Group justify="flex-end">
           <Button
-            color="secondary"
-            variant="contained"
             style={{ margin: '0 5px ' }}
             onClick={() => {
               handleNewTasting()

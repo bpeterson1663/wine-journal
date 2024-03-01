@@ -7,7 +7,7 @@ export const Quantity = () => {
     <Box>
       <NumberInput label="Quantity" {...form.getInputProps('quantity')} />
       <NumberInput label="Price" {...form.getInputProps('price')} />
-      <Textarea multiline rows={4} label="Description" {...form.getInputProps('description')} />
+      <Textarea autosize maxRows={4} label="Description" {...form.getInputProps('description')} />
     </Box>
   )
 }

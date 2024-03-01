@@ -50,7 +50,7 @@ export const Review = () => {
 
   return (
     <Box>
-      <Textarea multiline rows={4} id="remarks" label="Remarks" {...form.getInputProps('remarks')} />
+      <Textarea autosize maxRows={4} id="remarks" label="Remarks" {...form.getInputProps('remarks')} />
       <Text className={styles.label}>Rating</Text>
       <Rating
         className={styles.rating}

@@ -12,19 +12,6 @@ import { Profile } from 'pages/profile'
 import { UserContext } from 'context/user.context'
 
 function App() {
-  // Original theme
-  //   palette: {
-  //     primary: {
-  //       main: '#424242'
-  //     },
-  //     secondary: {
-  //       main: '#b71c1c'
-  //     },
-  //     info: {
-  //       main: '#ffffff'
-  //     }
-  //   },
-
   const ProtectedRoute = ({ component }: { component: ReactNode }) => {
     const { currentUser, loading } = useContext(UserContext)
 

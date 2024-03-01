@@ -72,7 +72,7 @@ export default function Profile() {
               onChange={setValue}
             />
 
-            <Button color="secondary" type="submit" variant="contained">
+            <Button type="submit">
               Save
             </Button>
           </form>

@@ -79,7 +79,7 @@ const EditTasting = () => {
               >
                 Cancel
               </Button>
-              <Button disabled={disableSave()} type="submit" variant="contained">
+              <Button disabled={disableSave()} type="submit">
                 Save
               </Button>
             </Group>
