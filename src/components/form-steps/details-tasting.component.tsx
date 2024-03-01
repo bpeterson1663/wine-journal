@@ -31,7 +31,7 @@ export const DetailsTasting = () => {
   }
 
   const onVarietalKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && event.currentTarget.value) {
       event.preventDefault()
       setVarietals([...varietals, currentVarietal])
       form.setFieldValue('varietal', [...varietals, currentVarietal])
@@ -81,7 +81,7 @@ export const DetailsTasting = () => {
             value={currentVarietal}
             onKeyDown={onVarietalKeyDown}
             onChange={onVarietalChange}
-            placeholder="Enter Varietal"
+            placeholder="Press enter after each varietal"
           />
         </Pill.Group>
       </PillsInput>

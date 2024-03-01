@@ -49,6 +49,7 @@ const NewTasting = () => {
         await dispatch(editWine({ ...tastingOpen, quantity })).unwrap()
       }
       await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? '' })).unwrap()
+      form.reset()
       setActiveStep(STEPS.length)
       notifications.show({
         message: 'Your tasting notes were saved.',
@@ -92,9 +93,35 @@ const NewTasting = () => {
   }
 
   const disableContinue = (): boolean => {
-    return false
+    
+    const { errors, isTouched } = form
+
+    if (activeStep === 0) {
+      if (tastingOpen) {
+        return false
+      } else if (
+        !isTouched('producer') ||
+        !isTouched('country') ||
+        !isTouched('region') ||
+        !isTouched('vintage') ||
+        !isTouched('varietal')
+      ) {
+        return true
+      }
+    } else if (activeStep === 1) {
+      if (!isTouched('smell')) {
+        return true
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return true
+    } else {
+      return false
+    }
   }
 
+  
   const Actions = () => {
     if (activeStep !== STEPS.length) {
       return (
