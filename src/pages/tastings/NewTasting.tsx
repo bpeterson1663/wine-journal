@@ -68,7 +68,7 @@ const NewTasting = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
 
-  const handleBack = (evt: React.MouseEvent<HTMLElement>) => {
+  const handlePrevious = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault()
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
@@ -128,10 +128,10 @@ const NewTasting = () => {
         <Group style={{ width: '100%' }} justify="space-between">
           <Button
             disabled={activeStep === 0}
-            onClick={handleBack}
+            onClick={handlePrevious}
             style={{ mt: 1, mr: 1 }}
           >
-            Back
+            Previous
           </Button>
           {activeStep === STEPS.length - 1 ? (
             <Button type="submit">

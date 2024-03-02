@@ -53,7 +53,7 @@ export default function NewWine() {
     evt.preventDefault()
     setActiveStep((current) => (current < 3 ? current + 1 : current))
   }
-  const handleBack = (evt: React.MouseEvent<HTMLElement>) => {
+  const handlePrevious = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault()
     setActiveStep((current) => (current > 0 ? current - 1 : current))
   }
@@ -101,8 +101,8 @@ export default function NewWine() {
         <Footer>
           {activeStep !== STEPS.length && (
             <Group style={{ width: '100%' }} justify="space-between">
-              <Button disabled={activeStep === 0} onClick={handleBack}>
-                Back
+              <Button disabled={activeStep === 0} onClick={handlePrevious}>
+                Previous 
               </Button>
               {activeStep === STEPS.length - 1 ? (
                 <Button type="submit">
