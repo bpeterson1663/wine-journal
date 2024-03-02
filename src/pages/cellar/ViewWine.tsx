@@ -80,7 +80,7 @@ export default function ViewWine() {
   const { producer, labelUri, varietal, vintage, region, country, subregion, classification } = wine
 
   return (
-    <PageContainer title={producer}>
+    <PageContainer title={producer} showBack>
       <section className={styles.container}>
         <div className={styles.column}>
           <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />

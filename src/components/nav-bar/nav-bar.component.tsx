@@ -33,6 +33,7 @@ const NavBar = () => {
           </Group>
           <Group justify="flex-end">
             <Avatar
+              color="white"
               component={Link}
               to="/profile"
               className={`${styles.icon} ${styles['nav-link']}`}

@@ -24,7 +24,6 @@ export default function TastingId() {
   const [opened, { open, close }] = useDisclosure(false)
 
   if (!tasting) {
-    debugger;
     navigate('/')
     return null
   }
@@ -97,7 +96,7 @@ export default function TastingId() {
   } = tasting
 
   return (
-    <PageContainer title={producer}>
+    <PageContainer title={producer} showBack>
       <section className={styles.container}>
         <div className={styles.column}>
           <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />

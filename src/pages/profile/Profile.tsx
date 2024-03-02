@@ -58,7 +58,7 @@ export default function Profile() {
     <PageContainer title="Profile">
       <section className={styles.container}>
         <Group className={styles.column}>
-          <Avatar radius="sm" size="xl" />
+          <Avatar color="white" className={styles.avatar} radius="sm" size="xl" />
 
           <form onSubmit={form.onSubmit(onSubmitHandler)}>
             <TextInput type="firstName" label="First Name" {...form.getInputProps('firstName')} />
@@ -79,7 +79,7 @@ export default function Profile() {
         </Group>
       </section>
       <Footer>
-        <Button variant="text" onClick={handleLogout}>
+        <Button onClick={handleLogout}>
           Sign Out
         </Button>
       </Footer>

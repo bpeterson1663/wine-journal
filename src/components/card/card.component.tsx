@@ -24,7 +24,7 @@ export function Card({ wine, url, showDate = false }: Props) {
     >
       {showDate && (
         <div className={styles.row}>
-          <Text size="sm">{dayjs(date).format('MM/DD/YYYY')}</Text>
+          <Text size="xs">{dayjs(date).format('MM/DD/YYYY')}</Text>
         </div>
       )}
       <div className={styles.row}>
@@ -32,7 +32,7 @@ export function Card({ wine, url, showDate = false }: Props) {
           <img className={styles.cardImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
         </div>
         <div className={styles.column}>
-          <Title order={3}>{producer}</Title>
+          <Title order={4}>{producer}</Title>
           <Text size="md">{varietal.join(', ')}</Text>
           <Text size="sm">{vintage}</Text>
           <Text size="sm">{region}</Text>
