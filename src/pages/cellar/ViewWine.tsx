@@ -23,10 +23,6 @@ export default function ViewWine() {
   const [itemToDelete, setItemToDelete] = useState('')
 
   if (!wine) {
-    notifications.show({
-      color: 'red',
-      message: 'That wine does not appear to exist in your cellar',
-    })
     navigate('/cellar')
     return null
   }

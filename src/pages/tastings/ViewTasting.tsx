@@ -24,10 +24,7 @@ export default function TastingId() {
   const [opened, { open, close }] = useDisclosure(false)
 
   if (!tasting) {
-    notifications.show({
-      color: 'red',
-      message: 'That tasting does not appear to exist.',
-    })
+    debugger;
     navigate('/')
     return null
   }
