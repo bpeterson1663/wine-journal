@@ -61,7 +61,7 @@ const SignUpForm = () => {
         <TextInput withAsterisk label="Password" type="password" {...form.getInputProps('password')} />
 
         <TextInput withAsterisk label="Confirm Password" type="password" {...form.getInputProps('confirmPassword')} />
-        <Group justify="flex-end" mt="md">
+        <Group justify="center" mt="md">
           <Button type="submit">
             Sign Up
           </Button>

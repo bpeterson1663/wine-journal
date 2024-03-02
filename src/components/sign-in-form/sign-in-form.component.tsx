@@ -67,8 +67,8 @@ const SignInForm = () => {
 
         <TextInput withAsterisk label="Password" type="password" {...form.getInputProps('password')} />
 
-        <Group justify="flex-end" mt="md">
-          <Button mt="10px" mb="20px" onClick={handleSignInWIthGoogle}>
+        <Group justify="center" mt="md">
+          <Button onClick={handleSignInWIthGoogle}>
             Sign In With Google
           </Button>
           <Button type="submit">Submit</Button>
