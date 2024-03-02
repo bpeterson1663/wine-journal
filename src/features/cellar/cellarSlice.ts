@@ -14,6 +14,9 @@ import {
   where,
   QuerySnapshot,
   DocumentSnapshot,
+  startAfter,
+  limit,
+  orderBy,
 } from 'firebase/firestore/lite'
 import { db } from '../../firebase'
 
@@ -56,8 +59,9 @@ export const cellarSlice = createSlice({
         })
 
         const data = wineList.map((wine) => wine as WineT)
+        const ids = [...state.wineList, ...data].map(tasting => tasting.id)
 
-        state.wineList = data
+        state.wineList = [...state.wineList, ...data].filter((value: WineT, index) => !ids.includes(value.id, index+1))
       })
       .addCase(fetchWineById.fulfilled, (state, action) => {
         const docSnap = action.payload
@@ -100,15 +104,28 @@ export const wineListSelector = (state: RootState) => state.cellar
 
 export default cellarSlice.reducer
 
+interface FetchWinesParams {
+  userId: string
+  previousDoc?: string
+}
 export const fetchWines = createAsyncThunk<
   QuerySnapshot,
-  string,
+  FetchWinesParams,
   {
     state: RootState
   }
->('wine/fetchWines', async (userId, { rejectWithValue }) => {
+>('wine/fetchWines', async ({userId, previousDoc}, { rejectWithValue }) => {
   try {
-    const fbq = query(collection(db, 'wines'), where('userId', '==', userId))
+
+    const baseQuery = query(collection(db, 'wines'), where('userId', '==', userId), orderBy("date", 'desc'))
+    if (previousDoc) {
+      const docRef = doc(db, 'wines', previousDoc);
+      const docSnapshot = await getDoc(docRef);
+      const fbq = query(baseQuery, startAfter(docSnapshot), limit(10))
+      return await getDocs(fbq)
+    }
+
+    const  fbq = query(baseQuery, limit(10))
     return await getDocs(fbq)
   } catch (err) {
     return rejectWithValue(err)

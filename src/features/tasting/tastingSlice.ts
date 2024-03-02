@@ -11,6 +11,9 @@ import {
   where,
   QuerySnapshot,
   DocumentSnapshot,
+  limit,
+  orderBy,
+  startAfter,
 } from 'firebase/firestore/lite'
 import { FetchStatusT, MessageT } from 'types'
 import { RootState } from '../store'
@@ -62,8 +65,9 @@ export const tastingSlice = createSlice({
         })
 
         const data = tastingList.map((tasting) => tasting as TastingT)
+        const ids = [...state.tastingList, ...data].map(tasting => tasting.id)
 
-        state.tastingList = data
+        state.tastingList = [...state.tastingList, ...data].filter((value: TastingT, index) => !ids.includes(value.id, index+1))
       })
       .addCase(fetchTastingById.fulfilled, (state, action) => {
         const docSnap = action.payload
@@ -106,17 +110,30 @@ export const tastingListSelector = (state: RootState) => state.tasting
 
 export default tastingSlice.reducer
 
+interface FetchTastingsParams {
+  userId: string
+  previousDoc?: string
+}
 export const fetchTastings = createAsyncThunk<
   QuerySnapshot,
-  string,
+  FetchTastingsParams,
   {
     state: RootState
   }
->('tasting/fetchTastings', async (userId, { rejectWithValue }) => {
+>('tasting/fetchTastings', async ({userId, previousDoc}, { rejectWithValue }) => {
   try {
-    const fbq = query(collection(db, 'tastings'), where('userId', '==', userId))
+    const baseQuery = query(collection(db, 'tastings'), where('userId', '==', userId), orderBy("date", 'desc'))
+    if (previousDoc) {
+      const docRef = doc(db, 'tastings', previousDoc);
+      const docSnapshot = await getDoc(docRef);
+      const fbq = query(baseQuery, startAfter(docSnapshot), limit(10))
+      return await getDocs(fbq)
+    }
+
+    const  fbq = query(baseQuery, limit(10))
     return await getDocs(fbq)
   } catch (err) {
+    console.error(err)
     return rejectWithValue(err)
   }
 })

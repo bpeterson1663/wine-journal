@@ -47,6 +47,12 @@
   }
 }
 
+.load-more-container {
+  margin-top: -40px;
+  display: flex;
+  justify-content: center;
+}
+
 @media (min-width: 640px) {
   .container {
     display: flex;
