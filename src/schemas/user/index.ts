@@ -10,4 +10,14 @@ export const UserProfileSchema = z.object({
   email: z.string().email({ message: 'Not a valid email' }),
 })
 
+export const defaultUserProfile = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  avatar: "",
+  displayName: "",
+  userId: "",
+  email: "",
+}
+
 export type UserProfileT = z.infer<typeof UserProfileSchema>

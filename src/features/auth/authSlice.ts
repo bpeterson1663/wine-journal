@@ -3,6 +3,10 @@ import { signInWithGooglePopup, auth } from '../../firebase'
 import { AuthUserT, CurrentUser, FetchStatusT, MessageT, SignUpT, LoginT } from 'types'
 import { RootState } from '../store'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { doc, getDoc, addDoc, collection } from 'firebase/firestore/lite'
+import { db } from '../../firebase'
+import { UserProfileT } from 'schemas/user'
+import { defaultUserProfile } from 'schemas/user'
 
 interface InitialAuthState {
   currentUser: CurrentUser
@@ -99,7 +103,7 @@ export const fetchLogout = createAsyncThunk<
 })
 
 export const fetchSignInWithGoogle = createAsyncThunk<
-  boolean,
+  UserProfileT | null,
   null,
   {
     state: RootState
@@ -107,10 +111,25 @@ export const fetchSignInWithGoogle = createAsyncThunk<
 >('auth/signInWithGoogle', async (_, { rejectWithValue }) => {
   try {
     const { user } = await signInWithGooglePopup()
-    if (user.email) {
-      return true
+    if (!user.email) {
+      return null
     }
-    return false
+    // Get user profile if it exists
+    const docRef = doc(db, 'users', user.uid);
+    const docSnapshot = await getDoc(docRef);
+    if (docSnapshot.exists()) {
+      return {
+        ...docSnapshot.data(),
+        id: docSnapshot.id,
+      } as UserProfileT
+    }
+    // Create new user profile
+    await addDoc(collection(db, 'users'), { ...defaultUserProfile, userId: user.uid, email: user.email })
+    return {
+      ...defaultUserProfile,
+      email: user.email,
+      id: user.uid,
+    } as UserProfileT
   } catch (err) {
     return rejectWithValue(err)
   }

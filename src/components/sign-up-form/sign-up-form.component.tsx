@@ -10,6 +10,7 @@ import styles from 'components/sign-up-form/sign-up-form.module.css'
 import { Schema, SignUpFormT } from 'components/sign-up-form/scehma'
 import { createUserProfile } from 'features/user/userSlice'
 import { generateAuthErrorMessage } from 'helpers'
+import { fetchSignInWithGoogle } from 'features/auth/authSlice'
 
 const SignUpForm = () => {
   const dispatch = useAppDispatch()
@@ -49,6 +50,17 @@ const SignUpForm = () => {
     }
   }
 
+  const handleSignUpWithGoogle = async () => {
+    try {
+      await dispatch(fetchSignInWithGoogle(null)).unwrap()
+    } catch (err) {
+      console.error(err)
+      notifications.show({
+        message: generateAuthErrorMessage(err as AuthError),
+      })
+    }
+  }
+
   return (
     <Box className={styles.container}>
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -62,6 +74,9 @@ const SignUpForm = () => {
 
         <TextInput withAsterisk label="Confirm Password" type="password" {...form.getInputProps('confirmPassword')} />
         <Group justify="center" mt="md">
+        <Button onClick={handleSignUpWithGoogle}>
+            Sign Up With Google
+          </Button>
           <Button type="submit">
             Sign Up
           </Button>

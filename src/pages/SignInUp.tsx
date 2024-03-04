@@ -19,6 +19,7 @@ const SignInUp = () => {
           display: 'flex',
           flexFlow: 'row wrap',
           justifyContent: 'center',
+          padding: 20
         }}
       >
         {showSignIn ? (

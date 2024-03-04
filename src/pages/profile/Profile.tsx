@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IconUpload } from '@tabler/icons-react'
-import { UserProfileSchema, UserProfileT } from 'schemas/user'
+import { UserProfileSchema, UserProfileT, defaultUserProfile } from 'schemas/user'
 import Footer from 'components/footer/footer.component'
 import { Avatar, Button, Group, FileInput, rem, TextInput } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
@@ -42,10 +42,7 @@ export default function Profile() {
 
   const form = useForm({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      avatar: '',
-      displayName: '',
+      ...defaultUserProfile,
       ...userProfile,
       id: userProfile?.id ?? '',
       userId: currentUser?.uid ?? '',
@@ -61,8 +58,8 @@ export default function Profile() {
           <Avatar color="white" className={styles.avatar} radius="sm" size="xl" />
 
           <form onSubmit={form.onSubmit(onSubmitHandler)}>
-            <TextInput type="firstName" label="First Name" {...form.getInputProps('firstName')} />
-            <TextInput type="lastName" label="Last Name" {...form.getInputProps('lastName')} />
+            <TextInput required type="firstName" label="First Name" {...form.getInputProps('firstName')} />
+            <TextInput required type="lastName" label="Last Name" {...form.getInputProps('lastName')} />
             <TextInput type="email" label="Email" disabled {...form.getInputProps('email')} />
             <TextInput type="displayName" label="Display Name" {...form.getInputProps('displayName')} />
             <FileInput

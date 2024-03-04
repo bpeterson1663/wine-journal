@@ -43,7 +43,7 @@ const SignInForm = () => {
     validate: zodResolver(Schema),
   })
 
-  const handleSignInWIthGoogle = async () => {
+  const handleSignInWithGoogle = async () => {
     try {
       await dispatch(fetchSignInWithGoogle(null))
     } catch (err) {
@@ -68,7 +68,7 @@ const SignInForm = () => {
         <TextInput withAsterisk label="Password" type="password" {...form.getInputProps('password')} />
 
         <Group justify="center" mt="md">
-          <Button onClick={handleSignInWIthGoogle}>
+          <Button onClick={handleSignInWithGoogle}>
             Sign In With Google
           </Button>
           <Button type="submit">Submit</Button>
