@@ -17,7 +17,7 @@ export default function PageContainer({ children, title = '', showBack = false }
       <header className={styles['header-row']}>
         <Title order={2}> {title} </Title>
       </header>
-      <Container mx={10}>
+      <Container mx={10} px={0}>
         {children}
       </Container>
     </main>
