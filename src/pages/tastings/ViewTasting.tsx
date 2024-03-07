@@ -104,6 +104,7 @@ export default function TastingId() {
             justify="flex-start"
             gap="xs"
             mt={10}
+            w={180}
           >
             {classification && <Title order={5}>Name: {classification}</Title>}
             <Text size="md">Varietal(s): {varietal.join(', ')}</Text>
