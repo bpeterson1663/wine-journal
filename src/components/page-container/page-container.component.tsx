@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Title } from '@mantine/core'
+import { Container, Title } from '@mantine/core'
 
 import styles from 'components/page-container/page-container.module.css'
 import { BackButton } from 'components/back-button/back-button.component'
@@ -17,7 +17,9 @@ export default function PageContainer({ children, title = '', showBack = false }
       <header className={styles['header-row']}>
         <Title order={2}> {title} </Title>
       </header>
-      {children}
+      <Container mx={10}>
+        {children}
+      </Container>
     </main>
   )
 }

@@ -5,7 +5,7 @@
 
 .wineImage {
   border-radius: 0.75rem;
-  width: 300px;
+  max-width: 150px;
 }
 
 .list {
@@ -65,6 +65,10 @@
     padding-right: 1rem;
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
+
+  .column{
+    max-width: 300px;
+  }
 }
     
 @media (min-width: 768px) {
@@ -79,6 +83,10 @@
     padding-right: 1.5rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .column{
+    max-width: 400px;
+  }
 }
   
 @media (min-width: 1024px) {
@@ -92,6 +100,10 @@
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .column{
+    max-width: 500px;
   }
 }
   

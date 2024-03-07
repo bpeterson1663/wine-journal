@@ -1,4 +1,4 @@
-import { Button, Modal, Group, Title, Text } from '@mantine/core'
+import { Button, Modal, Group, Title, Text, Image, Stack } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import ColorPalette from 'components/color-palette/color-palette.component'
@@ -96,52 +96,67 @@ export default function TastingId() {
   } = tasting
 
   return (
-    <PageContainer title={producer} showBack>
-      <section className={styles.container}>
-        <div className={styles.column}>
-          <img className={styles.wineImage} src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
-        </div>
-        <div className={styles.column}>
-          {producer && <Title order={6}>Winery: {producer}</Title>}
-          {classification && <Title order={6}>Name: {classification}</Title>}
-          <Text size="sm">Varietal(s): {varietal.join(', ')}</Text>
-          <Text size="sm">Vintage: {vintage}</Text>
-          <Text size="sm">Country: {country}</Text>
-
-          <Text size="sm">Region: {region}</Text>
-          {subregion && <Text size="sm">Subregion: {subregion}</Text>}
-          <Text size="md" style={{ mb: 1.5 }}>
-            {uppercaseFirstLetter(color)} / {uppercaseFirstLetter(intensity)} / {uppercaseFirstLetter(hue)}
-          </Text>
-          <ColorPalette color={color} hue={hue} intensity={intensity} />
-          <Text size="md" style={{ mb: 1.5 }}>
-            {smell}
-          </Text>
-        </div>
-        <div className={styles.column}>
-          <Title order={6}>Taste</Title>
-          <Text size="md" style={{ mb: 1.5 }}>
-            Body: {getLabel('BODY', body)}
-          </Text>
-          <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
-            Tannin: {getLabel('TANNIN', tannin)}
-          </Text>
-          <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
-            Acidity: {getLabel('ACIDITY', acidity)}
-          </Text>
-          <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
-            Alcohol: {getLabel('ALCOHOL', alcohol)}%
-          </Text>
-          <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
-            Sweetness: {getLabel('SWEET', sweet)}
-          </Text>
-          <Title order={6}>Remarks and Review</Title>
-          <RatingIcon rating={rating} />
-          <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
-            {remarks}
-          </Text>
-        </div>
-      </section>
+    <PageContainer showBack title={producer}>
+        <Group align="start">
+          <Image w={150} radius="md" src={labelUri || require('images/wine-tasting.jpg')} alt={producer} />
+          <Stack 
+            align="flex-start"
+            justify="flex-start"
+            gap="xs"
+            mt={10}
+          >
+            {classification && <Title order={5}>Name: {classification}</Title>}
+            <Text size="md">Varietal(s): {varietal.join(', ')}</Text>
+            <Text size="md">Vintage: {vintage}</Text>
+            <Text size="md">Country: {country}</Text>
+            <Text size="md">Region: {region}</Text>
+            {subregion && <Text size="md">Subregion: {subregion}</Text>}     
+          </Stack>
+        </Group>
+        <Group align="start">
+          <Stack 
+            align="flex-start"
+            justify="flex-start"
+            gap="xs"
+            w={150}
+            mt={20}
+          >   
+            <ColorPalette color={color} hue={hue} intensity={intensity} />
+            <Text size="md" style={{ mb: 1.5 }}>
+              {uppercaseFirstLetter(color)} / {uppercaseFirstLetter(intensity)} / {uppercaseFirstLetter(hue)}
+            </Text>
+            <Text size="md" style={{ mb: 1.5 }}>
+              {smell}
+            </Text>
+          </Stack>
+          <Stack 
+            align="flex-start"
+            justify="flex-start"
+            gap="xs"
+            w={160}
+            mt={20}
+          >
+            <Text size="md" style={{ mb: 1.5 }}>
+              Body: {getLabel('BODY', body)}
+            </Text>
+            <Text size="md"style={{ mb: 1.5 }} color="text.secondary">
+              Tannin: {getLabel('TANNIN', tannin)}
+            </Text>
+            <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
+              Acidity: {getLabel('ACIDITY', acidity)}
+            </Text>
+            <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
+              Alcohol: {getLabel('ALCOHOL', alcohol)}%
+            </Text>
+            <Text size="md"style={{ mb: 1.5 }} color="text.secondary">
+              Sweetness: {getLabel('SWEET', sweet)}
+            </Text>
+            <RatingIcon rating={rating} />
+            <Text size="md" style={{ mb: 1.5 }} color="text.secondary">
+              {remarks}
+            </Text>
+          </Stack>
+        </Group>
       <Footer>
         <Group style={{ width: '100%' }} justify="space-between">
           <Button
