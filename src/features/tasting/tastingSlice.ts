@@ -27,6 +27,7 @@ interface InitialTastingState {
   tastingList: TastingT[]
   tasting: TastingT | null
   tastingOpen: WineT | null
+  publicTastingList: TastingT[]
 }
 const initialState: InitialTastingState = {
   message: null,
@@ -34,6 +35,7 @@ const initialState: InitialTastingState = {
   tastingList: [],
   tasting: null,
   tastingOpen: null,
+  publicTastingList: []
 }
 
 export const tastingSlice = createSlice({
@@ -68,6 +70,23 @@ export const tastingSlice = createSlice({
         const ids = [...state.tastingList, ...data].map(tasting => tasting.id)
 
         state.tastingList = [...state.tastingList, ...data].filter((value: TastingT, index) => !ids.includes(value.id, index+1))
+      })
+      .addCase(fetchPublicTastings.fulfilled, (state, action) => {
+        const tastingList = action.payload.docs.map((doc) => {
+          const data = doc.data()
+          const quantity = typeof data.quantity === 'string' ? parseInt(data.quantity) : data.quantity
+          const price = typeof data.price === 'string' ? parseFloat(data.price) : data.price
+
+          return {
+            ...data,
+            id: doc.id,
+            date: data.date.toDate(),
+            quantity,
+            price,
+          }
+        })
+
+        state.publicTastingList =  tastingList.map((tasting) => tasting as TastingT)
       })
       .addCase(fetchTastingById.fulfilled, (state, action) => {
         const docSnap = action.payload
@@ -132,6 +151,16 @@ export const fetchTastings = createAsyncThunk<
 
     const  fbq = query(baseQuery, limit(10))
     return await getDocs(fbq)
+  } catch (err) {
+    console.error(err)
+    return rejectWithValue(err)
+  }
+})
+
+export const fetchPublicTastings = createAsyncThunk<QuerySnapshot>('tasting/fetchPublicTastings', async(_, { rejectWithValue }) => {
+  try {
+    const fbq = query(collection(db, 'tastings'), where('isPublic', '==', true), orderBy("date", 'desc'), limit(10))
+      return await getDocs(fbq)
   } catch (err) {
     console.error(err)
     return rejectWithValue(err)

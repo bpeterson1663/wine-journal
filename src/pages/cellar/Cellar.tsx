@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { notifications } from '@mantine/notifications'
+import { useState } from 'react'
 import PageContainer from 'components/page-container/page-container.component'
 import { Card } from 'components/card/card.component'
 import { useAppDispatch, useAppSelector } from 'features/hooks'
@@ -20,27 +19,6 @@ export default function Cellar() {
   const handleNewWine = () => {
     navigate('/cellar/new')
   }
-
-  useEffect(() => {
-    const onLoad = async () => {
-      if (currentUser) {
-        try {
-         const { docs } = await dispatch(fetchWines({userId: currentUser.uid})).unwrap()
-         if (docs.length < 10) {
-          setDisableLoadMore(true)
-         }
-        } catch (err) {
-          console.error(err)
-          notifications.show({
-            color: 'red',
-            message: 'An error occurred loading your wines from your cellar',
-          })
-        }
-      }
-      
-    }
-    onLoad()
-  }, [dispatch, currentUser])
 
   const handleNext = async (lastId: string) => {
     const {docs} = await dispatch(fetchWines({userId: currentUser?.uid ?? '', previousDoc: lastId})).unwrap()

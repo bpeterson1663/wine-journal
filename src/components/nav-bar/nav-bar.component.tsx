@@ -25,6 +25,9 @@ const NavBar = () => {
         <Container className={styles.inner} fluid>
           <Group>
             <Button onClick={() => handleNavigate("/")}>
+              Home
+            </Button>
+            <Button onClick={() => handleNavigate("/tastings")}>
               Tastings
             </Button>
             <Button onClick={() => handleNavigate("/cellar")}>

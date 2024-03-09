@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, Group } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
 import { Card } from 'components/card/card.component'
 import PageContainer from 'components/page-container/page-container.component'
 import { useAppSelector, useAppDispatch } from 'features/hooks'
@@ -19,27 +18,6 @@ export default function Tastings() {
   const handleNewTasting = () => {
     navigate('/tastings/new')
   }
-
-  useEffect(() => {
-    const onLoad = async () => {
-      if (currentUser) {
-        try {
-         const { docs } = await dispatch(fetchTastings({userId: currentUser.uid})).unwrap()
-         if (docs.length < 10) {
-          setDisableLoadMore(true)
-         }
-        } catch (err) {
-          console.error(err)
-          notifications.show({
-            color: 'red',
-            message: 'An error occurred loading your tastings',
-          })
-        }
-      }
-      
-    }
-    onLoad()
-  }, [dispatch, currentUser])
 
   const handleNext = async (lastId: string) => {
     const {docs} = await dispatch(fetchTastings({userId: currentUser?.uid ?? '', previousDoc: lastId})).unwrap()
