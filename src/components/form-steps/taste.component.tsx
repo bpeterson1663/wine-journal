@@ -14,7 +14,7 @@ export const Taste = () => {
 
   return (
     <Box>
-      <Text className={styles.label}>Body</Text>
+      <Text className={styles['form-label']}>Body</Text>
       <Slider
         classNames={{
           root: styles.slider,
@@ -29,7 +29,7 @@ export const Taste = () => {
         {...form.getInputProps('body')}
       />
 
-      <Text className={styles.label}>Tannin</Text>
+      <Text className={styles['form-label']}>Tannin</Text>
       <Slider
         classNames={{
           root: styles.slider,
@@ -44,7 +44,7 @@ export const Taste = () => {
         {...form.getInputProps('tannin')}
       />
 
-      <Text className={styles.label}>Acidity</Text>
+      <Text className={styles['form-label']}>Acidity</Text>
       <Slider
         classNames={{
           root: styles.slider,
@@ -59,7 +59,7 @@ export const Taste = () => {
         {...form.getInputProps('acidity')}
       />
 
-      <Text className={styles.label}>Alcohol(%)</Text>
+      <Text className={styles['form-label']}>Alcohol(%)</Text>
       <Slider
         classNames={{
           root: styles.slider,
@@ -74,7 +74,7 @@ export const Taste = () => {
         {...form.getInputProps('alcohol')}
       />
 
-      <Text className={styles.label}>Sweetness</Text>
+      <Text className={styles['form-label']}>Sweetness</Text>
       <Slider
         classNames={{
           root: styles.slider,

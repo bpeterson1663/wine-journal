@@ -59,11 +59,11 @@ export const DetailsWine = () => {
         onChange={onDateChange}
       />
 
-      <TextInput label="Producer / Winery" {...form.getInputProps('producer')} />
+      <TextInput mt="xs" label="Producer / Winery" {...form.getInputProps('producer')} />
 
-      <TextInput label="Classification" {...form.getInputProps('classification')} />
+      <TextInput mt="xs" label="Classification" {...form.getInputProps('classification')} />
 
-      <PillsInput label="Varietal(s)" {...form.getInputProps('varietal')}>
+      <PillsInput mt="xs" label="Varietal(s)" {...form.getInputProps('varietal')}>
         <Pill.Group>
           {varietals.map((varietal) => (
             <Pill
@@ -86,13 +86,13 @@ export const DetailsWine = () => {
         </Pill.Group>
       </PillsInput>
 
-      <TextInput label="Vintage" {...form.getInputProps('vintage')} />
+      <TextInput mt="xs" label="Vintage" {...form.getInputProps('vintage')} />
 
-      <TextInput label="Country" {...form.getInputProps('country')} />
+      <TextInput mt="xs" label="Country" {...form.getInputProps('country')} />
 
-      <TextInput label="Region" {...form.getInputProps('region')} />
+      <TextInput mt="xs" label="Region" {...form.getInputProps('region')} />
 
-      <TextInput label="Subregion" {...form.getInputProps('subregion')} />
+      <TextInput mt="xs" label="Subregion" {...form.getInputProps('subregion')} />
       <Group justify="center" mt="md">
         <WineLabelPic value={img} onChange={onCameraChange} />
       </Group>

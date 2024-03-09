@@ -1,4 +1,4 @@
-import { Box, Rating, Textarea, Text, rem } from '@mantine/core'
+import { Box, Group, Rating, Textarea, Text, rem } from '@mantine/core'
 import { IconMoodCry, IconMoodSad, IconMoodSmile, IconMoodHappy, IconMoodCrazyHappy } from '@tabler/icons-react'
 import styles from 'components/form-steps/form-steps.module.css'
 import { useTastingContext } from 'pages/tastings/form-context'
@@ -7,8 +7,8 @@ export const Review = () => {
   const form = useTastingContext()
 
   const getIconStyle = (color?: string) => ({
-    width: rem(24),
-    height: rem(24),
+    width: rem(48),
+    height: rem(48),
     color: color ? `var(--mantine-color-${color}-7)` : undefined,
   })
 
@@ -50,15 +50,20 @@ export const Review = () => {
 
   return (
     <Box>
-      <Textarea autosize maxRows={4} id="remarks" label="Remarks" {...form.getInputProps('remarks')} />
-      <Text className={styles.label}>Rating</Text>
+      <Textarea autosize minRows={4} maxRows={4} id="remarks" label="Remarks" {...form.getInputProps('remarks')} />
+      <Text className={styles['form-label']}>Rating</Text>
+
+      <Group justify="center" >
       <Rating
         className={styles.rating}
         emptySymbol={getEmptyIcon}
         fullSymbol={getFullIcon}
         highlightSelectedOnly
+        size="xl"
         {...form.getInputProps('rating')}
-      />
+        />
+      </Group>
+      
     </Box>
   )
 }

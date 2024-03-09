@@ -3,9 +3,18 @@
     margin-bottom: 50px;
 }
 
-.label {
+.form-label {
     margin-top: 10px;
-    font-size: 14px;
+    display: inline-block;
+    font-weight: 500;
+    word-break: break-word;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+    font-size: var(--input-label-size, var(--mantine-font-size-sm));
+}
+
+.radio-group {
+    margin-top: 10px;
 }
 
 .mark-label {
