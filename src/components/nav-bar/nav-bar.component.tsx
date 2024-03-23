@@ -1,11 +1,14 @@
-import { Avatar, Button, Container, Group } from '@mantine/core'
+import { Avatar, Burger, Button, Container, Group, Menu } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppSelector } from 'features/hooks'
-
+import useMobile from 'hooks/useMobile'
 import styles from 'components/nav-bar/nav-bar.module.css'
 
 const NavBar = () => {
+  const [opened, { toggle }] = useDisclosure();
   const navigate = useNavigate()
+  const isMobile = useMobile()
   const { currentUser } = useAppSelector((state) => state.auth)
   const { userProfile } = useAppSelector((state) => state.user)
 
@@ -19,9 +22,37 @@ const NavBar = () => {
     navigate(url)
   }
 
-  return (
-    <header className={styles['nav-bar']}>
-      {currentUser && (
+  function renderNavItems() {
+    if (isMobile && currentUser) {
+      return (
+        <Group justify="flex-end">
+          <Menu shadow="md" width={200} onClose={toggle}>
+            <Menu.Target>
+              <Burger className={styles["menu-icon"]} color='white' opened={opened} onClick={toggle} aria-label="Open Menu" />
+            </Menu.Target>
+      
+            <Menu.Dropdown>
+              <Menu.Item  onClick={() => handleNavigate("/")}>
+                Home
+              </Menu.Item>
+              <Menu.Item onClick={() => handleNavigate("/tastings")}>
+                Tastings
+              </Menu.Item>
+              <Menu.Item onClick={() => handleNavigate("/cellar")}>
+                Cellar
+              </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item onClick={() => handleNavigate("/cellar")}>
+                Profile
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
+      )
+    }
+
+    if (currentUser) {
+      return (
         <Container className={styles.inner} fluid>
           <Group>
             <Button onClick={() => handleNavigate("/")}>
@@ -46,7 +77,15 @@ const NavBar = () => {
             </Avatar>
           </Group>
         </Container>
-      )}
+      )
+    }
+
+    return null
+  }
+
+  return (
+    <header className={styles['nav-bar']}>
+      {renderNavItems()}
     </header>
   )
 }
