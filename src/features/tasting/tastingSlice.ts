@@ -20,6 +20,7 @@ import { RootState } from '../store'
 import { TastingT } from 'schemas/tastings'
 import { WineT } from 'schemas/cellar'
 import { db } from '../../firebase'
+import dayjs from 'dayjs'
 
 interface InitialTastingState {
   message: MessageT
@@ -159,7 +160,9 @@ export const fetchTastings = createAsyncThunk<
 
 export const fetchPublicTastings = createAsyncThunk<QuerySnapshot>('tasting/fetchPublicTastings', async(_, { rejectWithValue }) => {
   try {
-    const fbq = query(collection(db, 'tastings'), where('isPublic', '==', true), orderBy("date", 'desc'), limit(10))
+    const sevenDaysAgo = dayjs().subtract(7, 'day').toDate();
+
+    const fbq = query(collection(db, 'tastings'), where("date", '>', sevenDaysAgo), where('isPublic', '==', true), orderBy("date", 'desc'), limit(10))
       return await getDocs(fbq)
   } catch (err) {
     console.error(err)

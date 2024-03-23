@@ -20,6 +20,7 @@ export default function Home() {
     return (
         <PageContainer title="Welcome">
             <Stack>
+                {sortedPublicList.length > 0 && 
                 <Group>
                     <Text>What people are tasting</Text>
                     <section className={styles['preview-list']}>
@@ -30,6 +31,7 @@ export default function Home() {
                         } 
                     </section>
                 </Group>
+                }
                 <Group>
                     <Text>Your tastings</Text>
                     <section className={styles['preview-list']}>
