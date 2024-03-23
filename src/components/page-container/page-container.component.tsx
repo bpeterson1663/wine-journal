@@ -14,10 +14,12 @@ interface Props {
 export default function PageContainer({ children, title = '', showBack = false, showCancel = false}: Props) {
   return (
     <main className={styles.main}>
-      {showBack && <BackButton label={showCancel ? "Cancel" : "Back"} />}
+      {(showBack || showCancel) && <BackButton label={showCancel ? "Cancel" : "Back"} />}
+      {title &&
       <header className={styles['header-row']}>
         <Title order={2}> {title} </Title>
       </header>
+      }
       <Container mx={0} px={0}>
         {children}
       </Container>
