@@ -39,7 +39,7 @@
 .form {
   display: flex;
   flex-flow: column wrap;
-  margin: 40px auto;
+  margin: 20px auto 100px auto;
   max-width: 600px;
   width: 90%;
 } 

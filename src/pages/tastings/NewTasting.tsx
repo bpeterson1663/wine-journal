@@ -161,7 +161,7 @@ const NewTasting = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer showCancel>
       <TastingFormProvider form={form}>
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Stepper

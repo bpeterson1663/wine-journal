@@ -54,7 +54,7 @@ const EditTasting = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer showCancel>
       <TastingFormProvider form={form}>
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Box className={styles.section}>
@@ -71,14 +71,6 @@ const EditTasting = () => {
           </Box>
           <Footer>
             <Group style={{ width: '100%' }} justify="space-between">
-              <Button
-                onClick={() => {
-                  navigate('/')
-                }}
-                variant="outline"
-              >
-                Cancel
-              </Button>
               <Button disabled={disableSave()} type="submit">
                 Save
               </Button>

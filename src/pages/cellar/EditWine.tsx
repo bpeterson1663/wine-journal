@@ -56,8 +56,9 @@ export default function EditWine() {
   }
 
   return (
-    <WineFormProvider form={form}>
-      <PageContainer>
+      <PageContainer showCancel>
+            <WineFormProvider form={form}>
+
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Box>
             <DetailsWine />
@@ -81,7 +82,8 @@ export default function EditWine() {
             </Group>
           </Footer>
         </Box>
+        </WineFormProvider>
+
       </PageContainer>
-    </WineFormProvider>
   )
 }

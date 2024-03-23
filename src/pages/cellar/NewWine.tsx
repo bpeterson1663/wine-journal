@@ -9,6 +9,7 @@ import { notifications } from '@mantine/notifications'
 import Footer from 'components/footer/footer.component'
 import { createWine } from 'features/cellar/cellarSlice'
 import styles from 'pages/styles/pages.module.css'
+import PageContainer from 'components/page-container/page-container.component'
 
 const STEPS = [
   {
@@ -91,43 +92,47 @@ export default function NewWine() {
   }
 
   return (
-    <WineFormProvider form={form}>
-      <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
-        <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
-          {STEPS.map((step, index) => (
-            <Stepper.Step label={step.label}>{getStepContent(index)}</Stepper.Step>
-          ))}
-        </Stepper>
-        <Footer>
-          {activeStep !== STEPS.length && (
-            <Group style={{ width: '100%' }} justify="space-between">
-              <Button disabled={activeStep === 0} onClick={handlePrevious}>
-                Previous 
-              </Button>
-              {activeStep === STEPS.length - 1 ? (
-                <Button type="submit">
-                  Submit
+    <PageContainer showCancel>
+      <WineFormProvider form={form}>
+        
+
+        <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
+          <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>
+            {STEPS.map((step, index) => (
+              <Stepper.Step label={step.label}>{getStepContent(index)}</Stepper.Step>
+            ))}
+          </Stepper>
+          <Footer>
+            {activeStep !== STEPS.length && (
+              <Group style={{ width: '100%' }} justify="space-between">
+                <Button disabled={activeStep === 0} onClick={handlePrevious}>
+                  Previous 
                 </Button>
-              ) : (
-                <Button
-                  disabled={disableContinue()}
-                  name="continue"
-                  onClick={handleNext}
-                >
-                  Continue
+                {activeStep === STEPS.length - 1 ? (
+                  <Button type="submit">
+                    Submit
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={disableContinue()}
+                    name="continue"
+                    onClick={handleNext}
+                  >
+                    Continue
+                  </Button>
+                )}
+              </Group>
+            )}
+            {activeStep === STEPS.length && (
+              <Group justify="center">
+                <Button onClick={handleReset}>
+                  Add Another Entry
                 </Button>
-              )}
-            </Group>
-          )}
-          {activeStep === STEPS.length && (
-            <Group justify="center">
-              <Button onClick={handleReset}>
-                Add Another Entry
-              </Button>
-            </Group>
-          )}
-        </Footer>
-      </Box>
-    </WineFormProvider>
+              </Group>
+            )}
+          </Footer>
+        </Box>
+      </WineFormProvider>
+    </PageContainer>
   )
 }
