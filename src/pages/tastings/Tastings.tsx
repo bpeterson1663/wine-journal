@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 export default function Tastings() {
 	const dispatch = useAppDispatch();
 	const [disableLoadMore, setDisableLoadMore] = useState(false);
+	const [loading, setLoading] = useState(false)
 	const { currentUser } = useAppSelector((state) => state.auth);
 	const { tastingList } = useAppSelector((state) => state.tasting);
 	const navigate = useNavigate();
@@ -20,12 +21,20 @@ export default function Tastings() {
 	};
 
 	const handleNext = async (lastId: string) => {
-		const { docs } = await dispatch(
-			fetchTastings({ userId: currentUser?.uid ?? "", previousDoc: lastId }),
-		).unwrap();
-		if (docs.length < 10) {
-			setDisableLoadMore(true);
+		setLoading(true)
+		try {
+			const { docs } = await dispatch(
+				fetchTastings({ userId: currentUser?.uid ?? "", previousDoc: lastId }),
+			).unwrap();
+			if (docs.length < 10) {
+				setDisableLoadMore(true);
+			}
+		} catch (err) {
+			console.error(err)
+		} finally {
+			setLoading(false)
 		}
+		
 	};
 
 	const sortedList = [...tastingList].sort((a, b) =>
@@ -42,6 +51,7 @@ export default function Tastings() {
 			<div className={styles["load-more-container"]}>
 				<Button
 					disabled={disableLoadMore}
+					loading={loading}
 					variant="outline"
 					onClick={() => handleNext(sortedList[sortedList.length - 1].id)}
 				>

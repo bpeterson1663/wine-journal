@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Text } from "@mantine/core";
+import { Button, Group, Stack, Title } from "@mantine/core";
 import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
@@ -24,7 +24,7 @@ export default function Home() {
 			<Stack>
 				{sortedPublicList.length > 0 && (
 					<Group>
-						<Text>What people are tasting</Text>
+						<Title order={4}>What people are tasting</Title>
 						<section className={styles["preview-list"]}>
 							{sortedPublicList.map((tasting) => (
 								<Card key={tasting.id} wine={tasting} url="tastings" showDate />
@@ -32,24 +32,29 @@ export default function Home() {
 						</section>
 					</Group>
 				)}
-				<Group>
-					<Text>Your tastings</Text>
+				<Group pl={20} pr={20}>
+					<Group justify="space-between" w="100%">
+						<Title order={4}>Your tastings</Title>
+						<Button variant="outline" size="xs" onClick={() => navigate("/Tastings")}>View All</Button>
+					</Group>
+					
 					<section className={styles["preview-list"]}>
 						{sortedTastingList.map((tasting) => (
 							<Card key={tasting.id} wine={tasting} url="tastings" showDate />
 						))}
 					</section>
-					<Button onClick={() => navigate("/Tastings")}>View All</Button>
 				</Group>
 
-				<Group>
-					<Text>Your cellar</Text>
+				<Group pl={20} pr={20}>
+					<Group justify="space-between" w="100%">
+						<Title order={4}>Your cellar</Title>
+						<Button variant="outline" size="xs" onClick={() => navigate("/cellar")}>View All</Button>
+					</Group>
 					<section className={styles["preview-list"]}>
 						{wineList.map((wine) => (
 							<Card key={wine.id} wine={wine} url="cellar" />
 						))}
 					</section>
-					<Button onClick={() => navigate("/cellar")}>View All</Button>
 				</Group>
 			</Stack>
 			<Footer>

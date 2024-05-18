@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 export default function Cellar() {
 	const dispatch = useAppDispatch();
 	const [disableLoadMore, setDisableLoadMore] = useState(false);
+	const [loading, setLoading] = useState(false)
 	const { wineList } = useAppSelector((state) => state.cellar);
 	const { currentUser } = useAppSelector((state) => state.auth);
 
@@ -21,11 +22,18 @@ export default function Cellar() {
 	};
 
 	const handleNext = async (lastId: string) => {
-		const { docs } = await dispatch(
-			fetchWines({ userId: currentUser?.uid ?? "", previousDoc: lastId }),
-		).unwrap();
-		if (docs.length < 10) {
-			setDisableLoadMore(true);
+		setLoading(true)
+		try {
+			const { docs } = await dispatch(
+				fetchWines({ userId: currentUser?.uid ?? "", previousDoc: lastId }),
+			).unwrap();
+			if (docs.length < 10) {
+				setDisableLoadMore(true);
+			}
+		} catch(err) {
+			console.error(err)
+		} finally {
+			setLoading(false)
 		}
 	};
 
@@ -39,6 +47,7 @@ export default function Cellar() {
 			<div className={styles["load-more-container"]}>
 				<Button
 					disabled={disableLoadMore}
+					loading={loading}
 					variant="outline"
 					onClick={() => handleNext(wineList[wineList.length - 1].id)}
 				>
