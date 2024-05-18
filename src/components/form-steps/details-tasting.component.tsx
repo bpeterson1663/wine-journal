@@ -4,7 +4,6 @@ import { WineLabelPic } from "components/camera/camera.component";
 import { useTastingContext } from "pages/tastings/form-context";
 import {
 	type ChangeEvent,
-	type KeyboardEvent,
 	useEffect,
 	useState,
 } from "react";
@@ -35,13 +34,10 @@ export const DetailsTasting = () => {
 		}
 	};
 
-	const onVarietalKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-		if (event.key === "Enter" && event.currentTarget.value) {
-			event.preventDefault();
-			setVarietals([...varietals, currentVarietal]);
-			form.setFieldValue("varietal", [...varietals, currentVarietal]);
-			setCurrentVarietal("");
-		}
+	const onVarietalBlur = () => {
+		setVarietals([...varietals, currentVarietal]);
+		form.setFieldValue("varietal", [...varietals, currentVarietal]);
+		setCurrentVarietal("");
 	};
 
 	const onVarietalChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,13 +63,13 @@ export const DetailsTasting = () => {
 			<TextInput
 				mt="xs"
 				required
-				label="Producer / Winery"
+				label="Winery / Producer"
 				{...form.getInputProps("producer")}
 			/>
 
 			<TextInput
 				mt="xs"
-				label="Classification"
+				label="Name / Classification"
 				{...form.getInputProps("classification")}
 			/>
 
@@ -97,9 +93,8 @@ export const DetailsTasting = () => {
 					))}
 					<PillsInput.Field
 						value={currentVarietal}
-						onKeyDown={onVarietalKeyDown}
+						onBlur={onVarietalBlur}
 						onChange={onVarietalChange}
-						placeholder="Press enter after each varietal"
 					/>
 				</Pill.Group>
 			</PillsInput>
