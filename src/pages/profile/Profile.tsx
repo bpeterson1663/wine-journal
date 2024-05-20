@@ -14,6 +14,7 @@ import PageContainer from "components/page-container/page-container.component";
 import { fetchLogout } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { editUserProfile } from "features/user/userSlice";
+import { uploadImage } from "../../firebase";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -29,28 +30,7 @@ export default function Profile() {
 	const { currentUser } = useAppSelector((state) => state.auth);
 	const { userProfile } = useAppSelector((state) => state.user);
 	const [fileValue, setValue] = useState<File | null>(null);
-
-	const handleLogout = async () => {
-		await dispatch(fetchLogout(null));
-		if (!currentUser) {
-			navigate("/");
-		}
-	};
-
-	const onSubmitHandler = async (data: UserProfileT) => {
-		try {
-			await dispatch(editUserProfile(data));
-			notifications.show({
-				message: "Your profile was saved.",
-			});
-		} catch (err) {
-			notifications.show({
-				color: "red",
-				message:
-					"An error occurred trying to save your profile. Please try again later.",
-			});
-		}
-	};
+	const [blob, setBlob] = useState<Blob | null>(null);
 
 	const form = useForm({
 		initialValues: {
@@ -63,6 +43,50 @@ export default function Profile() {
 		validate: zodResolver(UserProfileSchema),
 	});
 
+	const handleLogout = async () => {
+		await dispatch(fetchLogout(null));
+		if (!currentUser) {
+			navigate("/");
+		}
+	};
+
+	const onSubmitHandler = async (data: UserProfileT) => {
+		try {
+			let avatar = data.avatar
+			if (form.isTouched('avatar')) {
+				const response = await uploadImage(blob, "user", currentUser?.uid ?? "", 'jpg')
+				avatar = response?.photoUrl ?? ""
+			}
+			await dispatch(editUserProfile({...data, avatar}));
+			form.resetTouched()
+			notifications.show({
+				message: "Your profile was saved.",
+			});
+		} catch (err) {
+			notifications.show({
+				color: "red",
+				message:
+					"An error occurred trying to save your profile. Please try again later.",
+			});
+		}
+	};
+
+	
+
+	const handleFileChange = (selectedFile: File | null) => {
+		if (selectedFile) {
+			setValue(selectedFile);
+		  	const reader = new FileReader();
+		  	reader.onload = (e: ProgressEvent<FileReader>) => {
+				if (e.target && e.target.result) {
+					const fileBlob = new Blob([e.target.result as ArrayBuffer], { type: selectedFile.type });
+				setBlob(fileBlob);
+			  }
+		  };
+		  reader.readAsArrayBuffer(selectedFile);
+		}
+	};
+
 	return (
 		<PageContainer title="Profile">
 			<section className={styles.container}>
@@ -72,6 +96,7 @@ export default function Profile() {
 						className={styles.avatar}
 						radius="sm"
 						size="xl"
+						src={userProfile?.avatar}
 					/>
 
 					<form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -102,9 +127,10 @@ export default function Profile() {
 							leftSection={
 								<IconUpload style={{ width: rem(18), height: rem(18) }} />
 							}
+							{...form.getInputProps("avatar")}
 							placeholder="Upload avatar"
 							value={fileValue}
-							onChange={setValue}
+							onChange={handleFileChange}
 						/>
 
 						<Button type="submit">Save</Button>

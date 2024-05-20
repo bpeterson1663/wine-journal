@@ -35,6 +35,10 @@ export const DetailsWine = () => {
 	};
 
 	const onVarietalBlur = () => {
+		if (currentVarietal === "") {
+			return
+		}
+
 		setVarietals([...varietals, currentVarietal]);
 		form.setFieldValue("varietal", [...varietals, currentVarietal]);
 		setCurrentVarietal("");
@@ -63,6 +67,7 @@ export const DetailsWine = () => {
 			<TextInput
 				mt="xs"
 				label="Winery / Producer"
+				required
 				{...form.getInputProps("producer")}
 			/>
 
@@ -75,6 +80,7 @@ export const DetailsWine = () => {
 			<PillsInput
 				mt="xs"
 				label="Varietal(s)"
+				required
 				{...form.getInputProps("varietal")}
 			>
 				<Pill.Group>
@@ -98,11 +104,11 @@ export const DetailsWine = () => {
 				</Pill.Group>
 			</PillsInput>
 
-			<TextInput mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
+			<TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
 
-			<TextInput mt="xs" label="Country" {...form.getInputProps("country")} />
+			<TextInput required mt="xs" label="Country" {...form.getInputProps("country")} />
 
-			<TextInput mt="xs" label="Region" {...form.getInputProps("region")} />
+			<TextInput required mt="xs" label="Region" {...form.getInputProps("region")} />
 
 			<TextInput
 				mt="xs"

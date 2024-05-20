@@ -2,6 +2,10 @@ import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 // import { getAnalytics } from 'firebase/analytics'
 import { getFirestore } from "firebase/firestore/lite";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+
+type Prefix = "user" | "wine"
+type FileType = "jpg" | "jpeg" | "png"
 
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_API_KEY,
@@ -20,6 +24,8 @@ export const db = getFirestore(app);
 
 export const auth = getAuth();
 
+export const storage = getStorage()
+
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
 	prompt: "select_account",
@@ -27,3 +33,17 @@ googleProvider.setCustomParameters({
 
 export const signInWithGooglePopup = async () =>
 	await signInWithPopup(auth, googleProvider);
+
+export async function uploadImage(file: Blob | null, prefix: Prefix, id: string, fileType: FileType) {
+	const fileRef = ref(storage, `${prefix}-${id}.${fileType}`);
+	if (!file) {
+		return
+	}
+	await uploadBytes(fileRef, file);
+	const photoUrl = await getDownloadURL(fileRef);
+	
+	
+	return {
+		photoUrl
+	}
+}

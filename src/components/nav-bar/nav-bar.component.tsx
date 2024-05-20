@@ -46,7 +46,7 @@ const NavBar = () => {
 								Cellar
 							</Menu.Item>
 							<Menu.Divider />
-							<Menu.Item onClick={() => handleNavigate("/cellar")}>
+							<Menu.Item onClick={() => handleNavigate("/profile")}>
 								Profile
 							</Menu.Item>
 						</Menu.Dropdown>

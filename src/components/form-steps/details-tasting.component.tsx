@@ -35,6 +35,9 @@ export const DetailsTasting = () => {
 	};
 
 	const onVarietalBlur = () => {
+		if (currentVarietal === "") {
+			return
+		}
 		setVarietals([...varietals, currentVarietal]);
 		form.setFieldValue("varietal", [...varietals, currentVarietal]);
 		setCurrentVarietal("");
@@ -76,6 +79,7 @@ export const DetailsTasting = () => {
 			<PillsInput
 				mt="xs"
 				label="Varietal(s)"
+				required
 				{...form.getInputProps("varietal")}
 			>
 				<Pill.Group>
@@ -99,11 +103,11 @@ export const DetailsTasting = () => {
 				</Pill.Group>
 			</PillsInput>
 
-			<TextInput mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
+			<TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
 
-			<TextInput mt="xs" label="Country" {...form.getInputProps("country")} />
+			<TextInput required mt="xs" label="Country" {...form.getInputProps("country")} />
 
-			<TextInput mt="xs" label="Region" {...form.getInputProps("region")} />
+			<TextInput required mt="xs" label="Region" {...form.getInputProps("region")} />
 
 			<TextInput
 				mt="xs"
