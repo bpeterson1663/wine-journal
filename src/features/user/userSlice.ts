@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore/lite";
 import type { UserProfileT } from "schemas/user";
 import type { FetchStatusT, MessageT } from "types";
-import { db } from "../../firebase";
+import { db } from "database";
 import type { RootState } from "../store";
 
 interface InitialUserState {

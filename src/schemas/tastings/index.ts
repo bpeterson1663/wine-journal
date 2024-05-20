@@ -76,4 +76,5 @@ export const INITIAL_VALUES: TastingT = {
 	body: 1,
 	rating: 3,
 	remarks: "",
+	imageBlob: null
 };

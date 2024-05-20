@@ -14,7 +14,7 @@ import PageContainer from "components/page-container/page-container.component";
 import { fetchLogout } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { editUserProfile } from "features/user/userSlice";
-import { uploadImage } from "../../firebase";
+import { uploadImage } from "database";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +51,6 @@ export default function Profile() {
 	};
 
 	const onSubmitHandler = async (data: UserProfileT) => {
-		debugger;
 		try {
 			let avatar = data.avatar
 			const response = await uploadImage(blob, "user", currentUser?.uid ?? "", 'jpg')
@@ -80,8 +79,8 @@ export default function Profile() {
 		  	reader.onload = (e: ProgressEvent<FileReader>) => {
 				if (e.target && e.target.result) {
 					const fileBlob = new Blob([e.target.result as ArrayBuffer], { type: selectedFile.type });
-				setBlob(fileBlob);
-			  }
+					setBlob(fileBlob);
+				}
 		  };
 		  reader.readAsArrayBuffer(selectedFile);
 		}

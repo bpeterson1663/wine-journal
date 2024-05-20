@@ -23,7 +23,7 @@ import {
 import type { WineT } from "schemas/cellar";
 import type { TastingT } from "schemas/tastings";
 import type { FetchStatusT, MessageT } from "types";
-import { db } from "../../firebase";
+import { db } from "database";
 import type { RootState } from "../store";
 
 interface InitialTastingState {
@@ -247,6 +247,7 @@ export const createTasting = createAsyncThunk<
 	const price =
 		typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
 	try {
+		delete data.imageBlob
 		const docData = await addDoc(collection(db, "tastings"), {
 			...data,
 			quantity,
@@ -278,6 +279,7 @@ export const editTasting = createAsyncThunk<
 		typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
 
 	try {
+		delete data.imageBlob
 		await updateDoc(tastingRef, { ...data, quantity, price });
 		return data;
 	} catch (err) {

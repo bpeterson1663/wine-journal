@@ -21,6 +21,25 @@ export const WineSchema = z.object({
 	price: z.number().default(0),
 	description: z.string().default(""),
 	labelUri: z.string().default(""),
+	imageBlob: z.instanceof(Blob)
+		.nullable()
+		.optional()
+		.refine((file) => {
+			if (!file) {
+				return
+			}
+			return file.size <= 10 * 1024 * 1024
+		}, {
+			message: "File size should be less than 10MB",
+		})
+		.refine((file) => {
+			if (!file) {
+				return
+			}
+			return ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)
+		}, {
+			message: "Only JPEG, PNG, and PDF files are allowed",
+		})
 });
 
 export type WineT = z.infer<typeof WineSchema>;
@@ -40,4 +59,5 @@ export const INITIAL_VALUES: WineT = {
 	labelUri: "",
 	varietal: [],
 	date: new Date(),
+	imageBlob: null
 };

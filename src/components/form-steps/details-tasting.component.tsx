@@ -1,7 +1,8 @@
-import { Box, Group, Pill, PillsInput, TextInput } from "@mantine/core";
+import { Box, FileInput, Group, Pill, PillsInput, TextInput, Image, rem } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { WineLabelPic } from "components/camera/camera.component";
 import { useTastingContext } from "pages/tastings/form-context";
+import { IconUpload } from "@tabler/icons-react";
+
 import {
 	type ChangeEvent,
 	useEffect,
@@ -9,14 +10,13 @@ import {
 } from "react";
 
 export const DetailsTasting = () => {
-	const [img, setImg] = useState("");
-	const [varietals, setVarietals] = useState([""]);
+	const [imgPreview, setImgPreview] = useState("");
+	const [varietals, setVarietals] = useState([""])
 	const [currentVarietal, setCurrentVarietal] = useState("");
 
 	const form = useTastingContext();
 
 	useEffect(() => {
-		setImg(form.values.labelUri);
 		setVarietals(form.values.varietal);
 	}, [form]);
 
@@ -48,10 +48,22 @@ export const DetailsTasting = () => {
 		setCurrentVarietal(event.currentTarget.value);
 	};
 
-	const onCameraChange = (value: string) => {
-		form.setFieldValue("labelUri", value);
-		setImg(value);
-	};
+	const handleFileChange = (selectedFile: File | null) => {
+		if (selectedFile) {
+			const reader = new FileReader()
+			reader.onload = (e: ProgressEvent<FileReader>) => {
+				 if (e.target && e.target.result) {
+					const fileBlob = new Blob([e.target.result as ArrayBuffer], { type: selectedFile.type})
+					const url = URL.createObjectURL(fileBlob);
+
+					setImgPreview(url)
+					form.setFieldValue('imageBlob', fileBlob)
+				}
+			}
+
+			reader.readAsArrayBuffer(selectedFile)
+		}
+	}
 
 	return (
 		<Box>
@@ -114,8 +126,22 @@ export const DetailsTasting = () => {
 				label="Subregion"
 				{...form.getInputProps("subregion")}
 			/>
-			<Group justify="center" mt="md">
-				<WineLabelPic value={img} onChange={onCameraChange} />
+			<Group justify="center" mt="md" align="center" flex="column">
+				<Image
+					radius="md"
+					height={300}
+					src={form.values.labelUri || imgPreview}
+					alt=""
+				/>
+				
+				<FileInput 
+					leftSection={
+						<IconUpload style={{ width: rem(18), height: rem(18) }} />
+					} 
+					{...form.getInputProps("labelUri")} 
+					placeholder="Add Image"
+					onChange={handleFileChange}/>
+				
 			</Group>
 		</Box>
 	);

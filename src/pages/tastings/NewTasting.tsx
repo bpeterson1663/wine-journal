@@ -11,7 +11,8 @@ import {
 import PageContainer from "components/page-container/page-container.component";
 import { editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { createTasting } from "features/tasting/tastingSlice";
+import { createTasting, editTasting } from "features/tasting/tastingSlice";
+import { uploadImage } from "database";
 import styles from "pages/styles/pages.module.css";
 import {
 	TastingFormProvider,
@@ -37,6 +38,7 @@ const STEPS = [
 
 const NewTasting = () => {
 	const [activeStep, setActiveStep] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useAppDispatch();
 	const { tastingOpen } = useAppSelector((state) => state.tasting);
 	const { currentUser } = useAppSelector((state) => state.auth);
@@ -51,15 +53,29 @@ const NewTasting = () => {
 	});
 
 	const onSubmitHandler = async (data: TastingT) => {
+		setIsLoading(true)
 		try {
 			if (tastingOpen) {
-				const quantity =
-					tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0;
+				const quantity = tastingOpen.quantity > 0 
+					? tastingOpen.quantity - 1 
+					: 0;
 				await dispatch(editWine({ ...tastingOpen, quantity })).unwrap();
 			}
-			await dispatch(
+
+			const { id } = await dispatch(
 				createTasting({ ...data, userId: currentUser?.uid ?? "" }),
 			).unwrap();
+
+			if (data.imageBlob) {				
+				try {
+					const fileType = data.imageBlob.type.split("/")[1]
+					const response = await uploadImage(data.imageBlob, "wine", id, fileType)
+					await dispatch(editTasting({ ...data, id, labelUri: response?.photoUrl ?? ""})).unwrap();
+				} catch (err) {
+					console.error(err);
+				}
+			}
+
 			form.reset();
 			setActiveStep(STEPS.length);
 			notifications.show({
@@ -71,6 +87,8 @@ const NewTasting = () => {
 				color: "red",
 				message: "Something went wrong creating your tasting notes.",
 			});
+		} finally {
+			setIsLoading(false)
 		}
 	};
 
@@ -137,14 +155,14 @@ const NewTasting = () => {
 			return (
 				<Group style={{ width: "100%" }} justify="space-between">
 					<Button
-						disabled={activeStep === 0}
+						disabled={activeStep === 0 || isLoading}
 						onClick={handlePrevious}
 						style={{ mt: 1, mr: 1 }}
 					>
 						Previous
 					</Button>
 					{activeStep === STEPS.length - 1 ? (
-						<Button type="submit">Submit</Button>
+						<Button type="submit" loading={isLoading}>Submit</Button>
 					) : (
 						<Button
 							disabled={disableContinue()}

@@ -19,8 +19,7 @@ import type {
 	MessageT,
 	SignUpT,
 } from "types";
-import { auth, signInWithGooglePopup } from "../../firebase";
-import { db } from "../../firebase";
+import { auth, signInWithGooglePopup, db } from "database";
 import type { RootState } from "../store";
 
 interface InitialAuthState {
