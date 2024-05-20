@@ -51,14 +51,14 @@ export default function Profile() {
 	};
 
 	const onSubmitHandler = async (data: UserProfileT) => {
+		debugger;
 		try {
 			let avatar = data.avatar
-			if (form.isTouched('avatar')) {
-				const response = await uploadImage(blob, "user", currentUser?.uid ?? "", 'jpg')
-				avatar = response?.photoUrl ?? ""
-			}
+			const response = await uploadImage(blob, "user", currentUser?.uid ?? "", 'jpg')
+			avatar = response?.photoUrl ?? ""
+			
 			await dispatch(editUserProfile({...data, avatar}));
-			form.resetTouched()
+
 			notifications.show({
 				message: "Your profile was saved.",
 			});

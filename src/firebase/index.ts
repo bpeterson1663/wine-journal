@@ -35,15 +35,22 @@ export const signInWithGooglePopup = async () =>
 	await signInWithPopup(auth, googleProvider);
 
 export async function uploadImage(file: Blob | null, prefix: Prefix, id: string, fileType: FileType) {
+	debugger;
 	const fileRef = ref(storage, `${prefix}-${id}.${fileType}`);
 	if (!file) {
 		return
 	}
-	await uploadBytes(fileRef, file);
-	const photoUrl = await getDownloadURL(fileRef);
-	
-	
-	return {
-		photoUrl
+	try {
+		await uploadBytes(fileRef, file);
+		const photoUrl = await getDownloadURL(fileRef);
+		return {
+			photoUrl
+		}
+		
+	} catch(err) {
+		console.error(err)
 	}
+
+	
+
 }
