@@ -2,7 +2,7 @@ import { Avatar, Burger, Button, Container, Group, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import styles from "components/nav-bar/nav-bar.module.css";
 import { useAppSelector } from "features/hooks";
-import useMobile from "hooks/useMobile";
+import { useMobile } from "hooks/useMobile";
 import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {

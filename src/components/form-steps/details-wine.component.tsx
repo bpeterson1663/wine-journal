@@ -1,7 +1,8 @@
-import { Box, Group, Pill, PillsInput, TextInput } from "@mantine/core";
+import { Box, Group, Pill, PillsInput, TextInput, FileInput, Image, rem } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { WineLabelPic } from "components/camera/camera.component";
 import { useWineContext } from "pages/cellar/form-context";
+import { IconUpload } from "@tabler/icons-react";
+import { useFileInput } from "hooks/useFileInput";
 import {
 	type ChangeEvent,
 	useEffect,
@@ -9,16 +10,16 @@ import {
 } from "react";
 
 export const DetailsWine = () => {
-	const [img, setImg] = useState("");
 	const [varietals, setVarietals] = useState([""]);
 	const [currentVarietal, setCurrentVarietal] = useState("");
+	const {file, blob, imgPreview, handleFileChange} = useFileInput()
 
 	const form = useWineContext();
 
 	useEffect(() => {
-		setImg(form.values.labelUri);
 		setVarietals(form.values.varietal);
-	}, [form]);
+		form.setFieldValue('imageBlob', blob)
+	}, [form, blob]);
 
 	const handleRemove = (val: string) => {
 		form.setFieldValue(
@@ -47,11 +48,6 @@ export const DetailsWine = () => {
 	const onVarietalChange = (event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		setCurrentVarietal(event.currentTarget.value);
-	};
-
-	const onCameraChange = (value: string) => {
-		form.setFieldValue("labelUri", value);
-		setImg(value);
 	};
 
 	return (
@@ -115,8 +111,26 @@ export const DetailsWine = () => {
 				label="Subregion"
 				{...form.getInputProps("subregion")}
 			/>
-			<Group justify="center" mt="md">
-				<WineLabelPic value={img} onChange={onCameraChange} />
+
+			<FileInput 
+				mt="xs"
+				leftSection={
+					<IconUpload style={{ width: rem(18), height: rem(18) }} />
+				} 
+				accept="image/png,image/jpeg,image/png"
+				value={file}
+				placeholder="Upload a picture of the wine"
+				label="Picture"
+				onChange={handleFileChange}
+			/>
+
+			<Group justify="center" mt="md" align="center">													
+				<Image
+					radius="md"
+					height={300}
+					src={form.values.labelUri || imgPreview}
+					alt=""
+				/>
 			</Group>
 		</Box>
 	);

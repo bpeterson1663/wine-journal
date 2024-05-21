@@ -16,21 +16,21 @@ import { useAppDispatch, useAppSelector } from "features/hooks";
 import { editUserProfile } from "features/user/userSlice";
 import { uploadImage } from "database";
 import styles from "pages/styles/pages.module.css";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
 	UserProfileSchema,
 	type UserProfileT,
 	defaultUserProfile,
 } from "schemas/user";
+import { useFileInput } from "hooks/useFileInput";
 
 export default function Profile() {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const { currentUser } = useAppSelector((state) => state.auth);
 	const { userProfile } = useAppSelector((state) => state.user);
-	const [fileValue, setValue] = useState<File | null>(null);
-	const [blob, setBlob] = useState<Blob | null>(null);
+
+	const {file, blob, handleFileChange} = useFileInput()
 
 	const form = useForm({
 		initialValues: {
@@ -67,22 +67,6 @@ export default function Profile() {
 				message:
 					"An error occurred trying to save your profile. Please try again later.",
 			});
-		}
-	};
-
-	
-
-	const handleFileChange = (selectedFile: File | null) => {
-		if (selectedFile) {
-			setValue(selectedFile);
-		  	const reader = new FileReader();
-		  	reader.onload = (e: ProgressEvent<FileReader>) => {
-				if (e.target && e.target.result) {
-					const fileBlob = new Blob([e.target.result as ArrayBuffer], { type: selectedFile.type });
-					setBlob(fileBlob);
-				}
-		  };
-		  reader.readAsArrayBuffer(selectedFile);
 		}
 	};
 
@@ -128,7 +112,7 @@ export default function Profile() {
 							}
 							{...form.getInputProps("avatar")}
 							placeholder="Upload avatar"
-							value={fileValue}
+							value={file}
 							onChange={handleFileChange}
 						/>
 
