@@ -1,5 +1,6 @@
 import {
 	Avatar,
+	Box,
 	Button,
 	FileInput,
 	Group,
@@ -23,13 +24,14 @@ import {
 	defaultUserProfile,
 } from "schemas/user";
 import { useFileInput } from "hooks/useFileInput";
+import { useMobile } from "hooks/useMobile";
 
 export default function Profile() {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const { currentUser } = useAppSelector((state) => state.auth);
 	const { userProfile } = useAppSelector((state) => state.user);
-
+	const isMobile = useMobile()
 	const {file, blob, handleFileChange} = useFileInput()
 
 	const form = useForm({
@@ -72,54 +74,61 @@ export default function Profile() {
 
 	return (
 		<PageContainer title="Profile">
-			<section className={styles.container}>
-				<Group className={styles.column}>
+				<Group justify="space-between">
+				<Box>
 					<Avatar
 						color="white"
 						className={styles.avatar}
 						radius="sm"
-						size="xl"
+						size={isMobile ? 200 : 300}
 						src={userProfile?.avatar}
 					/>
-
+				</Box>
+				<Box w={400}>
 					<form onSubmit={form.onSubmit(onSubmitHandler)}>
 						<TextInput
 							required
+							mt="xs"
 							type="firstName"
 							label="First Name"
 							{...form.getInputProps("firstName")}
 						/>
 						<TextInput
 							required
+							mt="xs"
 							type="lastName"
 							label="Last Name"
 							{...form.getInputProps("lastName")}
 						/>
 						<TextInput
+							mt="xs"
 							type="email"
 							label="Email"
 							disabled
 							{...form.getInputProps("email")}
 						/>
 						<TextInput
+							mt="xs"
 							type="displayName"
 							label="Display Name"
 							{...form.getInputProps("displayName")}
 						/>
 						<FileInput
+							mt="xs"
 							leftSection={
 								<IconUpload style={{ width: rem(18), height: rem(18) }} />
 							}
 							{...form.getInputProps("avatar")}
+							label="Avatar"
 							placeholder="Upload avatar"
 							value={file}
 							onChange={handleFileChange}
 						/>
 
-						<Button type="submit">Save</Button>
+						<Button mt="xs" type="submit">Save</Button>
 					</form>
+					</Box>
 				</Group>
-			</section>
 			<Footer>
 				<Button onClick={handleLogout}>Sign Out</Button>
 			</Footer>

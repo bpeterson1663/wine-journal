@@ -70,6 +70,7 @@ const NavBar = () => {
 							color="white"
 							component={Link}
 							to="/profile"
+							src={userProfile?.avatar}
 							className={`${styles.icon} ${styles["nav-link"]}`}
 							radius="xl"
 						>

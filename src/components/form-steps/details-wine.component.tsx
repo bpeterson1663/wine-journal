@@ -128,7 +128,7 @@ export const DetailsWine = () => {
 				<Image
 					radius="md"
 					height={300}
-					src={form.values.labelUri || imgPreview}
+					src={imgPreview || form.values.labelUri }
 					alt=""
 				/>
 			</Group>

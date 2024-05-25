@@ -74,6 +74,7 @@ export const tastingSlice = createSlice({
 						date: data.date.toDate(),
 						quantity,
 						price,
+						type: "tasting"
 					};
 				});
 
@@ -104,6 +105,7 @@ export const tastingSlice = createSlice({
 						date: data.date.toDate(),
 						quantity,
 						price,
+						type: "tasting"
 					};
 				});
 

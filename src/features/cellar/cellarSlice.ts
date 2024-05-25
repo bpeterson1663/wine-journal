@@ -65,6 +65,7 @@ export const cellarSlice = createSlice({
 						date: data.date.toDate(),
 						quantity,
 						price,
+						type: "wine"
 					};
 				});
 
@@ -94,6 +95,7 @@ export const cellarSlice = createSlice({
 						date: data.date.toDate(),
 						quantity,
 						price,
+						type: "wine"
 					};
 					state.wine = wine as WineT;
 				} else {
