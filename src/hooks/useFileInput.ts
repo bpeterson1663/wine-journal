@@ -10,7 +10,7 @@ export function useFileInput() {
 			setFile(selectedFile)
 			const reader = new FileReader()
 			reader.onload = (e: ProgressEvent<FileReader>) => {
-				 if (e.target && e.target.result) {
+				 if (e.target?.result) {
 					const fileBlob = new Blob([e.target.result as ArrayBuffer], { type: selectedFile.type})
 					const url = URL.createObjectURL(fileBlob);
                     setBlob(fileBlob)

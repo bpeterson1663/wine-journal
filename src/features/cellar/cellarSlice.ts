@@ -188,7 +188,7 @@ export const createWine = createAsyncThunk<
 	const price =
 		typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
 	try {
-		delete data.imageBlob
+		data.imageBlob = undefined
 		const docData = await addDoc(collection(db, "wines"), {
 			...data,
 			quantity,
@@ -220,7 +220,7 @@ export const editWine = createAsyncThunk<
 		typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
 
 	try {
-		delete data.imageBlob
+		data.imageBlob = undefined
 		await updateDoc(wineRef, { ...data, quantity, price });
 		return data;
 	} catch (err) {
