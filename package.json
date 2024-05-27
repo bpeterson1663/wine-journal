@@ -1,86 +1,73 @@
 {
-	"name": "wine-journal-main",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"@mantine/core": "^7.9.2",
-		"@mantine/dates": "^7.9.2",
-		"@mantine/form": "^7.9.2",
-		"@mantine/hooks": "^7.9.2",
-		"@mantine/notifications": "^7.9.2",
-		"@reduxjs/toolkit": "^1.9.7",
-		"@tabler/icons-react": "^2.47.0",
-		"@testing-library/jest-dom": "^5.17.0",
-		"@testing-library/react": "^13.4.0",
-		"@testing-library/user-event": "^14.5.2",
-		"@types/jest": "^29.5.12",
-		"@types/node": "^18.19.31",
-		"@types/react": "^18.3.1",
-		"@types/react-dom": "^18.3.0",
-		"@types/react-redux": "^7.1.33",
-		"countries-list": "^3.1.0",
-		"dayjs": "^1.11.11",
-		"firebase": "^10.11.1",
-		"husky": "^7.0.4",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"react-redux": "^8.1.3",
-		"react-router-dom": "^6.23.0",
-		"react-scripts": "^5.0.1",
-		"redux": "^4.2.1",
-		"typescript": "^5.4.5",
-		"web-vitals": "^2.1.4",
-		"zod": "^3.23.5"
-	},
-	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"deploy-prod": "react-scripts build && firebase deploy --only hosting",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"lint": "pnpm biome lint --apply ./"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
-	"lint-staged": {
-		"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-			"prettier --ignore-path .gitignore --write"
-		]
-	},
-	"eslintConfig": {
-		"extends": [
-			"react-app",
-			"react-app/jest"
-		]
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"devDependencies": {
-		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-		"@biomejs/biome": "1.7.2",
-		"@typescript-eslint/eslint-plugin": "^5.62.0",
-		"eslint": "^8.57.0",
-		"eslint-config-standard-with-typescript": "^37.0.0",
-		"eslint-plugin-import": "^2.29.1",
-		"eslint-plugin-n": "^16.6.2",
-		"eslint-plugin-promise": "^6.1.1",
-		"eslint-plugin-react": "^7.34.1",
-		"postcss": "^8.4.38",
-		"postcss-preset-mantine": "^1.15.0",
-		"postcss-simple-vars": "^7.0.1",
-		"prettier-plugin-organize-imports": "^3.2.4"
-	}
+  "name": "wine-journal-main",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@mantine/core": "^7.9.2",
+    "@mantine/dates": "^7.9.2",
+    "@mantine/form": "^7.9.2",
+    "@mantine/hooks": "^7.9.2",
+    "@mantine/notifications": "^7.9.2",
+    "@reduxjs/toolkit": "^1.9.7",
+    "@tabler/icons-react": "^2.47.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^18.19.31",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-redux": "^7.1.33",
+    "countries-list": "^3.1.0",
+    "dayjs": "^1.11.11",
+    "firebase": "^10.11.1",
+    "husky": "^7.0.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.23.0",
+    "react-scripts": "^5.0.1",
+    "redux": "^4.2.1",
+    "typescript": "^5.4.5",
+    "web-vitals": "^2.1.4",
+    "zod": "^3.23.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "deploy-prod": "react-scripts build && firebase deploy --only hosting",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "pnpm biome check --apply ./"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": ["prettier --ignore-path .gitignore --write"]
+  },
+  "eslintConfig": {
+    "extends": ["react-app", "react-app/jest"]
+  },
+  "browserslist": {
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@biomejs/biome": "1.7.2",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard-with-typescript": "^37.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.34.1",
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.15.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prettier-plugin-organize-imports": "^3.2.4"
+  }
 }

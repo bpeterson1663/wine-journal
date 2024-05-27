@@ -1,138 +1,107 @@
-import { Box, FileInput, Group, Pill, PillsInput, TextInput, Image, rem, Select } from "@mantine/core";
+import { Box, FileInput, Group, Image, Pill, PillsInput, Select, TextInput, rem } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { useTastingContext } from "pages/tastings/form-context";
 import { IconUpload } from "@tabler/icons-react";
+import { countries } from "countries-list";
 import { useFileInput } from "hooks/useFileInput";
-import { countries } from 'countries-list'
-import {
-	type ChangeEvent,
-	useEffect,
-	useState,
-} from "react";
+import { useTastingContext } from "pages/tastings/form-context";
+import { type ChangeEvent, useEffect, useState } from "react";
 
 export const DetailsTasting = () => {
-	const [varietals, setVarietals] = useState([""])
-	const [currentVarietal, setCurrentVarietal] = useState("");
-	const {file, blob, imgPreview, handleFileChange} = useFileInput()
-	const form = useTastingContext();
+  const [varietals, setVarietals] = useState([""]);
+  const [currentVarietal, setCurrentVarietal] = useState("");
+  const { file, blob, imgPreview, handleFileChange } = useFileInput();
+  const form = useTastingContext();
 
-	const countryList = Object.values(countries).map(country => country.name)
+  const countryList = Object.values(countries).map((country) => country.name);
 
-	useEffect(() => {
-		setVarietals(form.values.varietal);
-		form.setFieldValue('imageBlob', blob)
-	}, [form, blob]);
+  useEffect(() => {
+    setVarietals(form.values.varietal);
+    form.setFieldValue("imageBlob", blob);
+  }, [form, blob]);
 
-	const handleRemove = (val: string) => {
-		form.setFieldValue(
-			"varietal",
-			varietals.filter((varietal) => varietal !== val),
-		);
-		setVarietals(varietals.filter((varietal) => varietal !== val));
-	};
+  const handleRemove = (val: string) => {
+    form.setFieldValue(
+      "varietal",
+      varietals.filter((varietal) => varietal !== val),
+    );
+    setVarietals(varietals.filter((varietal) => varietal !== val));
+  };
 
-	const onDateChange = (value: Date | null) => {
-		if (value) {
-			form.setFieldValue("date", value);
-		}
-	};
+  const onDateChange = (value: Date | null) => {
+    if (value) {
+      form.setFieldValue("date", value);
+    }
+  };
 
-	const onVarietalBlur = () => {
-		if (currentVarietal === "") {
-			return
-		}
-		setVarietals([...varietals, currentVarietal]);
-		form.setFieldValue("varietal", [...varietals, currentVarietal]);
-		setCurrentVarietal("");
-	};
+  const onVarietalBlur = () => {
+    if (currentVarietal === "") {
+      return;
+    }
+    setVarietals([...varietals, currentVarietal]);
+    form.setFieldValue("varietal", [...varietals, currentVarietal]);
+    setCurrentVarietal("");
+  };
 
-	const onVarietalChange = (event: ChangeEvent<HTMLInputElement>) => {
-		event.preventDefault();
-		setCurrentVarietal(event.currentTarget.value);
-	};
+  const onVarietalChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setCurrentVarietal(event.currentTarget.value);
+  };
 
-	return (
-		<Box>
-			<DatePickerInput
-				{...form.getInputProps("date")}
-				valueFormat="YYYY MMM DD"
-				name="date"
-				label="Date"
-				onChange={onDateChange}
-			/>
+  return (
+    <Box>
+      <DatePickerInput
+        {...form.getInputProps("date")}
+        valueFormat="YYYY MMM DD"
+        name="date"
+        label="Date"
+        onChange={onDateChange}
+      />
 
-			<TextInput
-				mt="xs"
-				required
-				label="Winery / Producer"
-				{...form.getInputProps("producer")}
-			/>
+      <TextInput mt="xs" required label="Winery / Producer" {...form.getInputProps("producer")} />
 
-			<TextInput
-				mt="xs"
-				label="Name / Classification"
-				{...form.getInputProps("classification")}
-			/>
+      <TextInput mt="xs" label="Name / Classification" {...form.getInputProps("classification")} />
 
-			<PillsInput
-				mt="xs"
-				label="Varietal(s)"
-				required
-				{...form.getInputProps("varietal")}
-			>
-				<Pill.Group>
-					{varietals.map((varietal) => (
-						<Pill
-							key={varietal}
-							onRemove={() => {
-								handleRemove(varietal);
-							}}
-							withRemoveButton
-						>
-							{" "}
-							{varietal}
-						</Pill>
-					))}
-					<PillsInput.Field
-						value={currentVarietal}
-						onBlur={onVarietalBlur}
-						onChange={onVarietalChange}
-					/>
-				</Pill.Group>
-			</PillsInput>
+      <PillsInput mt="xs" label="Varietal(s)" required {...form.getInputProps("varietal")}>
+        <Pill.Group>
+          {varietals.map((varietal) => (
+            <Pill
+              key={varietal}
+              onRemove={() => {
+                handleRemove(varietal);
+              }}
+              withRemoveButton
+            >
+              {" "}
+              {varietal}
+            </Pill>
+          ))}
+          <PillsInput.Field value={currentVarietal} onBlur={onVarietalBlur} onChange={onVarietalChange} />
+        </Pill.Group>
+      </PillsInput>
 
-			<TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
+      <TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
 
-			<Select searchable data={countryList} required mt="xs" label="Country" {...form.getInputProps("country")} />
+      <Select searchable data={countryList} required mt="xs" label="Country" {...form.getInputProps("country")} />
 
-			<TextInput required mt="xs" label="Region" {...form.getInputProps("region")} />
+      <TextInput required mt="xs" label="Region" {...form.getInputProps("region")} />
 
-			<TextInput
-				mt="xs"
-				label="Subregion"
-				{...form.getInputProps("subregion")}
-			/>
+      <TextInput mt="xs" label="Subregion" {...form.getInputProps("subregion")} />
 
-			<FileInput 
-				mt="xs"
-				leftSection={
-					<IconUpload style={{ width: rem(18), height: rem(18) }} />
-				} 
-				accept="image/png,image/jpeg,image/png"
-				value={file}
-				placeholder="Upload a picture of the wine"
-				label="Picture"
-				onChange={handleFileChange}
-			/>
+      <FileInput
+        mt="xs"
+        leftSection={<IconUpload style={{ width: rem(18), height: rem(18) }} />}
+        accept="image/png,image/jpeg,image/png"
+        value={file}
+        placeholder="Upload a picture of the wine"
+        label="Picture"
+        onChange={handleFileChange}
+      />
 
-			{(imgPreview || form.values.labelUri) && <Group justify="center" mt="md" align="center">													
-				<Image
-					radius="md"
-					height={300}
-					src={imgPreview || form.values.labelUri}
-					alt=""
-				/>
-			</Group> }
-		</Box>
-	);
+      {(imgPreview || form.values.labelUri) && (
+        <Group justify="center" mt="md" align="center">
+          <Image radius="md" height={300} src={imgPreview || form.values.labelUri} alt="" />
+        </Group>
+      )}
+    </Box>
+  );
 };

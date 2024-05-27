@@ -4,16 +4,16 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { getFirestore } from "firebase/firestore/lite";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-type Prefix = "user" | "wine"
+type Prefix = "user" | "wine";
 
 const firebaseConfig = {
-	apiKey: process.env.REACT_APP_API_KEY,
-	authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-	projectId: process.env.REACT_APP_PROJECT_ID,
-	storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-	messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-	appId: process.env.REACT_APP_APP_ID,
-	measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -23,34 +23,29 @@ export const db = getFirestore(app);
 
 export const auth = getAuth();
 
-export const storage = getStorage()
+export const storage = getStorage();
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
-	prompt: "select_account",
+  prompt: "select_account",
 });
 
-export const signInWithGooglePopup = async () =>
-	await signInWithPopup(auth, googleProvider);
+export const signInWithGooglePopup = async () => await signInWithPopup(auth, googleProvider);
 
 export async function uploadImage(file: Blob | null, prefix: Prefix, id: string, fileType: string) {
-	const fileRef = ref(storage, `${prefix}-${id}.${fileType}`);
-	if (!file) {
-		return {
-			photoUrl: ""
-		}
-	}
-	try {
-		await uploadBytes(fileRef, file);
-		const photoUrl = await getDownloadURL(fileRef);
-		return {
-			photoUrl
-		}
-		
-	} catch(err) {
-		console.error(err)
-	}
-
-	
-
+  const fileRef = ref(storage, `${prefix}-${id}.${fileType}`);
+  if (!file) {
+    return {
+      photoUrl: "",
+    };
+  }
+  try {
+    await uploadBytes(fileRef, file);
+    const photoUrl = await getDownloadURL(fileRef);
+    return {
+      photoUrl,
+    };
+  } catch (err) {
+    console.error(err);
+  }
 }
