@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+const VintageSchema = z.union([
+	z.string().regex(/^\d{4}$/, {
+	  message: "Enter the vintage of the wine (N/V for non vintage)",
+	}),
+	z.literal("NV", {
+	  errorMap: () => ({ message: "Enter the vintage of the wine (N/V for non vintage)" }),
+	}),
+	z.literal("nv", {
+	  errorMap: () => ({ message: "Enter the vintage of the wine (N/V for non vintage)" }),
+	}),
+  ]).default('');
+
 export const WineSchema = z.object({
 	id: z.string().default(""),
 	type: z.string().default("wine"),
@@ -15,9 +27,7 @@ export const WineSchema = z.object({
 	country: z
 		.string()
 		.min(1, { message: "Enter the country where the wine is from" }),
-	vintage: z
-		.string()
-		.min(1, { message: "Enter the vintage of the wine (N/V for non vintage)" }),
+	vintage: VintageSchema,
 	quantity: z.number().default(0),
 	price: z.number().default(0),
 	description: z.string().default(""),
@@ -27,7 +37,7 @@ export const WineSchema = z.object({
 		.optional()
 		.refine((file) => {
 			if (!file) {
-				return
+				return true
 			}
 			return file.size <= 10 * 1024 * 1024
 		}, {
@@ -35,7 +45,7 @@ export const WineSchema = z.object({
 		})
 		.refine((file) => {
 			if (!file) {
-				return
+				return true
 			}
 			return ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)
 		}, {

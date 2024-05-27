@@ -9,6 +9,7 @@ export const Quantity = () => {
 			<NumberInput label="Price" {...form.getInputProps("price")} />
 			<Textarea
 				autosize
+				minRows={4}
 				maxRows={4}
 				label="Description"
 				{...form.getInputProps("description")}

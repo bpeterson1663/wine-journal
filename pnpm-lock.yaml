@@ -46,6 +46,9 @@ dependencies:
   '@types/react-redux':
     specifier: ^7.1.33
     version: 7.1.33
+  countries-list:
+    specifier: ^3.1.0
+    version: 3.1.0
   dayjs:
     specifier: ^1.11.11
     version: 1.11.11
@@ -4737,6 +4740,10 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
+    dev: false
+
+  /countries-list@3.1.0:
+    resolution: {integrity: sha512-HpTBLZba1VPTZSjUnUwR7SykxV7Z/7/+ZM5x5wi5tO99Qvom6bE2SC+AQ18016ujg3jSlYBbMITrHNnPAHSM9Q==}
     dev: false
 
   /cross-spawn@7.0.3:

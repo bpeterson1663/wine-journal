@@ -3,11 +3,23 @@
 	"organizeImports": {
 		"enabled": true
 	},
-
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineEnding": "lf",
+		"lineWidth": 120,
+		"attributePosition": "auto",
+		"ignore": ["**/build", "**/node_modules", "**/*.html"]
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"performance": {
+				"noDelete": "off"
+			}
 		}
 	},
 	"vcs": {

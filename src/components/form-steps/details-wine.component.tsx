@@ -1,8 +1,9 @@
-import { Box, Group, Pill, PillsInput, TextInput, FileInput, Image, rem } from "@mantine/core";
+import { Box, Group, Pill, PillsInput, TextInput, FileInput, Image, rem, Select } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useWineContext } from "pages/cellar/form-context";
 import { IconUpload } from "@tabler/icons-react";
 import { useFileInput } from "hooks/useFileInput";
+import { countries } from 'countries-list'
 import {
 	type ChangeEvent,
 	useEffect,
@@ -13,7 +14,7 @@ export const DetailsWine = () => {
 	const [varietals, setVarietals] = useState([""]);
 	const [currentVarietal, setCurrentVarietal] = useState("");
 	const {file, blob, imgPreview, handleFileChange} = useFileInput()
-
+	const countryList = Object.values(countries).map(country => country.name)
 	const form = useWineContext();
 
 	useEffect(() => {
@@ -102,7 +103,7 @@ export const DetailsWine = () => {
 
 			<TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
 
-			<TextInput required mt="xs" label="Country" {...form.getInputProps("country")} />
+			<Select searchable data={countryList} required mt="xs" label="Country" {...form.getInputProps("country")} />
 
 			<TextInput required mt="xs" label="Region" {...form.getInputProps("region")} />
 
@@ -124,14 +125,14 @@ export const DetailsWine = () => {
 				onChange={handleFileChange}
 			/>
 
-			<Group justify="center" mt="md" align="center">													
+			{(imgPreview || form.values.labelUri) && <Group justify="center" mt="md" align="center">													
 				<Image
 					radius="md"
 					height={300}
 					src={imgPreview || form.values.labelUri }
 					alt=""
 				/>
-			</Group>
+			</Group>}
 		</Box>
 	);
 };
