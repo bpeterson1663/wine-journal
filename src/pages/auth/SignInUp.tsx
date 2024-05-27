@@ -12,7 +12,7 @@ const SignInUp = () => {
   return (
     <main>
       <Title order={1} style={{ fontSize: "2rem" }}>
-        Wine Journal
+        Somm Scribe
       </Title>
       <div
         style={{
