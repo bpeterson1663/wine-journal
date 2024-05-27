@@ -1,7 +1,7 @@
 import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth, db, signInWithGooglePopup } from "database";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore/lite";
+import { addDoc, collection, where, query, getDocs } from "firebase/firestore/lite";
 import type { UserProfileT } from "schemas/user";
 import { defaultUserProfile } from "schemas/user";
 import type { AuthUserT, CurrentUser, FetchStatusT, LoginT, MessageT, SignUpT } from "types";
@@ -113,22 +113,29 @@ export const fetchSignInWithGoogle = createAsyncThunk<
     if (!user.email) {
       return null;
     }
-    // Get user profile if it exists
-    const docRef = doc(db, "users", user.uid);
-    const docSnapshot = await getDoc(docRef);
-    if (docSnapshot.exists()) {
+
+	const fbq = query(collection(db, "users"), where("userId", "==", user.uid));
+    const { docs } = await getDocs(fbq);
+    const profile = docs.map((doc) => {
+      const data = doc.data();
       return {
-        ...docSnapshot.data(),
-        id: docSnapshot.id,
-      } as UserProfileT;
-    }
+        ...data,
+        userId: data.userId,
+        id: doc.id,
+      };
+    });
+
+	if (profile.length === 1) {
+		return profile[0] as UserProfileT;
+	}
     // Create new user profile
     await addDoc(collection(db, "users"), {
       ...defaultUserProfile,
       userId: user.uid,
       email: user.email,
     });
-    return {
+
+	return {
       ...defaultUserProfile,
       email: user.email,
       id: user.uid,
