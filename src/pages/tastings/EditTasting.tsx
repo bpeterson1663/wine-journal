@@ -70,7 +70,7 @@ const EditTasting = () => {
             <Review />
           </Box>
           <Footer>
-            <Group style={{ width: "100%" }} justify="space-between">
+            <Group style={{ width: "100%" }} justify="flex-end">
               <Button disabled={disableSave()} type="submit">
                 Save
               </Button>

@@ -66,15 +66,7 @@ export default function EditWine() {
             <Quantity />
           </Box>
           <Footer>
-            <Group style={{ width: "100%" }} justify="space-between">
-              <Button
-                onClick={() => {
-                  navigate("/cellar");
-                }}
-                variant="outline"
-              >
-                Cancel
-              </Button>
+            <Group style={{ width: "100%" }} justify="flex-end">
               <Button disabled={disableSave()} type="submit">
                 Save
               </Button>
