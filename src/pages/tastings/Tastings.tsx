@@ -43,7 +43,7 @@ export default function Tastings() {
   };
 
   return (
-    <PageContainer title="Tastings">
+    <PageContainer showBack title="Tastings">
       <Group justify="flex-end">
         <TextInput placeholder="Search" onChange={(e) => setSearch(e.target.value)} leftSection={<IconSearch />} />
         <Button onClick={handleSearch}>Search</Button>

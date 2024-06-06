@@ -36,7 +36,7 @@ export default function Cellar() {
   };
 
   return (
-    <PageContainer title="Cellar">
+    <PageContainer showBack title="Cellar">
       <section className={styles.list}>
         {wineList.map((wine) => (
           <Card key={wine.id} wine={wine} url="cellar" />

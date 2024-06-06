@@ -3,13 +3,13 @@ import { z } from "zod";
 const VintageSchema = z
   .union([
     z.string().regex(/^\d{4}$/, {
-      message: "Enter the vintage of the wine (N/V for non vintage)",
+      message: "Enter the vintage of the wine (NV for non vintage)",
     }),
     z.literal("NV", {
-      errorMap: () => ({ message: "Enter the vintage of the wine (N/V for non vintage)" }),
+      errorMap: () => ({ message: "Enter the vintage of the wine (NV for non vintage)" }),
     }),
     z.literal("nv", {
-      errorMap: () => ({ message: "Enter the vintage of the wine (N/V for non vintage)" }),
+      errorMap: () => ({ message: "Enter the vintage of the wine (NV for non vintage)" }),
     }),
   ])
   .default("");
