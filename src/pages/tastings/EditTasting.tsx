@@ -18,7 +18,7 @@ const EditTasting = () => {
   const { tasting } = useAppSelector((state) => state.tasting);
 
   const form = useTastingForm({
-	validateInputOnBlur: true,
+    validateInputOnBlur: true,
     initialValues: {
       ...INITIAL_VALUES,
       ...tasting,

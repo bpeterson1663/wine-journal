@@ -1,13 +1,13 @@
 import type { AuthError } from "firebase/auth";
+import type { WineT } from "schemas/cellar";
+import type { TastingT } from "schemas/tastings";
+import { isTastingT } from "schemas/utils";
 import {
   ALCOHOL_MARKS,
   BODY_MARKS,
   SWEET_MARKS,
   TANNIN_ACIDITY_MARKS,
 } from "../components/form-tasting/form-tasting.constants";
-import { WineT } from "schemas/cellar";
-import { TastingT } from "schemas/tastings";
-import { isTastingT } from "schemas/utils";
 
 export const getLabel = (type: "BODY" | "TANNIN" | "ACIDITY" | "ALCOHOL" | "SWEET", value: number) => {
   switch (type) {
@@ -54,17 +54,17 @@ export const generateAuthErrorMessage = (err: AuthError): string => {
 };
 
 export function getWineImage(wine: WineT | TastingT) {
-	if (isTastingT(wine)) {
-		const {color} = wine
-		switch (color) {
-			case "red":
-				return require('images/wine/red-wine.jpeg')
-			case "white":
-				return require('images/wine/white-wine.jpeg')
-			default:
-				return require('images/wine/red-wine.jpeg')
-		}
-	}
-
-	return require('images/wine/red-wine.jpeg')
+  if (isTastingT(wine)) {
+    const { color } = wine;
+    switch (color) {
+      case "red":
+        return require("images/wine/red-wine.jpeg");
+      case "white":
+        return require("images/wine/white-wine.jpeg");
+      default:
+        return require("images/wine/red-wine.jpeg");
+    }
   }
+
+  return require("images/wine/red-wine.jpeg");
+}

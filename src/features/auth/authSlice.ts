@@ -1,7 +1,7 @@
 import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth, db, signInWithGooglePopup } from "database";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, where, query, getDocs } from "firebase/firestore/lite";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore/lite";
 import type { UserProfileT } from "schemas/user";
 import { defaultUserProfile } from "schemas/user";
 import type { AuthUserT, CurrentUser, FetchStatusT, LoginT, MessageT, SignUpT } from "types";
@@ -114,7 +114,7 @@ export const fetchSignInWithGoogle = createAsyncThunk<
       return null;
     }
 
-	const fbq = query(collection(db, "users"), where("userId", "==", user.uid));
+    const fbq = query(collection(db, "users"), where("userId", "==", user.uid));
     const { docs } = await getDocs(fbq);
     const profile = docs.map((doc) => {
       const data = doc.data();
@@ -125,9 +125,9 @@ export const fetchSignInWithGoogle = createAsyncThunk<
       };
     });
 
-	if (profile.length === 1) {
-		return profile[0] as UserProfileT;
-	}
+    if (profile.length === 1) {
+      return profile[0] as UserProfileT;
+    }
     // Create new user profile
     await addDoc(collection(db, "users"), {
       ...defaultUserProfile,
@@ -135,7 +135,7 @@ export const fetchSignInWithGoogle = createAsyncThunk<
       email: user.email,
     });
 
-	return {
+    return {
       ...defaultUserProfile,
       email: user.email,
       id: user.uid,
