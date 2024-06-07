@@ -29,6 +29,7 @@ const NavBar = () => {
           <Menu shadow="md" width={200} onClose={toggle}>
             <Menu.Target>
               <Burger
+			  	      size={30}
                 className={styles["menu-icon"]}
                 color="white"
                 opened={opened}

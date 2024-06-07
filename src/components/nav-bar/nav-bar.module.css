@@ -6,7 +6,7 @@
     background-color: var(--mantine-color-primary-9);
     padding: 10px 20px;
     z-index: 1;
-    min-height: 50px;
+    min-height: 65px;
 
     .menu-icon {
         background-color: var(--mantine-color-secondary-9);

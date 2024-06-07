@@ -11,4 +11,5 @@
     background-color: var(--mantine-color-primary-9);
     padding: 15px 20px;
     z-index: 3;
+    min-height: 65px;
 }

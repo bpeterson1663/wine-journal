@@ -18,7 +18,7 @@ export default function Home() {
   );
 
   return (
-    <PageContainer showLogo>
+    <PageContainer>
       <Stack>
         {sortedPublicList.length > 0 && (
           <Group>
