@@ -7,6 +7,7 @@ import { selectWineById } from "features/cellar/cellarSelectors";
 import { deleteWine, wineSetEdit } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { tastingSetOpen } from "features/tasting/tastingSlice";
+import { getWineImage } from "helpers";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -83,7 +84,7 @@ export default function ViewWine() {
     <PageContainer title={producer} showBack>
       <section className={styles.container}>
         <div className={styles.column}>
-          <img className={styles.wineImage} src={labelUri || require("images/wine-tasting.jpg")} alt={producer} />
+          <img className={styles.wineImage} src={labelUri || getWineImage(wine)} alt={producer} />
         </div>
         <div className={styles.column}>
           {producer && <Title order={6}>Winery: {producer}</Title>}

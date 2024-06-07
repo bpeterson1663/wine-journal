@@ -8,7 +8,7 @@ import RatingIcon from "components/rating/raiting.component";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { selectTastingById } from "features/tasting/tastingSelectors";
 import { deleteTasting, tastingSetEdit } from "features/tasting/tastingSlice";
-import { getLabel, uppercaseFirstLetter } from "helpers";
+import { getLabel, getWineImage, uppercaseFirstLetter } from "helpers";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -98,7 +98,7 @@ export default function TastingId() {
   return (
     <PageContainer showBack title={producer}>
       <Group align="start">
-        <Image w={150} radius="md" src={labelUri || require("images/wine-tasting.jpg")} alt={producer} />
+        <Image w={150} radius="md" src={labelUri || getWineImage(tasting)} alt={producer} />
         <Stack align="flex-start" justify="flex-start" gap="xs" mt={10} w={180}>
           {classification && <Title order={5}>Name: {classification}</Title>}
           <Text size="md">Varietal(s): {varietal.join(", ")}</Text>

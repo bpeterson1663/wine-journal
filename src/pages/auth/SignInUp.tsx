@@ -1,4 +1,4 @@
-import { Title } from "@mantine/core";
+import { Title, Image } from "@mantine/core";
 import { useState } from "react";
 
 import Footer from "components/footer/footer.component";
@@ -11,17 +11,25 @@ const SignInUp = () => {
 
   return (
     <main>
-      <Title order={1} style={{ fontSize: "2rem" }}>
-        Somm Scribe
-      </Title>
       <div
         style={{
           display: "flex",
-          flexFlow: "row wrap",
+          flexFlow: "wrap",
           justifyContent: "center",
           padding: 20,
         }}
       >
+        <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: 500,
+              padding: 20
+            }}
+          >
+            <Image height="300px" width="300px" src={require('images/logo/fulllogo_transparent_nobuffer.png')} />
+
+        </div>
         {showSignIn ? (
           <div
             style={{
@@ -30,7 +38,8 @@ const SignInUp = () => {
               width: 500,
             }}
           >
-            <Title order={2} style={{ fontSize: "1.5rem" }}>
+
+            <Title order={3} style={{ fontSize: "1.3rem" }}>
               Sign In
             </Title>
             <SignInForm />
@@ -56,9 +65,10 @@ const SignInUp = () => {
               display: "flex",
               flexDirection: "column",
               width: 500,
+              paddingBottom: 40,
             }}
           >
-            <Title order={2} style={{ fontSize: "1.5rem" }}>
+            <Title order={2} style={{ fontSize: "1.3rem" }}>
               Sign Up
             </Title>
             <SignUpForm />

@@ -1,6 +1,7 @@
 import { Text, Title } from "@mantine/core";
 import styles from "components/card/card.module.css";
 import dayjs from "dayjs";
+import { getWineImage } from "helpers";
 import { useNavigate } from "react-router-dom";
 import type { WineT } from "schemas/cellar";
 import type { TastingT } from "schemas/tastings";
@@ -14,6 +15,7 @@ interface Props {
 export function Card({ wine, url, showDate = false }: Props) {
   const navigate = useNavigate();
   const { id, labelUri, producer, vintage, region, varietal, date } = wine;
+
   return (
     <div
       key={id}
@@ -32,7 +34,7 @@ export function Card({ wine, url, showDate = false }: Props) {
       )}
       <div className={styles.row}>
         <div className={styles.column}>
-          <img className={styles.cardImage} src={labelUri || require("images/wine-tasting.jpg")} alt={producer} />
+          <img className={styles.cardImage} src={labelUri || getWineImage(wine)} alt={producer} />
         </div>
         <div className={styles.column}>
           <Title order={4}>{producer}</Title>

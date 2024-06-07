@@ -39,10 +39,10 @@ export const WineSchema = z.object({
         if (!file) {
           return true;
         }
-        return file.size <= 10 * 1024 * 1024;
+        return file.size <= 5 * 1024 * 1024;
       },
       {
-        message: "File size should be less than 10MB",
+        message: "File size should be less than 5MB",
       },
     )
     .refine(
