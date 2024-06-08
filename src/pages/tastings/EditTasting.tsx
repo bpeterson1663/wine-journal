@@ -6,9 +6,10 @@ import { ColorSmell, DetailsTasting, Review, Taste } from "components/form-steps
 import PageContainer from "components/page-container/page-container.component";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { editTasting } from "features/tasting/tastingSlice";
+import { useFileInput } from "hooks/useFileInput";
 import styles from "pages/styles/pages.module.css";
 import { TastingFormProvider, useTastingForm } from "pages/tastings/form-context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { INITIAL_VALUES, TastingSchema, type TastingT } from "schemas/tastings";
 
@@ -16,6 +17,8 @@ const EditTasting = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tasting } = useAppSelector((state) => state.tasting);
+  const { handleFileUpload } = useFileInput();
+  const [loading, setLoading] = useState(false);
 
   const form = useTastingForm({
     validateInputOnBlur: true,
@@ -33,8 +36,17 @@ const EditTasting = () => {
   }, [tasting, navigate]);
 
   const onSubmitHandler = async (data: TastingT) => {
+    setLoading(true);
     try {
-      await dispatch(editTasting(data)).unwrap();
+      let labelUri = data.labelUri;
+      if (data.imageBlob) {
+        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", data.id);
+        if (!error) {
+          labelUri = photoUrl;
+        }
+      }
+      await dispatch(editTasting({ ...data, labelUri })).unwrap();
+
       notifications.show({
         message: "Your tasting was updated.",
       });
@@ -44,6 +56,8 @@ const EditTasting = () => {
         color: "red",
         message: "Something went wrong updating your tasting.",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,7 +86,7 @@ const EditTasting = () => {
           </Box>
           <Footer>
             <Group style={{ width: "100%" }} justify="flex-end">
-              <Button disabled={disableSave()} type="submit">
+              <Button loading={loading} disabled={disableSave()} type="submit">
                 Save
               </Button>
             </Group>

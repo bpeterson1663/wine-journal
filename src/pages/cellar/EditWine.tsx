@@ -2,12 +2,13 @@ import { Box, Button, Group } from "@mantine/core";
 import { zodResolver } from "@mantine/form";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { notifications } from "@mantine/notifications";
 import { DetailsWine, Quantity } from "components/form-steps";
 import { editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
+import { useFileInput } from "hooks/useFileInput";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
@@ -16,13 +17,16 @@ import { INITIAL_VALUES, WineSchema, type WineT } from "schemas/cellar";
 export default function EditWine() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  const { handleFileUpload } = useFileInput();
   const { wine } = useAppSelector((state) => state.cellar);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (!wine) {
       navigate("/cellar");
     }
   }, [wine, navigate]);
+
   const form = useWineForm({
     initialValues: {
       ...INITIAL_VALUES,
@@ -33,8 +37,16 @@ export default function EditWine() {
   });
 
   const onSubmitHandler = async (data: WineT) => {
+    setLoading(true);
     try {
-      await dispatch(editWine({ ...data })).unwrap();
+      let labelUri = data.labelUri;
+      if (data.imageBlob) {
+        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", data.id);
+        if (!error) {
+          labelUri = photoUrl;
+        }
+      }
+      await dispatch(editWine({ ...data, labelUri })).unwrap();
       notifications.show({
         message: "Edits were saved.",
       });
@@ -44,6 +56,8 @@ export default function EditWine() {
         color: "red",
         message: "An error occurred trying to save your edits. Please try again later.",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,7 +81,7 @@ export default function EditWine() {
           </Box>
           <Footer>
             <Group style={{ width: "100%" }} justify="flex-end">
-              <Button disabled={disableSave()} type="submit">
+              <Button loading={loading} disabled={disableSave()} type="submit">
                 Save
               </Button>
             </Group>

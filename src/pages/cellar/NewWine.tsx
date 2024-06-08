@@ -26,6 +26,7 @@ export default function NewWine() {
   const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector((state) => state.auth);
   const { handleFileUpload } = useFileInput();
+  const [loading, setLoading] = useState(false);
 
   const form = useWineForm({
     validateInputOnBlur: true,
@@ -36,6 +37,7 @@ export default function NewWine() {
   });
 
   const onSubmitHandler = async (data: WineT) => {
+    setLoading(true);
     try {
       const { id } = await dispatch(createWine({ ...data, userId: currentUser?.uid ?? "", varietal: [] })).unwrap();
 
@@ -57,6 +59,8 @@ export default function NewWine() {
         message: "Something went wrong adding your wine.",
         color: "red",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,7 +123,9 @@ export default function NewWine() {
                   Previous
                 </Button>
                 {activeStep === STEPS.length - 1 ? (
-                  <Button type="submit">Submit</Button>
+                  <Button loading={loading} type="submit">
+                    Submit
+                  </Button>
                 ) : (
                   <Button disabled={disableContinue()} name="continue" onClick={handleNext}>
                     Continue
