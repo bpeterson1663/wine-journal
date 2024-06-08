@@ -76,16 +76,7 @@ export default function Profile() {
 
   return (
     <PageContainer title="Profile" showBack>
-      <Group justify="space-between">
-        <Box mr="auto" ml="auto">
-          <Avatar
-            color="white"
-            className={styles.avatar}
-            radius="lg"
-            size={isMobile ? 200 : 300}
-            src={userProfile?.avatar}
-          />
-        </Box>
+      <Group justify="space-between" pl={10}>
         <Box w={400}>
           <form onSubmit={form.onSubmit(onSubmitHandler)}>
             <TextInput required mt="xs" type="firstName" label="First Name" {...form.getInputProps("firstName")} />
@@ -101,16 +92,26 @@ export default function Profile() {
               value={file}
               onChange={handleFileChange}
             />
-
-            <Button mt="xs" type="submit" loading={loading}>
-              Save
-            </Button>
+            <Footer>
+              <Group style={{ width: "100%" }} justify="space-between">
+                <Button onClick={handleLogout}>Sign Out</Button>
+                <Button type="submit" loading={loading}>
+                  Save
+                </Button>
+              </Group>
+            </Footer>
           </form>
         </Box>
+        <Box mr="auto" ml="auto">
+          <Avatar
+            color="white"
+            className={styles.avatar}
+            radius="lg"
+            size={isMobile ? 200 : 300}
+            src={userProfile?.avatar}
+          />
+        </Box>
       </Group>
-      <Footer>
-        <Button onClick={handleLogout}>Sign Out</Button>
-      </Footer>
     </PageContainer>
   );
 }

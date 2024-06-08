@@ -101,7 +101,7 @@ export const editUserProfile = createAsyncThunk<
 >("user/editUserProfile", async (data, { rejectWithValue }) => {
   const userRef = doc(db, "users", data.id);
   try {
-    delete data.imageBlob
+    delete data.imageBlob;
     await updateDoc(userRef, { ...data });
     return data;
   } catch (err) {

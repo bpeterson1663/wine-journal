@@ -32,14 +32,6 @@ export const ColorSmell = () => {
         </Group>
       </Radio.Group>
 
-      <Radio.Group mt="sm" name="intensity" label="Intensity" defaultValue="pale" {...form.getInputProps("intensity")}>
-        <Group mt="xs">
-          <Radio value="pale" label="Pale" />
-          <Radio value="medium" label="Medium" />
-          <Radio value="deep" label="Deep" />
-        </Group>
-      </Radio.Group>
-
       {color === "red" && (
         <Radio.Group mt="sm" name="hue" label="Hue" defaultValue="purple" {...form.getInputProps("hue")}>
           <Group mt="xs">
@@ -71,6 +63,15 @@ export const ColorSmell = () => {
           </Group>
         </Radio.Group>
       )}
+
+      <Radio.Group mt="sm" name="intensity" label="Intensity" defaultValue="pale" {...form.getInputProps("intensity")}>
+        <Group mt="xs">
+          <Radio value="pale" label="Pale" />
+          <Radio value="medium" label="Medium" />
+          <Radio value="deep" label="Deep" />
+        </Group>
+      </Radio.Group>
+
       <ColorPalette color={color} hue={hue} intensity={intensity} />
 
       <Textarea autosize minRows={4} maxRows={4} name="smell" label="Smell" {...form.getInputProps("smell")} />
