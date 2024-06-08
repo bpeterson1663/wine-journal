@@ -1,3 +1,4 @@
+import { ImageSchema } from "schemas/image";
 import { z } from "zod";
 
 const VintageSchema = z
@@ -30,32 +31,7 @@ export const WineSchema = z.object({
   price: z.number().default(0),
   description: z.string().default(""),
   labelUri: z.string().default(""),
-  imageBlob: z
-    .instanceof(Blob)
-    .nullable()
-    .optional()
-    .refine(
-      (file) => {
-        if (!file) {
-          return true;
-        }
-        return file.size <= 5 * 1024 * 1024;
-      },
-      {
-        message: "File size should be less than 5MB",
-      },
-    )
-    .refine(
-      (file) => {
-        if (!file) {
-          return true;
-        }
-        return ["image/jpeg", "image/png", "application/pdf"].includes(file.type);
-      },
-      {
-        message: "Only JPEG, PNG, and PDF files are allowed",
-      },
-    ),
+  imageBlob: ImageSchema,
 });
 
 export type WineT = z.infer<typeof WineSchema>;

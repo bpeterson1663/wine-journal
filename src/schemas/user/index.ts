@@ -1,3 +1,4 @@
+import { ImageSchema } from "schemas/image";
 import { z } from "zod";
 
 export const UserProfileSchema = z.object({
@@ -8,6 +9,7 @@ export const UserProfileSchema = z.object({
   displayName: z.string().default(""),
   userId: z.string().default(""),
   email: z.string().email({ message: "Not a valid email" }),
+  imageBlob: ImageSchema,
 });
 
 export const defaultUserProfile = {
@@ -18,6 +20,7 @@ export const defaultUserProfile = {
   displayName: "",
   userId: "",
   email: "",
+  imageBlob: null,
 };
 
 export type UserProfileT = z.infer<typeof UserProfileSchema>;

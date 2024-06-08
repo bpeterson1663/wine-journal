@@ -16,6 +16,7 @@ const SignInUp = () => {
           display: "flex",
           flexFlow: "wrap",
           justifyContent: "center",
+          marginTop: 20,
           padding: 20,
         }}
       >
@@ -35,6 +36,7 @@ const SignInUp = () => {
               display: "flex",
               flexDirection: "column",
               width: 500,
+              marginTop: 20,
             }}
           >
             <Title order={3} style={{ fontSize: "1.3rem" }}>

@@ -4,10 +4,10 @@ import { notifications } from "@mantine/notifications";
 import Footer from "components/footer/footer.component";
 import { ColorSmell, DetailsTasting, Review, Taste } from "components/form-steps";
 import PageContainer from "components/page-container/page-container.component";
-import { uploadImage } from "database";
 import { editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { createTasting, editTasting } from "features/tasting/tastingSlice";
+import { useFileInput } from "hooks/useFileInput";
 import styles from "pages/styles/pages.module.css";
 import { TastingFormProvider, useTastingForm } from "pages/tastings/form-context";
 import { useState } from "react";
@@ -29,11 +29,13 @@ const STEPS = [
 ];
 
 const NewTasting = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { tastingOpen } = useAppSelector((state) => state.tasting);
   const { currentUser } = useAppSelector((state) => state.auth);
+  const [activeStep, setActiveStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { handleFileUpload } = useFileInput();
   const form = useTastingForm({
     validateInputOnBlur: true,
     initialValues: {
@@ -49,18 +51,15 @@ const NewTasting = () => {
     try {
       if (tastingOpen) {
         const quantity = tastingOpen.quantity > 0 ? tastingOpen.quantity - 1 : 0;
-        await dispatch(editWine({ ...tastingOpen, quantity })).unwrap();
+        dispatch(editWine({ ...tastingOpen, quantity })).unwrap();
       }
 
       const { id } = await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? "" })).unwrap();
 
       if (data.imageBlob) {
-        try {
-          const fileType = data.imageBlob.type.split("/")[1];
-          const response = await uploadImage(data.imageBlob, "wine", id, fileType);
-          await dispatch(editTasting({ ...data, id, labelUri: response?.photoUrl ?? "" })).unwrap();
-        } catch (err) {
-          console.error(err);
+        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", id);
+        if (!error) {
+          await dispatch(editTasting({ ...data, id, labelUri: photoUrl })).unwrap();
         }
       }
 

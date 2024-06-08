@@ -32,20 +32,20 @@ googleProvider.setCustomParameters({
 
 export const signInWithGooglePopup = async () => await signInWithPopup(auth, googleProvider);
 
-export async function uploadImage(file: Blob | null, prefix: Prefix, id: string, fileType: string) {
+export async function uploadImage(file: Blob, prefix: Prefix, id: string, fileType: string) {
   const fileRef = ref(storage, `${prefix}-${id}.${fileType}`);
-  if (!file) {
-    return {
-      photoUrl: "",
-    };
-  }
   try {
     await uploadBytes(fileRef, file);
     const photoUrl = await getDownloadURL(fileRef);
     return {
       photoUrl,
+      error: "",
     };
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
+    return {
+      photoUrl: "",
+      error: err.message,
+    };
   }
 }

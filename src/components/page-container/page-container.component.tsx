@@ -11,18 +11,11 @@ interface Props {
   showCancel?: boolean;
 }
 
-export default function PageContainer({
-  children,
-  title = "",
-  showBack = false,
-  showCancel = false,
-}: Props) {
+export default function PageContainer({ children, title = "", showBack = false, showCancel = false }: Props) {
   return (
     <main className={styles.main}>
       {(showBack || showCancel) && <BackButton label={showCancel ? "Cancel" : "Back"} />}
-      <header className={styles["header-row"]}>
-        {title && <Title order={2}> {title} </Title>}
-      </header>
+      <header className={styles["header-row"]}>{title && <Title order={2}> {title} </Title>}</header>
 
       <Container mx={0} px={0}>
         {children}
