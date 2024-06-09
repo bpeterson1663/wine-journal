@@ -4,9 +4,9 @@ import { notifications } from "@mantine/notifications";
 import Footer from "components/footer/footer.component";
 import { DetailsWine, Quantity } from "components/form-steps";
 import PageContainer from "components/page-container/page-container.component";
+import { uploadImage } from "database";
 import { createWine, editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { useFileInput } from "hooks/useFileInput";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
@@ -25,7 +25,6 @@ export default function NewWine() {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector((state) => state.auth);
-  const { handleFileUpload } = useFileInput();
   const [loading, setLoading] = useState(false);
 
   const form = useWineForm({
@@ -42,7 +41,7 @@ export default function NewWine() {
       const { id } = await dispatch(createWine({ ...data, userId: currentUser?.uid ?? "", varietal: [] })).unwrap();
 
       if (data.imageBlob) {
-        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", id);
+        const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);
         if (!error) {
           await dispatch(editWine({ ...data, id, labelUri: photoUrl })).unwrap();
         }

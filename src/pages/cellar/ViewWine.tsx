@@ -1,6 +1,7 @@
-import { Button, Group, Modal, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Group, Modal, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { IconTrash } from "@tabler/icons-react";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
 import { selectWineById } from "features/cellar/cellarSelectors";
@@ -22,13 +23,14 @@ export default function ViewWine() {
   const id = params.id ?? "";
   const wine = useAppSelector(selectWineById(id));
   const [itemToDelete, setItemToDelete] = useState("");
+  const [loading, setLoading] = useState(false);
 
   if (!wine) {
     navigate("/cellar");
     return null;
   }
 
-  const handleConfirmDeleteOpen = (id: string) => {
+  const handleConfirmDelete = (id: string) => {
     setItemToDelete(id);
     open();
   };
@@ -39,6 +41,7 @@ export default function ViewWine() {
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       await dispatch(deleteWine(itemToDelete)).unwrap();
       notifications.show({
@@ -51,6 +54,8 @@ export default function ViewWine() {
         color: "red",
         message: "Something went wrong removing your wine.",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,15 +105,18 @@ export default function ViewWine() {
       <Footer>
         <Group style={{ width: "100%" }} justify="space-between">
           <Group>
-            <Button
+            <ActionIcon
+              variant="filled"
+              size={36}
+              loading={loading}
               onClick={() => {
-                handleConfirmDeleteOpen(wine.id);
+                handleConfirmDelete(wine.id);
               }}
-              variant="outline"
             >
-              Delete
-            </Button>
+              <IconTrash />
+            </ActionIcon>
             <Button
+              disabled={loading}
               onClick={() => {
                 handleEditClick(wine);
               }}
@@ -118,6 +126,7 @@ export default function ViewWine() {
           </Group>
           <Group>
             <Button
+              disabled={loading}
               onClick={() => {
                 handleOpenBottleClick(wine);
               }}

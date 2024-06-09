@@ -4,10 +4,10 @@ import { notifications } from "@mantine/notifications";
 import Footer from "components/footer/footer.component";
 import { ColorSmell, DetailsTasting, Review, Taste } from "components/form-steps";
 import PageContainer from "components/page-container/page-container.component";
+import { uploadImage } from "database";
 import { editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { createTasting, editTasting } from "features/tasting/tastingSlice";
-import { useFileInput } from "hooks/useFileInput";
 import styles from "pages/styles/pages.module.css";
 import { TastingFormProvider, useTastingForm } from "pages/tastings/form-context";
 import { useState } from "react";
@@ -35,7 +35,6 @@ const NewTasting = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { handleFileUpload } = useFileInput();
   const form = useTastingForm({
     validateInputOnBlur: true,
     initialValues: {
@@ -57,7 +56,7 @@ const NewTasting = () => {
       const { id } = await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? "" })).unwrap();
 
       if (data.imageBlob) {
-        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", id);
+        const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);
         if (!error) {
           await dispatch(editTasting({ ...data, id, labelUri: photoUrl })).unwrap();
         }

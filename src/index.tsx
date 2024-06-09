@@ -1,4 +1,4 @@
-import { Button, MantineProvider, createTheme } from "@mantine/core";
+import { ActionIcon, Button, MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -45,6 +45,11 @@ const theme = createTheme({
   },
   components: {
     Button: Button.extend({
+      defaultProps: {
+        color: "#7b3242",
+      },
+    }),
+    ActionIcon: ActionIcon.extend({
       defaultProps: {
         color: "#7b3242",
       },

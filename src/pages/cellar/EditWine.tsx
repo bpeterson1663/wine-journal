@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 
 import { notifications } from "@mantine/notifications";
 import { DetailsWine, Quantity } from "components/form-steps";
+import { uploadImage } from "database";
 import { editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { useFileInput } from "hooks/useFileInput";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,6 @@ import { INITIAL_VALUES, WineSchema, type WineT } from "schemas/cellar";
 export default function EditWine() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { handleFileUpload } = useFileInput();
   const { wine } = useAppSelector((state) => state.cellar);
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +40,7 @@ export default function EditWine() {
     try {
       let labelUri = data.labelUri;
       if (data.imageBlob) {
-        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", data.id);
+        const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", data.id);
         if (!error) {
           labelUri = photoUrl;
         }

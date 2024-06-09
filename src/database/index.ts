@@ -2,9 +2,14 @@ import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 // import { getAnalytics } from 'firebase/analytics'
 import { getFirestore } from "firebase/firestore/lite";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 type Prefix = "user" | "wine";
+
+interface UploadImageResponse {
+  photoUrl: string;
+  error: string;
+}
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -32,7 +37,8 @@ googleProvider.setCustomParameters({
 
 export const signInWithGooglePopup = async () => await signInWithPopup(auth, googleProvider);
 
-export async function uploadImage(file: Blob, prefix: Prefix, id: string, fileType: string) {
+export async function uploadImage(file: Blob, prefix: Prefix, id: string): Promise<UploadImageResponse> {
+  const fileType = file.type.split("/")[1];
   const fileRef = ref(storage, `${prefix}-${id}.${fileType}`);
   try {
     await uploadBytes(fileRef, file);
@@ -46,6 +52,23 @@ export async function uploadImage(file: Blob, prefix: Prefix, id: string, fileTy
     return {
       photoUrl: "",
       error: err.message,
+    };
+  }
+}
+
+export async function removeImage(url: string) {
+  const fileRef = ref(storage, url);
+  try {
+    const response = await deleteObject(fileRef);
+    console.log({ response });
+    return {
+      success: true,
+      message: "image removed successfully",
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      message: `error occured removing image ${err}`,
     };
   }
 }

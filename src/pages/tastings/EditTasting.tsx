@@ -4,9 +4,9 @@ import { notifications } from "@mantine/notifications";
 import Footer from "components/footer/footer.component";
 import { ColorSmell, DetailsTasting, Review, Taste } from "components/form-steps";
 import PageContainer from "components/page-container/page-container.component";
+import { uploadImage } from "database";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { editTasting } from "features/tasting/tastingSlice";
-import { useFileInput } from "hooks/useFileInput";
 import styles from "pages/styles/pages.module.css";
 import { TastingFormProvider, useTastingForm } from "pages/tastings/form-context";
 import { useEffect, useState } from "react";
@@ -17,7 +17,6 @@ const EditTasting = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tasting } = useAppSelector((state) => state.tasting);
-  const { handleFileUpload } = useFileInput();
   const [loading, setLoading] = useState(false);
 
   const form = useTastingForm({
@@ -40,7 +39,7 @@ const EditTasting = () => {
     try {
       let labelUri = data.labelUri;
       if (data.imageBlob) {
-        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "wine", data.id);
+        const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", data.id);
         if (!error) {
           labelUri = photoUrl;
         }

@@ -1,6 +1,7 @@
-import { Button, Group, Image, Modal, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Group, Image, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { IconTrash } from "@tabler/icons-react";
 import ColorPalette from "components/color-palette/color-palette.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
@@ -22,6 +23,7 @@ export default function TastingId() {
   const tasting = useAppSelector(selectTastingById(id));
   const [itemToDelete, setItemToDelete] = useState("");
   const [opened, { open, close }] = useDisclosure(false);
+  const [loading, setLoading] = useState(false);
 
   if (!tasting) {
     navigate("/");
@@ -39,6 +41,7 @@ export default function TastingId() {
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       await dispatch(deleteTasting(itemToDelete)).unwrap();
       notifications.show({
@@ -51,6 +54,8 @@ export default function TastingId() {
         color: "red",
         message: "Soemthing went wrong trying to delete your tasting notes.",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -142,14 +147,17 @@ export default function TastingId() {
       </Group>
       <Footer>
         <Group style={{ width: "100%" }} justify="space-between">
-          <Button
+          <ActionIcon
+            variant="filled"
+            size={36}
+            loading={loading}
             onClick={() => {
               handleConfirmDeleteOpen(tasting.id);
             }}
-            variant="outline"
           >
-            Delete
-          </Button>
+            <IconTrash />
+          </ActionIcon>
+
           <Button
             style={{ mt: 1, mr: 1 }}
             onClick={() => {

@@ -1,9 +1,10 @@
-import { Avatar, Box, Button, FileInput, Group, TextInput, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, FileInput, Group, TextInput, rem } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { IconUpload } from "@tabler/icons-react";
+import { IconTrash, IconUpload } from "@tabler/icons-react";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
+import { removeImage, uploadImage } from "database";
 import { fetchLogout } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { editUserProfile } from "features/user/userSlice";
@@ -20,7 +21,7 @@ export default function Profile() {
   const { currentUser } = useAppSelector((state) => state.auth);
   const { userProfile } = useAppSelector((state) => state.user);
   const isMobile = useMobile();
-  const { file, blob, handleFileChange, handleFileUpload } = useFileInput();
+  const { file, blob, handleFileChange } = useFileInput();
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
@@ -47,13 +48,30 @@ export default function Profile() {
     }
   };
 
+  const handleDeleteAvatar = async () => {
+    setLoading(true);
+    try {
+      await removeImage(form.values.avatar);
+      await dispatch(editUserProfile({ ...form.values, avatar: "" })).unwrap();
+      notifications.show({
+        message: "Your avatar image has been removed.",
+      });
+    } catch (err: any) {
+      notifications.show({
+        message: "An error occurred removing your avatar.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onSubmitHandler = async (data: UserProfileT) => {
     setLoading(true);
 
     try {
       let avatar = data.avatar;
       if (data.imageBlob) {
-        const { error, photoUrl } = await handleFileUpload(data.imageBlob, "user", currentUser?.uid ?? "");
+        const { error, photoUrl } = await uploadImage(data.imageBlob, "user", currentUser?.uid ?? "");
         if (!error) {
           avatar = photoUrl;
         }
@@ -110,6 +128,16 @@ export default function Profile() {
             size={isMobile ? 200 : 300}
             src={userProfile?.avatar}
           />
+          <ActionIcon
+            variant="filled"
+            mt={10}
+            size={36}
+            loading={loading}
+            disabled={!form.values.avatar}
+            onClick={handleDeleteAvatar}
+          >
+            <IconTrash />
+          </ActionIcon>
         </Box>
       </Group>
     </PageContainer>

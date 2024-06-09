@@ -1,12 +1,4 @@
-import { uploadImage } from "database";
 import { useState } from "react";
-
-interface FileUploadResponse {
-  photoUrl: string;
-  error: string;
-}
-
-type Prefix = "user" | "wine";
 
 export function useFileInput() {
   const [imgPreview, setImgPreview] = useState("");
@@ -30,23 +22,6 @@ export function useFileInput() {
     }
   };
 
-  async function handleFileUpload(imageBlob: Blob, prefix: Prefix, id: string): Promise<FileUploadResponse> {
-    try {
-      const fileType = imageBlob.type.split("/")[1];
-      const { photoUrl, error } = await uploadImage(imageBlob, prefix, id, fileType);
-      return {
-        photoUrl,
-        error,
-      };
-    } catch (err: any) {
-      console.error(err);
-      return {
-        photoUrl: "",
-        error: `unable to upload file: ${err.message}`,
-      };
-    }
-  }
-
   return {
     file,
     blob,
@@ -55,6 +30,5 @@ export function useFileInput() {
     setBlob,
     setImgPreview,
     handleFileChange,
-    handleFileUpload,
   };
 }
