@@ -4,7 +4,7 @@ import { IconUpload } from "@tabler/icons-react";
 import { countries } from "countries-list";
 import { useFileInput } from "hooks/useFileInput";
 import { useWineContext } from "pages/cellar/form-context";
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, type KeyboardEvent, useEffect, useState } from "react";
 
 export const DetailsWine = () => {
   const [varietals, setVarietals] = useState([""]);
@@ -29,6 +29,18 @@ export const DetailsWine = () => {
   const onDateChange = (value: Date | null) => {
     if (value) {
       form.setFieldValue("date", value);
+    }
+  };
+
+  const onVarietalKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (currentVarietal === "") {
+      return;
+    }
+
+    if (event.key === "Enter") {
+      setVarietals([...varietals, currentVarietal]);
+      form.setFieldValue("varietal", [...varietals, currentVarietal]);
+      setCurrentVarietal("");
     }
   };
 
@@ -75,7 +87,12 @@ export const DetailsWine = () => {
               {varietal}
             </Pill>
           ))}
-          <PillsInput.Field value={currentVarietal} onBlur={onVarietalBlur} onChange={onVarietalChange} />
+          <PillsInput.Field
+            value={currentVarietal}
+            onBlur={onVarietalBlur}
+            onKeyDown={onVarietalKeyDown}
+            onChange={onVarietalChange}
+          />
         </Pill.Group>
       </PillsInput>
 
