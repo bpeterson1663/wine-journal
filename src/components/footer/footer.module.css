@@ -9,7 +9,7 @@
     flex-direction: column;
     justify-content: center;
     background-color: var(--mantine-color-primary-9);
-    padding: 30px;
+    padding: 20px 10px;
     z-index: 3;
-    min-height: 65px;
+    min-height: 50px;
 }
