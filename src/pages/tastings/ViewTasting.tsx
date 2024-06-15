@@ -66,7 +66,7 @@ export default function TastingId() {
   };
 
   const ConfirmDeleteDialog = () => (
-    <Modal className={styles["delete-dialog"]} opened={opened} onClose={close} title="Delete Tasting">
+    <Modal className={styles["delete-dialog"]} opened={opened} onClose={close} title="Delete Tasting" centered>
       <Text className={styles.content}>Are you sure you want to delete this tasting?</Text>
       <Group justify="flex-end">
         <Button variant="outline" onClick={handleConfirmDeleteClose}>

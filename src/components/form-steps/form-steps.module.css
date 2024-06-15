@@ -1,6 +1,7 @@
 .slider {
     margin-top: 10px;
     margin-bottom: 50px;
+    font-size: var(--input-label-size, var(--mantine-font-size-sm));
 }
 
 .form-label {
@@ -13,12 +14,16 @@
     font-size: var(--input-label-size, var(--mantine-font-size-sm));
 }
 
+.label {
+    font-size: var(--input-label-size, var(--mantine-font-size-sm));
+}
+
 .radio-group {
     margin-top: 10px;
 }
 
 .mark-label {
-    font-size: 12px;
+    font-size: 0.7rem !important;
 }
 
 .rating {

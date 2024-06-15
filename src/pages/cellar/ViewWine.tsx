@@ -71,7 +71,7 @@ export default function ViewWine() {
   };
 
   const ConfirmDeleteDialog = () => (
-    <Modal opened={opened} onClose={close} title="Delete Wine">
+    <Modal opened={opened} onClose={close} title="Delete Wine" centered>
       <Text>Are you sure you want to delete this wine?</Text>
       <Group>
         <Button autoFocus onClick={handleConfirmDeleteClose}>

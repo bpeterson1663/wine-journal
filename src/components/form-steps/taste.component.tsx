@@ -13,7 +13,7 @@ export const Taste = () => {
   const form = useTastingContext();
 
   return (
-    <Box>
+    <Box mt={10}>
       <Text className={styles["form-label"]}>Body</Text>
       <Slider
         classNames={{
