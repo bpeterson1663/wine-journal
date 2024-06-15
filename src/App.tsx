@@ -46,7 +46,14 @@ function App() {
     const { currentUser, loading } = useContext(UserContext);
 
     if (loading) {
-      return <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />;
+      return (
+        <LoadingOverlay
+          loaderProps={{ color: "red" }}
+          visible={loading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+        />
+      );
     }
     if (!currentUser?.uid) {
       return <Navigate to="/login" replace />;

@@ -100,7 +100,15 @@ export const DetailsTasting = () => {
 
       <TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
 
-      <Select searchable  autoComplete="country" data={countryList} required mt="xs" label="Country" {...form.getInputProps("country")} />
+      <Select
+        searchable
+        autoComplete="country"
+        data={countryList}
+        required
+        mt="xs"
+        label="Country"
+        {...form.getInputProps("country")}
+      />
 
       <TextInput required mt="xs" label="Region" {...form.getInputProps("region")} />
 

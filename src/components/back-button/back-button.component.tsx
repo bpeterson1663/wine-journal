@@ -35,7 +35,7 @@ export function BackButton({ label = "Back", showWarning }: Props) {
 
   return (
     <>
-      <Modal opened={openConfirm} onClose={() => setOpenConfirm(false)} title="Unsaved Changes">
+      <Modal opened={openConfirm} onClose={() => setOpenConfirm(false)} title="Unsaved Changes" centered>
         <Modal.Body>
           <p>Are you sure you want to leave before saving your changes?</p>
         </Modal.Body>

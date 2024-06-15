@@ -42,6 +42,7 @@ const theme = createTheme({
       "#8b3d4e",
       "#7b3242",
     ],
+    red: ["#f9f0f2", "#ebdfe2", "#dabbc1", "#ca95a0", "#bc7583", "#b46171", "#b15568", "#9c4658", "#8b3d4e", "#7b3242"],
   },
   components: {
     Button: Button.extend({
