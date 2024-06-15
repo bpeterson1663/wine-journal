@@ -33,11 +33,12 @@ export const DetailsWine = () => {
   };
 
   const onVarietalKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (currentVarietal === "") {
-      return;
-    }
-
     if (event.key === "Enter") {
+      event.preventDefault();
+      if (currentVarietal === "") {
+        return;
+      }
+
       setVarietals([...varietals, currentVarietal]);
       form.setFieldValue("varietal", [...varietals, currentVarietal]);
       setCurrentVarietal("");

@@ -4,7 +4,7 @@ import { IconUpload } from "@tabler/icons-react";
 import { countries } from "countries-list";
 import { useFileInput } from "hooks/useFileInput";
 import { useTastingContext } from "pages/tastings/form-context";
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, type KeyboardEvent, useEffect, useState } from "react";
 
 export const DetailsTasting = () => {
   const [varietals, setVarietals] = useState([""]);
@@ -33,10 +33,24 @@ export const DetailsTasting = () => {
     }
   };
 
+  const onVarietalKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (currentVarietal === "") {
+        return;
+      }
+
+      setVarietals([...varietals, currentVarietal]);
+      form.setFieldValue("varietal", [...varietals, currentVarietal]);
+      setCurrentVarietal("");
+    }
+  };
+
   const onVarietalBlur = () => {
     if (currentVarietal === "") {
       return;
     }
+
     setVarietals([...varietals, currentVarietal]);
     form.setFieldValue("varietal", [...varietals, currentVarietal]);
     setCurrentVarietal("");
@@ -75,7 +89,12 @@ export const DetailsTasting = () => {
               {varietal}
             </Pill>
           ))}
-          <PillsInput.Field value={currentVarietal} onBlur={onVarietalBlur} onChange={onVarietalChange} />
+          <PillsInput.Field
+            value={currentVarietal}
+            onBlur={onVarietalBlur}
+            onKeyDown={onVarietalKeyDown}
+            onChange={onVarietalChange}
+          />
         </Pill.Group>
       </PillsInput>
 
