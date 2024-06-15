@@ -21,7 +21,7 @@ export default function Profile() {
   const { currentUser } = useAppSelector((state) => state.auth);
   const { userProfile } = useAppSelector((state) => state.user);
   const isMobile = useMobile();
-  const { file, blob, handleFileChange } = useFileInput();
+  const { file, blob, handleFileChange, imgPreview } = useFileInput();
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
@@ -126,7 +126,7 @@ export default function Profile() {
             className={styles.avatar}
             radius="lg"
             size={isMobile ? 200 : 300}
-            src={userProfile?.avatar}
+            src={imgPreview || userProfile?.avatar}
           />
           <ActionIcon
             variant="filled"
