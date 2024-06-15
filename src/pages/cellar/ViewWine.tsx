@@ -130,6 +130,8 @@ export default function ViewWine() {
             >
               <IconTrash />
             </ActionIcon>
+          </Group>
+          <Group>
             <Button
               disabled={loading}
               onClick={() => {
@@ -138,8 +140,6 @@ export default function ViewWine() {
             >
               Edit
             </Button>
-          </Group>
-          <Group>
             <Button
               disabled={loading}
               onClick={() => {

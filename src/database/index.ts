@@ -59,8 +59,7 @@ export async function uploadImage(file: Blob, prefix: Prefix, id: string): Promi
 export async function removeImage(url: string) {
   const fileRef = ref(storage, url);
   try {
-    const response = await deleteObject(fileRef);
-    console.log({ response });
+    await deleteObject(fileRef);
     return {
       success: true,
       message: "image removed successfully",

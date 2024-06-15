@@ -6,7 +6,6 @@ export const ImageSchema = z
   .optional()
   .refine(
     (file) => {
-      console.log({ file });
       if (!file) {
         return true;
       }
@@ -18,7 +17,6 @@ export const ImageSchema = z
   )
   .refine(
     (file) => {
-      console.log({ file });
       if (!file) {
         return true;
       }

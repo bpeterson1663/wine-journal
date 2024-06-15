@@ -105,7 +105,7 @@ export default function NewWine() {
   };
 
   return (
-    <PageContainer showCancel>
+    <PageContainer showCancel showWarning={form.isDirty()}>
       <WineFormProvider form={form}>
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Stepper active={activeStep} onStepClick={setActiveStep} allowNextStepsSelect={false}>

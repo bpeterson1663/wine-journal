@@ -46,6 +46,7 @@ export default function EditWine() {
         }
       }
       await dispatch(editWine({ ...data, labelUri })).unwrap();
+      form.resetDirty();
       notifications.show({
         message: "Edits were saved.",
       });
@@ -69,7 +70,7 @@ export default function EditWine() {
   };
 
   return (
-    <PageContainer showCancel>
+    <PageContainer showCancel showWarning={form.isDirty()}>
       <WineFormProvider form={form}>
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Box>

@@ -166,7 +166,7 @@ const NewTasting = () => {
   };
 
   return (
-    <PageContainer showCancel>
+    <PageContainer showCancel showWarning={form.isDirty()}>
       <TastingFormProvider form={form}>
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Stepper

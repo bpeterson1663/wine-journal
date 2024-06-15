@@ -45,7 +45,7 @@ const EditTasting = () => {
         }
       }
       await dispatch(editTasting({ ...data, labelUri })).unwrap();
-
+      form.resetDirty();
       notifications.show({
         message: "Your tasting was updated.",
       });
@@ -68,7 +68,7 @@ const EditTasting = () => {
   };
 
   return (
-    <PageContainer showCancel>
+    <PageContainer showCancel showWarning={form.isDirty()}>
       <TastingFormProvider form={form}>
         <Box className={styles.form} component="form" onSubmit={form.onSubmit(onSubmitHandler)}>
           <Box className={styles.section}>
