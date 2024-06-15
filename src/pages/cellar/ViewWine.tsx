@@ -84,7 +84,7 @@ export default function ViewWine() {
     </Modal>
   );
 
-  const { producer, labelUri, varietal, vintage, region, country, subregion, classification } = wine;
+  const { producer, labelUri, varietal, vintage, region, country, subregion, classification, quantity, price } = wine;
 
   return (
     <PageContainer title={producer} showBack>
@@ -113,6 +113,8 @@ export default function ViewWine() {
 
           <Text size="sm">Region: {region}</Text>
           {subregion && <Text size="sm">Subregion: {subregion}</Text>}
+          <Text size="sm">Quantity: {quantity}</Text>
+          <Text size="sm">Price: {price}</Text>
         </div>
       </section>
       <Footer>
