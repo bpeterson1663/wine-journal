@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Group, Modal, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Group, Image, Modal, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconTrash } from "@tabler/icons-react";
@@ -24,6 +24,7 @@ export default function ViewWine() {
   const wine = useAppSelector(selectWineById(id));
   const [itemToDelete, setItemToDelete] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imageEnlarged, setImageEnlarged] = useState(false);
 
   if (!wine) {
     navigate("/cellar");
@@ -89,7 +90,19 @@ export default function ViewWine() {
     <PageContainer title={producer} showBack>
       <section className={styles.container}>
         <div className={styles.column}>
-          <img className={styles.wineImage} src={labelUri || getWineImage(wine)} alt={producer} />
+          <Image
+            className={styles.wineImage}
+            src={labelUri || getWineImage(wine)}
+            alt={producer}
+            onClick={() => setImageEnlarged(true)}
+          />
+          <Modal fullScreen opened={imageEnlarged} onClose={() => setImageEnlarged(false)} size="xl">
+            <Image
+              src={labelUri || getWineImage(wine)}
+              alt="Enlarged Image"
+              style={{ maxWidth: "100%", maxHeight: "100%" }}
+            />
+          </Modal>
         </div>
         <div className={styles.column}>
           {producer && <Title order={6}>Winery: {producer}</Title>}

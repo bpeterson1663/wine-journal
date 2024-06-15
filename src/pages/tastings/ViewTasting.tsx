@@ -24,6 +24,7 @@ export default function TastingId() {
   const [itemToDelete, setItemToDelete] = useState("");
   const [opened, { open, close }] = useDisclosure(false);
   const [loading, setLoading] = useState(false);
+  const [imageEnlarged, setImageEnlarged] = useState(false);
 
   if (!tasting) {
     navigate("/");
@@ -103,7 +104,20 @@ export default function TastingId() {
   return (
     <PageContainer showBack title={producer}>
       <Group align="start">
-        <Image w={150} radius="md" src={labelUri || getWineImage(tasting)} alt={producer} />
+        <Image
+          w={150}
+          radius="md"
+          src={labelUri || getWineImage(tasting)}
+          alt={producer}
+          onClick={() => setImageEnlarged(true)}
+        />
+        <Modal fullScreen opened={imageEnlarged} onClose={() => setImageEnlarged(false)} size="xl">
+          <Image
+            src={labelUri || getWineImage(tasting)}
+            alt="Enlarged Image"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
+        </Modal>
         <Stack align="flex-start" justify="flex-start" gap="xs" mt={10} w={180}>
           {classification && <Title order={5}>Name: {classification}</Title>}
           <Text size="md">Varietal(s): {varietal.join(", ")}</Text>
