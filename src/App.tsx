@@ -1,3 +1,4 @@
+import { LoadingOverlay } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import Layout from "components/layout/layout.component";
 import { UserContext } from "context/user.context";
@@ -45,7 +46,7 @@ function App() {
     const { currentUser, loading } = useContext(UserContext);
 
     if (loading) {
-      return <div>Loading....</div>;
+      return <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />;
     }
     if (!currentUser?.uid) {
       return <Navigate to="/login" replace />;

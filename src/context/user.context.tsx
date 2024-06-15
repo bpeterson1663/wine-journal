@@ -17,7 +17,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const dispatch = useAppDispatch();
   const auth = getAuth();
   const [currentUser, setCurrentUser] = useState<null | AuthUserT>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const value = { currentUser, setCurrentUser, loading };
   const { userProfile } = useAppSelector((state) => state.user);
@@ -35,11 +35,12 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
           if (!userProfile?.firstName) {
             await dispatch(getUserProfileById(uid));
           }
+          setLoading(false);
         }
       } else {
         setCurrentUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
     return () => {
       unsubscribe();
