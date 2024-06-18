@@ -1,8 +1,9 @@
 import { Box, NumberInput, Textarea } from "@mantine/core";
-import { useWineForm } from "pages/cellar/form-context";
+import { useWineContext } from "pages/cellar/form-context";
 
 export const Quantity = () => {
-  const form = useWineForm();
+  const form = useWineContext();
+
   return (
     <Box>
       <NumberInput label="Quantity" {...form.getInputProps("quantity")} />
