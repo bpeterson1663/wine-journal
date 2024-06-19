@@ -4,6 +4,7 @@ import Layout from "components/layout/layout.component";
 import { UserContext } from "context/user.context";
 import { fetchWines } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
+import { fetchPlans } from "features/plan/planSlice";
 import { fetchPublicTastings, fetchTastings } from "features/tasting/tastingSlice";
 import SignInUp from "pages/auth/SignInUp";
 import { Cellar, EditWine, NewWine, ViewWine } from "pages/cellar";
@@ -29,6 +30,7 @@ function App() {
             dispatch(fetchTastings({ userId: currentUser.uid })),
             dispatch(fetchPublicTastings()),
             dispatch(fetchWines({ userId: currentUser.uid })),
+            dispatch(fetchPlans()),
           ]);
         } catch (err) {
           console.error(err);
