@@ -47,11 +47,8 @@ export const createUserProfile = createAsyncThunk<
   }
 >("user/createUserProfile", async (data, { rejectWithValue }) => {
   try {
-    const { firstName, lastName, userId } = data;
     const docData = await addDoc(collection(db, "users"), {
-      firstName,
-      lastName,
-      userId,
+      ...data,
     });
     const userProfile = {
       ...data,

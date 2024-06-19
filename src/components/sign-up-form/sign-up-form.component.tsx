@@ -3,19 +3,24 @@ import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { Schema, type SignUpFormT } from "components/sign-up-form/scehma";
 import styles from "components/sign-up-form/sign-up-form.module.css";
+import dayjs from "dayjs";
 import { fetchSignUp } from "features/auth/authSlice";
 import { fetchSignInWithGoogle } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
+import { selectBeginnerPlan } from "features/plan/planSelector";
 import { createUserProfile } from "features/user/userSlice";
 import type { AuthError } from "firebase/auth";
 import { generateAuthErrorMessage } from "helpers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { currentUser } = useAppSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const plan = useAppSelector(selectBeginnerPlan());
 
   useEffect(() => {
     if (currentUser) {
@@ -36,6 +41,7 @@ const SignUpForm = () => {
   });
 
   const onSubmitHandler = async (data: SignUpFormT) => {
+    setLoading(true);
     const { password, email, firstName, lastName } = data;
     try {
       const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap();
@@ -48,6 +54,11 @@ const SignUpForm = () => {
           displayName: "",
           avatar: "",
           id: "",
+          planId: plan?.id ?? "",
+          trialExpires: dayjs()
+            .add(plan?.trialLength ?? 0, "days")
+            .toDate(),
+          isPaid: false,
         }),
       ).unwrap();
     } catch (err) {
@@ -55,10 +66,13 @@ const SignUpForm = () => {
         color: "red",
         message: generateAuthErrorMessage(err as AuthError),
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSignUpWithGoogle = async () => {
+    setGoogleLoading(true);
     try {
       await dispatch(fetchSignInWithGoogle(null)).unwrap();
     } catch (err) {
@@ -66,6 +80,8 @@ const SignUpForm = () => {
       notifications.show({
         message: generateAuthErrorMessage(err as AuthError),
       });
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -82,8 +98,12 @@ const SignUpForm = () => {
 
         <TextInput withAsterisk label="Confirm Password" type="password" {...form.getInputProps("confirmPassword")} />
         <Group justify="center" mt="md">
-          <Button onClick={handleSignUpWithGoogle}>Sign Up With Google</Button>
-          <Button type="submit">Sign Up</Button>
+          <Button loading={googleLoading} disabled={loading} onClick={handleSignUpWithGoogle}>
+            Sign Up With Google
+          </Button>
+          <Button loading={loading} disabled={googleLoading} type="submit">
+            Sign Up
+          </Button>
         </Group>
       </form>
     </Box>

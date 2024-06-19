@@ -7,32 +7,21 @@ import { fetchLogin, fetchSignInWithGoogle } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import type { AuthError } from "firebase/auth";
 import { generateAuthErrorMessage } from "helpers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignInForm = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { currentUser } = useAppSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
-  const dispatch = useAppDispatch();
   useEffect(() => {
     if (currentUser) {
       navigate("/");
     }
   }, [currentUser, navigate]);
-
-  const onSubmitHandler = async (data: SignInFormT) => {
-    const { password, email } = data;
-    try {
-      await dispatch(fetchLogin({ email, password })).unwrap();
-    } catch (err) {
-      console.error(err);
-      notifications.show({
-        color: "red",
-        message: generateAuthErrorMessage(err as AuthError),
-      });
-    }
-  };
 
   const form = useForm({
     initialValues: {
@@ -43,7 +32,24 @@ const SignInForm = () => {
     validate: zodResolver(Schema),
   });
 
+  const onSubmitHandler = async (data: SignInFormT) => {
+    setLoading(true);
+    const { password, email } = data;
+    try {
+      await dispatch(fetchLogin({ email, password })).unwrap();
+    } catch (err) {
+      console.error(err);
+      notifications.show({
+        color: "red",
+        message: generateAuthErrorMessage(err as AuthError),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSignInWithGoogle = async () => {
+    setGoogleLoading(true);
     try {
       await dispatch(fetchSignInWithGoogle(null));
     } catch (err) {
@@ -51,6 +57,8 @@ const SignInForm = () => {
       notifications.show({
         message: generateAuthErrorMessage(err as AuthError),
       });
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -68,8 +76,12 @@ const SignInForm = () => {
         <TextInput withAsterisk label="Password" type="password" {...form.getInputProps("password")} />
 
         <Group justify="center" mt="md">
-          <Button onClick={handleSignInWithGoogle}>Sign In With Google</Button>
-          <Button type="submit">Submit</Button>
+          <Button loading={googleLoading} disabled={loading} onClick={handleSignInWithGoogle}>
+            Sign In With Google
+          </Button>
+          <Button loading={loading} disabled={googleLoading} type="submit">
+            Submit
+          </Button>
         </Group>
       </form>
     </Box>
