@@ -8,7 +8,7 @@ import PageContainer from "components/page-container/page-container.component";
 import RatingIcon from "components/rating/raiting.component";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { selectTastingById } from "features/tasting/tastingSelectors";
-import { deleteTasting, tastingSetEdit } from "features/tasting/tastingSlice";
+import { deleteTastingThunk, tastingSetEdit } from "features/tasting/tastingSlice";
 import { getLabel, getWineImage, uppercaseFirstLetter } from "helpers";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
@@ -44,7 +44,7 @@ export default function TastingId() {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await dispatch(deleteTasting(itemToDelete)).unwrap();
+      await dispatch(deleteTastingThunk(itemToDelete)).unwrap();
       notifications.show({
         message: "Tasting was deleted.",
       });

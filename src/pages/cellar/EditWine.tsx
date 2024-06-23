@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { DetailsWine, Quantity } from "components/form-steps";
 import { uploadImage } from "database";
-import { editWine } from "features/cellar/cellarSlice";
+import { editWineThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
@@ -45,7 +45,7 @@ export default function EditWine() {
           labelUri = photoUrl;
         }
       }
-      await dispatch(editWine({ ...data, labelUri })).unwrap();
+      await dispatch(editWineThunk({ ...data, labelUri })).unwrap();
       form.resetDirty();
       notifications.show({
         message: "Edits were saved.",

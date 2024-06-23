@@ -1,5 +1,5 @@
 
-mutation CreatePlan($name: String, $price: Float, $maxWine: Int, $maxTasting: Int, $description: String, $upgradablePlans: [String!], $downgradablePlans: [String!], $isActive: Boolean, $trialLength: Int) @auth(level: PUBLIC) {
+mutation CreatePlan($name: String, $price: Float, $maxWine: Int, $maxTasting: Int, $description: String, $upgradablePlans: [String!], $downgradablePlans: [String!], $isActive: Boolean, $trialLength: Int) @auth(level: USER) {
     plan_insert(data: {
         name: $name,
         price: $price,
@@ -13,7 +13,7 @@ mutation CreatePlan($name: String, $price: Float, $maxWine: Int, $maxTasting: In
     })
 }
 
-mutation CreateUser($avatar: String, $firstName: String, $lastName: String, $displayName: String, $userId: String, $email: String, $plan: Plan_Key, $trialExpires: Timestamp, $isPaid: Boolean) @auth(level: PUBLIC) {
+mutation CreateUser($avatar: String, $firstName: String, $lastName: String, $displayName: String, $userId: String, $email: String, $plan: Plan_Key, $trialExpires: Timestamp, $isPaid: Boolean) @auth(level: USER) {
     user_insert(data: {
         avatar: $avatar,
         firstName: $firstName,
@@ -27,7 +27,7 @@ mutation CreateUser($avatar: String, $firstName: String, $lastName: String, $dis
     })
 }
 
-mutation CreateWine($user: User_Key, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String) @auth(level: PUBLIC) {
+mutation CreateWine($user: User_Key, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String) @auth(level: USER) {
     wine_insert(data: {
         user: $user,
         classification: $classification,
@@ -45,7 +45,7 @@ mutation CreateWine($user: User_Key, $classification: String, $country: String, 
     })
 }
 
-mutation CreateTasting($user: User_Key, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String, $hue: String, $color: String, $intensity: String, $smell: String, $alcohol: Int, $acidity: Int, $tannin: Int, $sweet: Int, $body: Int, $rating: Int, $remarks: String) @auth(level: PUBLIC) {
+mutation CreateTasting($user: User_Key, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String, $hue: String, $color: String, $intensity: String, $smell: String, $alcohol: Int, $acidity: Int, $tannin: Int, $sweet: Int, $body: Int, $rating: Int, $remarks: String) @auth(level: USER) {
     tasting_insert(data: {
         user: $user,
         classification: $classification,
@@ -72,4 +72,56 @@ mutation CreateTasting($user: User_Key, $classification: String, $country: Strin
         rating: $rating,
         remarks: $remarks
     })
+}
+
+mutation UpdateWine($id: UUID, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String) @auth(level: USER) {
+  wine_update(id: $id, data: {
+        classification: $classification,
+        country: $country,
+        date: $date,
+        description: $description,
+        labelUri: $labelUri,
+        price: $price,
+        producer: $producer,
+        quantity: $quantity,
+        region: $region,
+        subregion: $subregion,
+        varietal: $varietal,
+        vintage: $vintage,
+    })
+}
+
+mutation UpdateTasting($id: UUID, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String,  $hue: String, $color: String, $intensity: String, $smell: String, $alcohol: Int, $acidity: Int, $tannin: Int, $sweet: Int, $body: Int, $rating: Int, $remarks: String) @auth(level: USER) {
+  tasting_update(id: $id, data: {
+        classification: $classification,
+        country: $country,
+        date: $date,
+        description: $description,
+        labelUri: $labelUri,
+        price: $price,
+        producer: $producer,
+        quantity: $quantity,
+        region: $region,
+        subregion: $subregion,
+        varietal: $varietal,
+        vintage: $vintage,
+        hue: $hue,
+        color: $color,
+        intensity: $intensity,
+        smell: $smell,
+        alcohol: $alcohol,
+        acidity: $acidity,
+        tannin: $tannin,
+        sweet: $sweet,
+        body: $body,
+        rating: $rating,
+        remarks: $remarks
+    })
+}
+mutation DeleteWine($id: UUID!) {
+  wine_delete(id: $id)
+}
+
+mutation DeleteTasting($id: UUID!) {
+  tasting_delete(id: $id)
 }

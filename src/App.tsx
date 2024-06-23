@@ -2,10 +2,10 @@ import { LoadingOverlay } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import Layout from "components/layout/layout.component";
 import { UserContext } from "context/user.context";
-import { fetchWines } from "features/cellar/cellarSlice";
+import { fetchWinesThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { fetchPlans } from "features/plan/planSlice";
-import { fetchPublicTastings, fetchTastings } from "features/tasting/tastingSlice";
+import { fetchTastingsThunk } from "features/tasting/tastingSlice";
 import SignInUp from "pages/auth/SignInUp";
 import { Cellar, EditWine, NewWine, ViewWine } from "pages/cellar";
 import Home from "pages/home/Home";
@@ -28,9 +28,8 @@ function App() {
       if (currentUser?.uid) {
         try {
           await Promise.all([
-            dispatch(fetchTastings({ userId: currentUser.uid })),
-            // dispatch(fetchPublicTastings()),
-            dispatch(fetchWines({ userId: currentUser.uid })),
+            dispatch(fetchTastingsThunk({ userId: currentUser.uid })),
+            dispatch(fetchWinesThunk({ userId: currentUser.uid })),
           ]);
         } catch (err) {
           console.error(err);

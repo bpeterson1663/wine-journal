@@ -5,7 +5,7 @@ import Footer from "components/footer/footer.component";
 import { DetailsWine, Quantity } from "components/form-steps";
 import PageContainer from "components/page-container/page-container.component";
 import { uploadImage } from "database";
-import { createWineThunk, editWine } from "features/cellar/cellarSlice";
+import { createWineThunk, editWineThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
@@ -44,7 +44,7 @@ export default function NewWine() {
       if (data.imageBlob) {
         const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);
         if (!error) {
-          await dispatch(editWine({ ...data, id, labelUri: photoUrl })).unwrap();
+          await dispatch(editWineThunk({ ...data, id, labelUri: photoUrl })).unwrap();
         }
       }
 

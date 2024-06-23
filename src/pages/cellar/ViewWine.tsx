@@ -5,7 +5,7 @@ import { IconTrash } from "@tabler/icons-react";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
 import { selectWineById } from "features/cellar/cellarSelectors";
-import { deleteWine, wineSetEdit } from "features/cellar/cellarSlice";
+import { deleteWineThunk, wineSetEdit } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { tastingSetOpen } from "features/tasting/tastingSlice";
 import { getWineImage } from "helpers";
@@ -44,7 +44,7 @@ export default function ViewWine() {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await dispatch(deleteWine(itemToDelete)).unwrap();
+      await dispatch(deleteWineThunk(itemToDelete)).unwrap();
       notifications.show({
         message: "Your wine was removed from cellar.",
       });

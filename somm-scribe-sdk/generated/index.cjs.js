@@ -43,6 +43,42 @@ exports.createTasting = function createTasting(dcOrVars, vars) {
   return executeMutation(createTastingRef(dcOrVars, vars));
 };
 
+function updateWineRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'UpdateWine', inputVars);
+}
+exports.updateWineRef = updateWineRef;
+exports.updateWine = function updateWine(dcOrVars, vars) {
+  return executeMutation(updateWineRef(dcOrVars, vars));
+};
+
+function updateTastingRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'UpdateTasting', inputVars);
+}
+exports.updateTastingRef = updateTastingRef;
+exports.updateTasting = function updateTasting(dcOrVars, vars) {
+  return executeMutation(updateTastingRef(dcOrVars, vars));
+};
+
+function deleteWineRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars, true);
+  return mutationRef(dcInstance, 'DeleteWine', inputVars);
+}
+exports.deleteWineRef = deleteWineRef;
+exports.deleteWine = function deleteWine(dcOrVars, vars) {
+  return executeMutation(deleteWineRef(dcOrVars, vars));
+};
+
+function deleteTastingRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars, true);
+  return mutationRef(dcInstance, 'DeleteTasting', inputVars);
+}
+exports.deleteTastingRef = deleteTastingRef;
+exports.deleteTasting = function deleteTasting(dcOrVars, vars) {
+  return executeMutation(deleteTastingRef(dcOrVars, vars));
+};
+
 function listPlansRef(dc) {
   const { dc: dcInstance} = validateArgs(dc, undefined);
   return queryRef(dcInstance, 'ListPlans');

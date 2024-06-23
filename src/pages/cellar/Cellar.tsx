@@ -2,7 +2,7 @@ import { Button, Group } from "@mantine/core";
 import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
-import { fetchWines } from "features/cellar/cellarSlice";
+import { fetchWinesThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function Cellar() {
   const dispatch = useAppDispatch();
-  const [disableLoadMore, setDisableLoadMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const { wineList } = useAppSelector((state) => state.cellar);
   const { currentUser } = useAppSelector((state) => state.auth);
@@ -24,10 +23,7 @@ export default function Cellar() {
   const handleNext = async (lastId: string) => {
     setLoading(true);
     try {
-      await dispatch(fetchWines({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
-      // if (docs.length < 10) {
-      //   setDisableLoadMore(true);
-      // }
+      await dispatch(fetchWinesThunk({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
     } catch (err) {
       console.error(err);
     } finally {
@@ -44,7 +40,7 @@ export default function Cellar() {
       </section>
       <div className={styles["load-more-container"]}>
         <Button
-          disabled={disableLoadMore}
+          disabled={true}
           loading={loading}
           variant="outline"
           onClick={() => handleNext(wineList[wineList.length - 1].id)}

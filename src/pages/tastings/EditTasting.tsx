@@ -6,7 +6,7 @@ import { ColorSmell, DetailsTasting, Review, Taste } from "components/form-steps
 import PageContainer from "components/page-container/page-container.component";
 import { uploadImage } from "database";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { editTasting } from "features/tasting/tastingSlice";
+import { editTastingThunk } from "features/tasting/tastingSlice";
 import styles from "pages/styles/pages.module.css";
 import { TastingFormProvider, useTastingForm } from "pages/tastings/form-context";
 import { useEffect, useState } from "react";
@@ -44,7 +44,7 @@ const EditTasting = () => {
           labelUri = photoUrl;
         }
       }
-      await dispatch(editTasting({ ...data, labelUri })).unwrap();
+      await dispatch(editTastingThunk({ ...data, labelUri })).unwrap();
       form.resetDirty();
       notifications.show({
         message: "Your tasting was updated.",

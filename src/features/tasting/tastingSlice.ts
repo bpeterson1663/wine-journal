@@ -1,20 +1,5 @@
 import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db, dc } from "database";
-import dayjs from "dayjs";
-import {
-  type DocumentSnapshot,
-  type QuerySnapshot,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore/lite";
+import { dc } from "database";
 import type { WineT } from "schemas/cellar";
 import type { TastingT } from "schemas/tastings";
 import type { FetchStatusT, MessageT } from "types";
@@ -26,6 +11,10 @@ import {
   type User_Key,
   createTasting,
   listTastings,
+  updateTasting,
+  type UpdateTastingVariables,
+  type DeleteTastingVariables,
+  deleteTasting
 } from "@firebasegen/somm-scribe-connector";
 interface InitialTastingState {
   message: MessageT;
@@ -57,7 +46,7 @@ export const tastingSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchTastings.fulfilled, (state, action) => {
+      .addCase(fetchTastingsThunk.fulfilled, (state, action) => {
         const tastingList = action.payload.tastings.map((tasting) => {
           const quantity = typeof tasting.quantity === "string" ? Number.parseInt(tasting.quantity) : tasting.quantity;
           const price = typeof tasting.price === "string" ? Number.parseFloat(tasting.price) : tasting.price;
@@ -72,62 +61,19 @@ export const tastingSlice = createSlice({
           return data as TastingT;
         });
 
-        // const data = tastingList.map((tasting) => tasting as TastingT);
-        // const ids = [...state.tastingList, ...data].map((tasting) => tasting.id);
-        // const filter = [...state.tastingList, ...data].filter(
-        //   (value: TastingT, index) => !ids.includes(value.id, index + 1),
-        // );
-
         state.tastingList = tastingList;
-      })
-      .addCase(fetchPublicTastings.fulfilled, (state, action) => {
-        const tastingList = action.payload.docs.map((doc) => {
-          const data = doc.data();
-          const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
-          const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
-
-          return {
-            ...data,
-            id: doc.id,
-            date: data.date.toDate(),
-            quantity,
-            price,
-            type: "tasting",
-          };
-        });
-
-        state.publicTastingList = tastingList.map((tasting) => tasting as TastingT);
-      })
-      .addCase(fetchTastingById.fulfilled, (state, action) => {
-        const docSnap = action.payload;
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
-          const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
-
-          const tasting = {
-            ...data,
-            id: docSnap.id,
-            date: data.date.toDate(),
-            quantity,
-            price,
-          };
-          state.tasting = tasting as TastingT;
-        } else {
-          state.tasting = null;
-        }
       })
       .addCase(createTastingThunk.fulfilled, (state, action) => {
         const tastings = [...state.tastingList, action.payload];
         state.tastingList = tastings;
       })
-      .addCase(editTasting.fulfilled, (state, action) => {
+      .addCase(editTastingThunk.fulfilled, (state, action) => {
         const index = state.tastingList.findIndex((el) => el.id === action.payload.id);
         if (index >= 0) {
           state.tastingList[index] = action.payload;
         }
       })
-      .addCase(deleteTasting.fulfilled, (state, action) => {
+      .addCase(deleteTastingThunk.fulfilled, (state, action) => {
         state.tastingList = state.tastingList.filter((tasting) => tasting.id !== action.payload);
       });
   },
@@ -143,7 +89,8 @@ interface FetchTastingsParams {
   userId: string;
   previousDoc?: string;
 }
-export const fetchTastings = createAsyncThunk<
+
+export const fetchTastingsThunk = createAsyncThunk<
   ListTastingsResponse,
   FetchTastingsParams,
   {
@@ -155,54 +102,8 @@ export const fetchTastings = createAsyncThunk<
     const { data } = await listTastings(params);
 
     return data;
-    // const baseQuery = query(collection(db, "tastings"), where("userId", "==", userId), orderBy("date", "desc"));
-    // if (previousDoc) {
-    //   const docRef = doc(db, "tastings", previousDoc);
-    //   const docSnapshot = await getDoc(docRef);
-    //   const fbq = query(baseQuery, startAfter(docSnapshot), limit(10));
-    //   return await getDocs(fbq);
-    // }
-
-    // const fbq = query(baseQuery, limit(10));
-    // return await getDocs(fbq);
   } catch (err) {
     console.error(err);
-    return rejectWithValue(err);
-  }
-});
-
-export const fetchPublicTastings = createAsyncThunk<QuerySnapshot>(
-  "tasting/fetchPublicTastings",
-  async (_, { rejectWithValue }) => {
-    try {
-      const sevenDaysAgo = dayjs().subtract(7, "day").toDate();
-
-      const fbq = query(
-        collection(db, "tastings"),
-        where("date", ">", sevenDaysAgo),
-        where("isPublic", "==", true),
-        orderBy("date", "desc"),
-        limit(10),
-      );
-      return await getDocs(fbq);
-    } catch (err) {
-      console.error(err);
-      return rejectWithValue(err);
-    }
-  },
-);
-
-export const fetchTastingById = createAsyncThunk<
-  DocumentSnapshot,
-  string,
-  {
-    state: RootState;
-  }
->("tasting/fetchTastingById", async (id, { rejectWithValue }) => {
-  try {
-    const docRef = doc(db, "tastings", id);
-    return await getDoc(docRef);
-  } catch (err) {
     return rejectWithValue(err);
   }
 });
@@ -279,27 +180,75 @@ export const createTastingThunk = createAsyncThunk<
   }
 });
 
-export const editTasting = createAsyncThunk<
+export const editTastingThunk = createAsyncThunk<
   TastingT,
   TastingT,
   {
     state: RootState;
   }
 >("tasting/editTasting", async (data, { rejectWithValue }) => {
-  const tastingRef = doc(db, "tastings", data.id);
   const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
   const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
-
+  const {
+    id,
+    classification,
+    country,
+    date,
+    description,
+    labelUri,
+    producer,
+    region,
+    subregion,
+    varietal,
+    vintage,
+    hue,
+    color,
+    intensity,
+    smell,
+    alcohol,
+    acidity,
+    tannin,
+    sweet,
+    body,
+    rating,
+    remarks,
+  } = data;
   try {
-    delete data.imageBlob;
-    await updateDoc(tastingRef, { ...data, quantity, price });
+    delete data.imageBlob; 
+    const request: UpdateTastingVariables = {
+      id,
+      classification,
+      country,
+      description,
+      date: date.toISOString(),
+      labelUri,
+      producer,
+      region,
+      subregion,
+      varietal,
+      vintage,
+      quantity,
+      price,
+      hue,
+      color,
+      intensity,
+      smell,
+      alcohol,
+      acidity,
+      tannin,
+      sweet,
+      body,
+      rating,
+      remarks
+    }
+    await updateTasting(request)
     return data;
   } catch (err) {
     return rejectWithValue(err);
   }
 });
 
-export const deleteTasting = createAsyncThunk<
+export const deleteTastingThunk = createAsyncThunk<
   string,
   string,
   {
@@ -307,7 +256,10 @@ export const deleteTasting = createAsyncThunk<
   }
 >("tasting/deleteTasting", async (id, { rejectWithValue }) => {
   try {
-    await deleteDoc(doc(db, "tastings", id));
+    const request: DeleteTastingVariables = {
+      id
+    }
+    await deleteTasting(request)
     return id;
   } catch (err) {
     return rejectWithValue(err);

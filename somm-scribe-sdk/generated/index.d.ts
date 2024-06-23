@@ -93,6 +93,22 @@ export interface CreateWineVariables {
   vintage?: string | null;
 }
 
+export interface DeleteTastingResponse {
+  tasting_delete?: Tasting_Key | null;
+}
+
+export interface DeleteTastingVariables {
+  id: UUIDString;
+}
+
+export interface DeleteWineResponse {
+  wine_delete?: Wine_Key | null;
+}
+
+export interface DeleteWineVariables {
+  id: UUIDString;
+}
+
 export interface GetUserByIdResponse {
   users: ({
     firstName: string;
@@ -194,6 +210,57 @@ export interface Tasting_Key {
   __typename?: 'Tasting_Key';
 }
 
+export interface UpdateTastingResponse {
+  tasting_update?: Tasting_Key | null;
+}
+
+export interface UpdateTastingVariables {
+  id?: UUIDString | null;
+  classification?: string | null;
+  country?: string | null;
+  date?: TimestampString | null;
+  description?: string | null;
+  labelUri?: string | null;
+  price?: number | null;
+  producer?: string | null;
+  quantity?: number | null;
+  region?: string | null;
+  subregion?: string | null;
+  varietal?: string[] | null;
+  vintage?: string | null;
+  hue?: string | null;
+  color?: string | null;
+  intensity?: string | null;
+  smell?: string | null;
+  alcohol?: number | null;
+  acidity?: number | null;
+  tannin?: number | null;
+  sweet?: number | null;
+  body?: number | null;
+  rating?: number | null;
+  remarks?: string | null;
+}
+
+export interface UpdateWineResponse {
+  wine_update?: Wine_Key | null;
+}
+
+export interface UpdateWineVariables {
+  id?: UUIDString | null;
+  classification?: string | null;
+  country?: string | null;
+  date?: TimestampString | null;
+  description?: string | null;
+  labelUri?: string | null;
+  price?: number | null;
+  producer?: string | null;
+  quantity?: number | null;
+  region?: string | null;
+  subregion?: string | null;
+  varietal?: string[] | null;
+  vintage?: string | null;
+}
+
 export interface User_Key {
   id: UUIDString;
   __typename?: 'User_Key';
@@ -240,6 +307,42 @@ export function createTastingRef(dc: DataConnect, vars?: CreateTastingVariables)
 
 export function createTasting(vars?: CreateTastingVariables): MutationPromise<CreateTastingResponse, CreateTastingVariables>;
 export function createTasting(dc: DataConnect, vars?: CreateTastingVariables): MutationPromise<CreateTastingResponse,CreateTastingVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function updateWineRef(vars?: UpdateWineVariables): MutationRef<UpdateWineResponse, UpdateWineVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function updateWineRef(dc: DataConnect, vars?: UpdateWineVariables): MutationRef<UpdateWineResponse,UpdateWineVariables>;
+
+export function updateWine(vars?: UpdateWineVariables): MutationPromise<UpdateWineResponse, UpdateWineVariables>;
+export function updateWine(dc: DataConnect, vars?: UpdateWineVariables): MutationPromise<UpdateWineResponse,UpdateWineVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function updateTastingRef(vars?: UpdateTastingVariables): MutationRef<UpdateTastingResponse, UpdateTastingVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function updateTastingRef(dc: DataConnect, vars?: UpdateTastingVariables): MutationRef<UpdateTastingResponse,UpdateTastingVariables>;
+
+export function updateTasting(vars?: UpdateTastingVariables): MutationPromise<UpdateTastingResponse, UpdateTastingVariables>;
+export function updateTasting(dc: DataConnect, vars?: UpdateTastingVariables): MutationPromise<UpdateTastingResponse,UpdateTastingVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function deleteWineRef(vars: DeleteWineVariables): MutationRef<DeleteWineResponse, DeleteWineVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function deleteWineRef(dc: DataConnect, vars: DeleteWineVariables): MutationRef<DeleteWineResponse,DeleteWineVariables>;
+
+export function deleteWine(vars: DeleteWineVariables): MutationPromise<DeleteWineResponse, DeleteWineVariables>;
+export function deleteWine(dc: DataConnect, vars: DeleteWineVariables): MutationPromise<DeleteWineResponse,DeleteWineVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function deleteTastingRef(vars: DeleteTastingVariables): MutationRef<DeleteTastingResponse, DeleteTastingVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function deleteTastingRef(dc: DataConnect, vars: DeleteTastingVariables): MutationRef<DeleteTastingResponse,DeleteTastingVariables>;
+
+export function deleteTasting(vars: DeleteTastingVariables): MutationPromise<DeleteTastingResponse, DeleteTastingVariables>;
+export function deleteTasting(dc: DataConnect, vars: DeleteTastingVariables): MutationPromise<DeleteTastingResponse,DeleteTastingVariables>;
 
 
 /* Allow users to create refs without passing in DataConnect */

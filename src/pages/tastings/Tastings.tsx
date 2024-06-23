@@ -4,14 +4,13 @@ import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { fetchTastings } from "features/tasting/tastingSlice";
+import { fetchTastingsThunk } from "features/tasting/tastingSlice";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Tastings() {
   const dispatch = useAppDispatch();
-  const [disableLoadMore, setDisableLoadMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const { currentUser } = useAppSelector((state) => state.auth);
@@ -25,10 +24,7 @@ export default function Tastings() {
   const handleNext = async (lastId: string) => {
     setLoading(true);
     try {
-      await dispatch(fetchTastings({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
-      // if (docs.length < 10) {
-      //   setDisableLoadMore(true);
-      // }
+      await dispatch(fetchTastingsThunk({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
     } catch (err) {
       console.error(err);
     } finally {
@@ -56,7 +52,7 @@ export default function Tastings() {
       </section>
       <div className={styles["load-more-container"]}>
         <Button
-          disabled={disableLoadMore}
+          disabled={true}
           loading={loading}
           variant="outline"
           onClick={() => handleNext(sortedList[sortedList.length - 1].id)}
