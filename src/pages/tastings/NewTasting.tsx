@@ -7,7 +7,7 @@ import PageContainer from "components/page-container/page-container.component";
 import { uploadImage } from "database";
 import { editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { createTasting, editTasting } from "features/tasting/tastingSlice";
+import { createTastingThunk, editTasting } from "features/tasting/tastingSlice";
 import styles from "pages/styles/pages.module.css";
 import { TastingFormProvider, useTastingForm } from "pages/tastings/form-context";
 import { useState } from "react";
@@ -53,7 +53,7 @@ const NewTasting = () => {
         dispatch(editWine({ ...tastingOpen, quantity })).unwrap();
       }
 
-      const { id } = await dispatch(createTasting({ ...data, userId: currentUser?.uid ?? "" })).unwrap();
+      const { id } = await dispatch(createTastingThunk({ ...data, userId: currentUser?.uid ?? "" })).unwrap();
 
       if (data.imageBlob) {
         const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);

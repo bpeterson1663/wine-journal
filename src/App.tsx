@@ -24,13 +24,13 @@ function App() {
 
   useEffect(() => {
     const onLoad = async () => {
+      await dispatch(fetchPlans()).unwrap();
       if (currentUser?.uid) {
         try {
           await Promise.all([
             dispatch(fetchTastings({ userId: currentUser.uid })),
-            dispatch(fetchPublicTastings()),
+            // dispatch(fetchPublicTastings()),
             dispatch(fetchWines({ userId: currentUser.uid })),
-            dispatch(fetchPlans()),
           ]);
         } catch (err) {
           console.error(err);

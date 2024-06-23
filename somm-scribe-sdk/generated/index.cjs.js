@@ -1,0 +1,97 @@
+const { getDataConnect, queryRef, executeQuery, mutationRef, executeMutation } = require('firebase/data-connect');
+
+const connectorConfig = {
+  connector: 'somm-scribe-connector',
+  service: 'somm-scribe',
+  location: 'us-central1'
+};
+exports.connectorConfig = connectorConfig;
+
+function createPlanRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'CreatePlan', inputVars);
+}
+exports.createPlanRef = createPlanRef;
+exports.createPlan = function createPlan(dcOrVars, vars) {
+  return executeMutation(createPlanRef(dcOrVars, vars));
+};
+
+function createUserRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'CreateUser', inputVars);
+}
+exports.createUserRef = createUserRef;
+exports.createUser = function createUser(dcOrVars, vars) {
+  return executeMutation(createUserRef(dcOrVars, vars));
+};
+
+function createWineRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'CreateWine', inputVars);
+}
+exports.createWineRef = createWineRef;
+exports.createWine = function createWine(dcOrVars, vars) {
+  return executeMutation(createWineRef(dcOrVars, vars));
+};
+
+function createTastingRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'CreateTasting', inputVars);
+}
+exports.createTastingRef = createTastingRef;
+exports.createTasting = function createTasting(dcOrVars, vars) {
+  return executeMutation(createTastingRef(dcOrVars, vars));
+};
+
+function listPlansRef(dc) {
+  const { dc: dcInstance} = validateArgs(dc, undefined);
+  return queryRef(dcInstance, 'ListPlans');
+}
+exports.listPlansRef = listPlansRef;
+exports.listPlans = function listPlans(dc) {
+  return executeQuery(listPlansRef(dc));
+};
+
+function listWinesRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return queryRef(dcInstance, 'ListWines', inputVars);
+}
+exports.listWinesRef = listWinesRef;
+exports.listWines = function listWines(dcOrVars, vars) {
+  return executeQuery(listWinesRef(dcOrVars, vars));
+};
+
+function listTastingsRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return queryRef(dcInstance, 'ListTastings', inputVars);
+}
+exports.listTastingsRef = listTastingsRef;
+exports.listTastings = function listTastings(dcOrVars, vars) {
+  return executeQuery(listTastingsRef(dcOrVars, vars));
+};
+
+function getUserByIdRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return queryRef(dcInstance, 'GetUserById', inputVars);
+}
+exports.getUserByIdRef = getUserByIdRef;
+exports.getUserById = function getUserById(dcOrVars, vars) {
+  return executeQuery(getUserByIdRef(dcOrVars, vars));
+};
+
+function validateArgs(dcOrVars, vars, validateVars) {
+  let dcInstance;
+  let realVars;
+  // TODO; Check what happens if this is undefined.
+  if(dcOrVars && 'dataConnectOptions' in dcOrVars) {
+      dcInstance = dcOrVars;
+      realVars = vars;
+  } else {
+      dcInstance = getDataConnect(connectorConfig);
+      realVars = dcOrVars;
+  }
+  if(!dcInstance || (!realVars && validateVars)) {
+      throw new Error('You didn\t pass in the vars!');
+  }
+  return { dc: dcInstance, vars: realVars };
+}

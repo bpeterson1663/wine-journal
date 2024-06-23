@@ -54,7 +54,7 @@ const SignUpForm = () => {
           displayName: "",
           avatar: "",
           id: "",
-          planId: plan?.id ?? "",
+          planId: plan?.id ?? "2241b29e996448ee8acd0a3bd84ca27a",
           trialExpires: dayjs()
             .add(plan?.trialLength ?? 0, "days")
             .toDate(),

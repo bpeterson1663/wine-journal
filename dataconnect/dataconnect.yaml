@@ -1,0 +1,10 @@
+specVersion: "v1alpha"
+serviceId: "somm-scribe"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "somm-scribe-sql"
+connectorDirs: ["./connector"]

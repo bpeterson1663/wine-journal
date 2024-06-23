@@ -24,10 +24,10 @@ export default function Cellar() {
   const handleNext = async (lastId: string) => {
     setLoading(true);
     try {
-      const { docs } = await dispatch(fetchWines({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
-      if (docs.length < 10) {
-        setDisableLoadMore(true);
-      }
+      await dispatch(fetchWines({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
+      // if (docs.length < 10) {
+      //   setDisableLoadMore(true);
+      // }
     } catch (err) {
       console.error(err);
     } finally {

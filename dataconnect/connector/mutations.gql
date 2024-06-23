@@ -1,0 +1,75 @@
+
+mutation CreatePlan($name: String, $price: Float, $maxWine: Int, $maxTasting: Int, $description: String, $upgradablePlans: [String!], $downgradablePlans: [String!], $isActive: Boolean, $trialLength: Int) @auth(level: PUBLIC) {
+    plan_insert(data: {
+        name: $name,
+        price: $price,
+        maxWine: $maxWine,
+        maxTasting: $maxTasting,
+        description: $description,
+        upgradablePlans: $upgradablePlans,
+        downgradablePlans: $downgradablePlans,
+        isActive: $isActive,
+        trialLength: $trialLength,
+    })
+}
+
+mutation CreateUser($avatar: String, $firstName: String, $lastName: String, $displayName: String, $userId: String, $email: String, $plan: Plan_Key, $trialExpires: Timestamp, $isPaid: Boolean) @auth(level: PUBLIC) {
+    user_insert(data: {
+        avatar: $avatar,
+        firstName: $firstName,
+        lastName: $lastName,
+        displayName: $displayName,
+        userId: $userId,
+        email: $email,
+        plan: $plan,
+        trialExpires: $trialExpires,
+        isPaid: $isPaid,
+    })
+}
+
+mutation CreateWine($user: User_Key, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String) @auth(level: PUBLIC) {
+    wine_insert(data: {
+        user: $user,
+        classification: $classification,
+        country: $country,
+        date: $date,
+        description: $description,
+        labelUri: $labelUri,
+        price: $price,
+        producer: $producer,
+        quantity: $quantity,
+        region: $region,
+        subregion: $subregion,
+        varietal: $varietal,
+        vintage: $vintage,
+    })
+}
+
+mutation CreateTasting($user: User_Key, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String, $hue: String, $color: String, $intensity: String, $smell: String, $alcohol: Int, $acidity: Int, $tannin: Int, $sweet: Int, $body: Int, $rating: Int, $remarks: String) @auth(level: PUBLIC) {
+    tasting_insert(data: {
+        user: $user,
+        classification: $classification,
+        country: $country,
+        date: $date,
+        description: $description,
+        labelUri: $labelUri,
+        price: $price,
+        producer: $producer,
+        quantity: $quantity,
+        region: $region,
+        subregion: $subregion,
+        varietal: $varietal,
+        vintage: $vintage,
+        hue: $hue,
+        color: $color,
+        intensity: $intensity,
+        smell: $smell,
+        alcohol: $alcohol,
+        acidity: $acidity,
+        tannin: $tannin,
+        sweet: $sweet,
+        body: $body,
+        rating: $rating,
+        remarks: $remarks
+    })
+}

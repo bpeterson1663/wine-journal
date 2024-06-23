@@ -1,10 +1,9 @@
 import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db } from "database";
+import { db, dc } from "database";
 import dayjs from "dayjs";
 import {
   type DocumentSnapshot,
   type QuerySnapshot,
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -13,7 +12,6 @@ import {
   limit,
   orderBy,
   query,
-  startAfter,
   updateDoc,
   where,
 } from "firebase/firestore/lite";
@@ -22,6 +20,13 @@ import type { TastingT } from "schemas/tastings";
 import type { FetchStatusT, MessageT } from "types";
 import type { RootState } from "../store";
 
+import {
+  type ListTastingsResponse,
+  type ListTastingsVariables,
+  type User_Key,
+  createTasting,
+  listTastings,
+} from "@firebasegen/somm-scribe-connector";
 interface InitialTastingState {
   message: MessageT;
   status: FetchStatusT;
@@ -53,27 +58,27 @@ export const tastingSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchTastings.fulfilled, (state, action) => {
-        const tastingList = action.payload.docs.map((doc) => {
-          const data = doc.data();
-          const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
-          const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
+        const tastingList = action.payload.tastings.map((tasting) => {
+          const quantity = typeof tasting.quantity === "string" ? Number.parseInt(tasting.quantity) : tasting.quantity;
+          const price = typeof tasting.price === "string" ? Number.parseFloat(tasting.price) : tasting.price;
 
-          return {
-            ...data,
-            id: doc.id,
-            date: data.date.toDate(),
+          const data = {
+            ...tasting,
             quantity,
             price,
             type: "tasting",
-          };
+          } as unknown;
+
+          return data as TastingT;
         });
 
-        const data = tastingList.map((tasting) => tasting as TastingT);
-        const ids = [...state.tastingList, ...data].map((tasting) => tasting.id);
+        // const data = tastingList.map((tasting) => tasting as TastingT);
+        // const ids = [...state.tastingList, ...data].map((tasting) => tasting.id);
+        // const filter = [...state.tastingList, ...data].filter(
+        //   (value: TastingT, index) => !ids.includes(value.id, index + 1),
+        // );
 
-        state.tastingList = [...state.tastingList, ...data].filter(
-          (value: TastingT, index) => !ids.includes(value.id, index + 1),
-        );
+        state.tastingList = tastingList;
       })
       .addCase(fetchPublicTastings.fulfilled, (state, action) => {
         const tastingList = action.payload.docs.map((doc) => {
@@ -112,7 +117,7 @@ export const tastingSlice = createSlice({
           state.tasting = null;
         }
       })
-      .addCase(createTasting.fulfilled, (state, action) => {
+      .addCase(createTastingThunk.fulfilled, (state, action) => {
         const tastings = [...state.tastingList, action.payload];
         state.tastingList = tastings;
       })
@@ -139,23 +144,27 @@ interface FetchTastingsParams {
   previousDoc?: string;
 }
 export const fetchTastings = createAsyncThunk<
-  QuerySnapshot,
+  ListTastingsResponse,
   FetchTastingsParams,
   {
     state: RootState;
   }
->("tasting/fetchTastings", async ({ userId, previousDoc }, { rejectWithValue }) => {
+>("tasting/fetchTastings", async ({ userId }, { rejectWithValue }) => {
   try {
-    const baseQuery = query(collection(db, "tastings"), where("userId", "==", userId), orderBy("date", "desc"));
-    if (previousDoc) {
-      const docRef = doc(db, "tastings", previousDoc);
-      const docSnapshot = await getDoc(docRef);
-      const fbq = query(baseQuery, startAfter(docSnapshot), limit(10));
-      return await getDocs(fbq);
-    }
+    const params: ListTastingsVariables = { userId };
+    const { data } = await listTastings(params);
 
-    const fbq = query(baseQuery, limit(10));
-    return await getDocs(fbq);
+    return data;
+    // const baseQuery = query(collection(db, "tastings"), where("userId", "==", userId), orderBy("date", "desc"));
+    // if (previousDoc) {
+    //   const docRef = doc(db, "tastings", previousDoc);
+    //   const docSnapshot = await getDoc(docRef);
+    //   const fbq = query(baseQuery, startAfter(docSnapshot), limit(10));
+    //   return await getDocs(fbq);
+    // }
+
+    // const fbq = query(baseQuery, limit(10));
+    // return await getDocs(fbq);
   } catch (err) {
     console.error(err);
     return rejectWithValue(err);
@@ -198,25 +207,71 @@ export const fetchTastingById = createAsyncThunk<
   }
 });
 
-export const createTasting = createAsyncThunk<
+export const createTastingThunk = createAsyncThunk<
   TastingT,
   TastingT,
   {
     state: RootState;
   }
->("tasting/createTasting", async (data, { rejectWithValue }) => {
-  const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
-  const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
+>("tasting/createTasting", async (request, { rejectWithValue }) => {
+  const quantity = typeof request.quantity === "string" ? Number.parseInt(request.quantity) : request.quantity;
+  const price = typeof request.price === "string" ? Number.parseFloat(request.price) : request.price;
   try {
-    delete data.imageBlob;
-    const docData = await addDoc(collection(db, "tastings"), {
-      ...data,
-      quantity,
+    const userId = request.userId as unknown;
+    const {
+      classification,
+      country,
+      date,
+      description,
+      labelUri,
+      producer,
+      region,
+      subregion,
+      varietal,
+      vintage,
+      hue,
+      color,
+      intensity,
+      smell,
+      alcohol,
+      acidity,
+      tannin,
+      sweet,
+      body,
+      rating,
+      remarks,
+    } = request;
+    const tastingData = {
+      user: userId as User_Key,
+      classification,
+      country,
+      date: date.toISOString(),
+      description,
+      labelUri,
+      producer,
       price,
-    });
+      region,
+      subregion,
+      varietal,
+      vintage,
+      quantity,
+      hue,
+      color,
+      intensity,
+      smell,
+      alcohol,
+      acidity,
+      tannin,
+      sweet,
+      body,
+      rating,
+      remarks,
+    };
+    const { data } = await createTasting(dc, { ...tastingData });
+
     const tasting = {
-      ...data,
-      id: docData.id,
+      ...request,
+      id: data.tasting_insert.id,
     };
     return tasting as TastingT;
   } catch (err) {

@@ -5,7 +5,7 @@ import Footer from "components/footer/footer.component";
 import { DetailsWine, Quantity } from "components/form-steps";
 import PageContainer from "components/page-container/page-container.component";
 import { uploadImage } from "database";
-import { createWine, editWine } from "features/cellar/cellarSlice";
+import { createWineThunk, editWine } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
@@ -24,7 +24,7 @@ const STEPS = [
 export default function NewWine() {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector((state) => state.auth);
+  const { userProfile } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
 
   const form = useWineForm({
@@ -39,7 +39,7 @@ export default function NewWine() {
   const onSubmitHandler = async (data: WineT) => {
     setLoading(true);
     try {
-      const { id } = await dispatch(createWine({ ...data, userId: currentUser?.uid ?? "", varietal: [] })).unwrap();
+      const { id } = await dispatch(createWineThunk({ ...data, userId: userProfile?.id ?? "" })).unwrap();
 
       if (data.imageBlob) {
         const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);

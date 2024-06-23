@@ -8,5 +8,9 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "dataconnect": {
+    "source": "dataconnect",
+    "location": "us-central1"
   }
 }

@@ -1,22 +1,14 @@
-import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db } from "database";
-import type { RootState } from "features/store";
 import {
-  type DocumentSnapshot,
-  type QuerySnapshot,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  updateDoc,
-  where,
-} from "firebase/firestore/lite";
+  type ListWinesResponse,
+  type ListWinesVariables,
+  type User_Key,
+  createWine,
+  listWines,
+} from "@firebasegen/somm-scribe-connector";
+import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { db, dc } from "database";
+import type { RootState } from "features/store";
+import { type DocumentSnapshot, deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore/lite";
 import type { WineT } from "schemas/cellar";
 import type { FetchStatusT, MessageT } from "types";
 
@@ -44,27 +36,27 @@ export const cellarSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchWines.fulfilled, (state, action) => {
-        const wineList = action.payload.docs.map((doc) => {
-          const data = doc.data();
-          const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
-          const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
-
-          return {
-            ...data,
-            id: doc.id,
-            date: data.date.toDate(),
+        const wineList = action.payload.wines.map((wine) => {
+          // const data = doc.data();
+          const quantity = typeof wine.quantity === "string" ? Number.parseInt(wine.quantity) : wine.quantity;
+          const price = typeof wine.price === "string" ? Number.parseFloat(wine.price) : wine.price;
+          const data = {
+            ...wine,
+            // id: wine.id,
+            // date: data.date.toDate(),
             quantity,
             price,
             type: "wine",
-          };
+          } as unknown;
+          return data as WineT;
         });
 
-        const data = wineList.map((wine) => wine as WineT);
-        const ids = [...state.wineList, ...data].map((tasting) => tasting.id);
-
-        state.wineList = [...state.wineList, ...data].filter(
-          (value: WineT, index) => !ids.includes(value.id, index + 1),
-        );
+        // const data = wineList.map((wine) => wine as WineT);
+        // const ids = [...state.wineList, ...data].map((tasting) => tasting.id);
+        // const filtered = [...state.wineList, ...data].filter(
+        //   (value: WineT, index) => !ids.includes(value.id, index + 1),
+        // );
+        state.wineList = wineList;
       })
       .addCase(fetchWineById.fulfilled, (state, action) => {
         const docSnap = action.payload;
@@ -86,7 +78,7 @@ export const cellarSlice = createSlice({
           state.wine = null;
         }
       })
-      .addCase(createWine.fulfilled, (state, action) => {
+      .addCase(createWineThunk.fulfilled, (state, action) => {
         const wines = [...state.wineList, action.payload];
         state.wineList = wines;
       })
@@ -113,23 +105,27 @@ interface FetchWinesParams {
   previousDoc?: string;
 }
 export const fetchWines = createAsyncThunk<
-  QuerySnapshot,
+  ListWinesResponse,
   FetchWinesParams,
   {
     state: RootState;
   }
 >("wine/fetchWines", async ({ userId, previousDoc }, { rejectWithValue }) => {
   try {
-    const baseQuery = query(collection(db, "wines"), where("userId", "==", userId), orderBy("date", "desc"));
-    if (previousDoc) {
-      const docRef = doc(db, "wines", previousDoc);
-      const docSnapshot = await getDoc(docRef);
-      const fbq = query(baseQuery, startAfter(docSnapshot), limit(10));
-      return await getDocs(fbq);
-    }
+    const params: ListWinesVariables = { userId };
+    const { data } = await listWines(params);
+    return data;
 
-    const fbq = query(baseQuery, limit(10));
-    return await getDocs(fbq);
+    // const baseQuery = query(collection(db, "wines"), where("userId", "==", userId), orderBy("date", "desc"));
+    // if (previousDoc) {
+    //   const docRef = doc(db, "wines", previousDoc);
+    //   const docSnapshot = await getDoc(docRef);
+    //   const fbq = query(baseQuery, startAfter(docSnapshot), limit(10));
+    //   return await getDocs(fbq);
+    // }
+
+    // const fbq = query(baseQuery, limit(10));
+    // return await getDocs(fbq);
   } catch (err) {
     return rejectWithValue(err);
   }
@@ -150,28 +146,45 @@ export const fetchWineById = createAsyncThunk<
   }
 });
 
-export const createWine = createAsyncThunk<
+export const createWineThunk = createAsyncThunk<
   WineT,
   WineT,
   {
     state: RootState;
   }
->("wine/createWine", async (data, { rejectWithValue }) => {
-  const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
-  const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
+>("wine/createWine", async (request, { rejectWithValue }) => {
+  const quantity = typeof request.quantity === "string" ? Number.parseInt(request.quantity) : request.quantity;
+  const price = typeof request.price === "string" ? Number.parseFloat(request.price) : request.price;
   try {
-    delete data.imageBlob;
-    const docData = await addDoc(collection(db, "wines"), {
-      ...data,
-      quantity,
+    const userId = request.userId as unknown;
+    const { classification, country, date, description, labelUri, producer, region, subregion, varietal, vintage } =
+      request;
+
+    const wineData = {
+      user: userId as User_Key,
+      classification,
+      country,
+      date: date.toISOString(),
+      description,
+      labelUri,
+      producer,
       price,
-    });
-    const wine = {
-      ...data,
-      id: docData.id,
+      region,
+      subregion,
+      varietal,
+      vintage,
+      quantity,
     };
+    const { data } = await createWine(dc, { ...wineData });
+
+    const wine = {
+      ...request,
+      id: data.wine_insert.id,
+    };
+
     return wine as WineT;
   } catch (err) {
+    console.log({ err });
     return rejectWithValue(err);
   }
 });

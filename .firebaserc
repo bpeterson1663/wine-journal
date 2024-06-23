@@ -1,5 +1,12 @@
 {
   "projects": {
     "default": "wine-journal-711ef"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {
+    "postgres": {
+      "localConnectionString": "postgresql://localhost:5432?sslmode=disable"
+    }
   }
 }

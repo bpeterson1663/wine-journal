@@ -1,6 +1,7 @@
+import { type GetUserByIdVariables, type Plan_Key, createUser, getUserById } from "@firebasegen/somm-scribe-connector";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db } from "database";
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { db, dc } from "database";
+import { doc, updateDoc } from "firebase/firestore/lite";
 import type { UserProfileT } from "schemas/user";
 import type { FetchStatusT, MessageT } from "types";
 import type { RootState } from "../store";
@@ -45,15 +46,31 @@ export const createUserProfile = createAsyncThunk<
   {
     state: RootState;
   }
->("user/createUserProfile", async (data, { rejectWithValue }) => {
+>("user/createUserProfile", async (request, { rejectWithValue }) => {
   try {
-    const docData = await addDoc(collection(db, "users"), {
-      ...data,
-    });
-    const userProfile = {
-      ...data,
-      id: docData.id,
+    // const docData = await addDoc(collection(db, "users"), {
+    //   ...request,
+    // });
+    const plan = request.planId as unknown;
+    const profile = {
+      firstName: request.firstName,
+      lastName: request.lastName,
+      plan: plan as Plan_Key,
+      email: request.email,
+      displayName: request.displayName,
+      avatar: request.avatar,
+      trialExpires: request.trialExpires.toISOString(),
+      isPaid: true,
+      userId: request.userId,
     };
+
+    const { data } = await createUser(dc, profile);
+
+    const userProfile = {
+      ...request,
+      id: data.user_insert.id,
+    };
+
     return userProfile as UserProfileT;
   } catch (err) {
     return rejectWithValue(err);
@@ -66,21 +83,14 @@ export const getUserProfileById = createAsyncThunk<
   {
     state: RootState;
   }
->("user/getUserProfileById", async (id, { rejectWithValue }) => {
+>("user/getUserProfileById", async (userId, { rejectWithValue }) => {
   try {
-    const fbq = query(collection(db, "users"), where("userId", "==", id));
-    const { docs } = await getDocs(fbq);
-    const profile = docs.map((doc) => {
-      const data = doc.data();
-      return {
-        ...data,
-        userId: data.userId,
-        id: doc.id,
-      };
-    });
+    const params: GetUserByIdVariables = { userId };
+    const { data } = await getUserById(params);
 
-    if (profile.length === 1) {
-      return profile[0] as UserProfileT;
+    if (data.users.length === 1) {
+      const profile = data.users[0] as unknown;
+      return profile as UserProfileT;
     }
 
     return null;

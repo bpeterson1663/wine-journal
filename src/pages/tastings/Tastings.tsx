@@ -25,10 +25,10 @@ export default function Tastings() {
   const handleNext = async (lastId: string) => {
     setLoading(true);
     try {
-      const { docs } = await dispatch(fetchTastings({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
-      if (docs.length < 10) {
-        setDisableLoadMore(true);
-      }
+      await dispatch(fetchTastings({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
+      // if (docs.length < 10) {
+      //   setDisableLoadMore(true);
+      // }
     } catch (err) {
       console.error(err);
     } finally {

@@ -1,7 +1,6 @@
+import { type ListPlansResponse, listPlans } from "@firebasegen/somm-scribe-connector";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db } from "database";
 import type { RootState } from "features/store";
-import { type QuerySnapshot, collection, getDocs } from "firebase/firestore/lite";
 import type { PlanT } from "schemas/plans";
 import type { FetchStatusT, MessageT } from "types";
 
@@ -25,11 +24,9 @@ export const planSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchPlans.fulfilled, (state, action) => {
-      const planList = action.payload.docs.map((doc) => {
-        const data = doc.data();
+      const planList = action.payload.plans.map((plan) => {
         return {
-          id: doc.id,
-          ...data,
+          ...plan,
         } as PlanT;
       });
 
@@ -41,14 +38,15 @@ export const planSlice = createSlice({
 export default planSlice.reducer;
 
 export const fetchPlans = createAsyncThunk<
-  QuerySnapshot,
+  ListPlansResponse,
   void,
   {
     state: RootState;
   }
 >("plans/fetchPlans", async (_, { rejectWithValue }) => {
   try {
-    return await getDocs(collection(db, "plans"));
+    const { data } = await listPlans();
+    return data;
   } catch (err) {
     return rejectWithValue(err);
   }

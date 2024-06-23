@@ -1,0 +1,98 @@
+extend type Mutation {
+  """
+  Insert a single Plan into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  plan_insert(data: Plan_Data!): Plan_Key!
+  """
+  Insert a single Tasting into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  tasting_insert(data: Tasting_Data!): Tasting_Key!
+  """
+  Insert a single User into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insert(data: User_Data!): User_Key!
+  """
+  Insert a single Wine into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  wine_insert(data: Wine_Data!): Wine_Key!
+  """
+  Insert or update a single Plan into the table, based on the primary key. Returns the key of the newly inserted Plan.
+  """
+  plan_upsert(data: Plan_Data!): Plan_Key!
+  """
+  Insert or update a single Tasting into the table, based on the primary key. Returns the key of the newly inserted Tasting.
+  """
+  tasting_upsert(data: Tasting_Data!): Tasting_Key!
+  """
+  Insert or update a single User into the table, based on the primary key. Returns the key of the newly inserted User.
+  """
+  user_upsert(data: User_Data!): User_Key!
+  """
+  Insert or update a single Wine into the table, based on the primary key. Returns the key of the newly inserted Wine.
+  """
+  wine_upsert(data: Wine_Data!): Wine_Key!
+  """
+  Update a single Plan based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  plan_update(id: UUID, key: Plan_Key, data: Plan_Data!): Plan_Key
+  """
+  Update a single Tasting based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  tasting_update(id: UUID, key: Tasting_Key, data: Tasting_Data!): Tasting_Key
+  """
+  Update a single User based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  user_update(id: UUID, key: User_Key, data: User_Data!): User_Key
+  """
+  Update a single Wine based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  wine_update(id: UUID, key: Wine_Key, data: Wine_Data!): Wine_Key
+  """
+  Update Plan entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  plan_updateMany(where: Plan_Filter, all: Boolean = false, data: Plan_Data!): Int!
+  """
+  Update Tasting entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  tasting_updateMany(where: Tasting_Filter, all: Boolean = false, data: Tasting_Data!): Int!
+  """
+  Update User entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  user_updateMany(where: User_Filter, all: Boolean = false, data: User_Data!): Int!
+  """
+  Update Wine entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  wine_updateMany(where: Wine_Filter, all: Boolean = false, data: Wine_Data!): Int!
+  """
+  Delete a single Plan based on `id` or `key` and return its key (or `null` if not found).
+  """
+  plan_delete(id: UUID, key: Plan_Key): Plan_Key
+  """
+  Delete a single Tasting based on `id` or `key` and return its key (or `null` if not found).
+  """
+  tasting_delete(id: UUID, key: Tasting_Key): Tasting_Key
+  """
+  Delete a single User based on `id` or `key` and return its key (or `null` if not found).
+  """
+  user_delete(id: UUID, key: User_Key): User_Key
+  """
+  Delete a single Wine based on `id` or `key` and return its key (or `null` if not found).
+  """
+  wine_delete(id: UUID, key: Wine_Key): Wine_Key
+  """
+  Delete Plan entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  plan_deleteMany(where: Plan_Filter, all: Boolean = false): Int!
+  """
+  Delete Tasting entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  tasting_deleteMany(where: Tasting_Filter, all: Boolean = false): Int!
+  """
+  Delete User entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  user_deleteMany(where: User_Filter, all: Boolean = false): Int!
+  """
+  Delete Wine entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  wine_deleteMany(where: Wine_Filter, all: Boolean = false): Int!
+}
