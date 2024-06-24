@@ -24,9 +24,10 @@ const STEPS = [
 export default function NewWine() {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
+  const { currentUser } = useAppSelector((state) => state.auth);
   const { userProfile } = useAppSelector((state) => state.user);
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const form = useWineForm({
     validateInputOnBlur: true,
     initialValues: {
