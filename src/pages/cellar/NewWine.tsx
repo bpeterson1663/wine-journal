@@ -31,6 +31,7 @@ export default function NewWine() {
     validateInputOnBlur: true,
     initialValues: {
       ...INITIAL_VALUES,
+      userId: currentUser?.uid ?? ""
     },
     validate: zodResolver(WineSchema),
   });

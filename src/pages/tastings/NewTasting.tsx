@@ -40,7 +40,7 @@ const NewTasting = () => {
     initialValues: {
       ...INITIAL_VALUES,
       ...tastingOpen,
-      date: new Date(),
+      userId: currentUser?.uid ?? ""
     },
     validate: zodResolver(TastingSchema),
   });
