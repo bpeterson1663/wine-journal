@@ -40,12 +40,11 @@ export const cellarSlice = createSlice({
     builder
       .addCase(fetchWinesThunk.fulfilled, (state, action) => {
         const wineList = action.payload.wines.map((wine) => {
-          // const data = doc.data();
           const quantity = typeof wine.quantity === "string" ? Number.parseInt(wine.quantity) : wine.quantity;
           const price = typeof wine.price === "string" ? Number.parseFloat(wine.price) : wine.price;
+          
           const data = {
             ...wine,
-            // id: wine.id,
             date: new Date(wine.date),
             quantity,
             price,
@@ -53,12 +52,6 @@ export const cellarSlice = createSlice({
           } as unknown;
           return data as WineT;
         });
-
-        // const data = wineList.map((wine) => wine as WineT);
-        // const ids = [...state.wineList, ...data].map((tasting) => tasting.id);
-        // const filtered = [...state.wineList, ...data].filter(
-        //   (value: WineT, index) => !ids.includes(value.id, index + 1),
-        // );
         state.wineList = wineList;
       })
       .addCase(createWineThunk.fulfilled, (state, action) => {

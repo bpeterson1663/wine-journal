@@ -118,10 +118,10 @@ mutation UpdateTasting($id: UUID, $classification: String, $country: String, $da
         remarks: $remarks
     })
 }
-mutation DeleteWine($id: UUID!) {
+mutation DeleteWine($id: UUID!) @auth(level: USER) {
   wine_delete(id: $id)
 }
 
-mutation DeleteTasting($id: UUID!) {
+mutation DeleteTasting($id: UUID!) @auth(level: USER) {
   tasting_delete(id: $id)
 }

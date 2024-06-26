@@ -55,6 +55,7 @@ export const tastingSlice = createSlice({
             ...tasting,
             quantity,
             price,
+            date: new Date(tasting.date),
             type: "tasting",
           } as unknown;
 
