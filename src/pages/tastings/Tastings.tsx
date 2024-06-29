@@ -3,36 +3,22 @@ import { IconSearch } from "@tabler/icons-react";
 import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
-import { useAppDispatch, useAppSelector } from "features/hooks";
-import { fetchTastingsThunk } from "features/tasting/tastingSlice";
+import { useAppSelector } from "features/hooks";
+import { selectAllTastings } from "features/tasting/tastingSelectors";
+import { useViewMore } from "hooks/useViewMore";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Tastings() {
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const { currentUser } = useAppSelector((state) => state.auth);
-  const { tastingList } = useAppSelector((state) => state.tasting);
+  const tastingList = useAppSelector(selectAllTastings);
+  const { viewable, handleShowMore, moreAvailable } = useViewMore(tastingList);
   const navigate = useNavigate();
 
   const handleNewTasting = () => {
     navigate("/tastings/new");
   };
-
-  const handleNext = async (lastId: string) => {
-    setLoading(true);
-    try {
-      await dispatch(fetchTastingsThunk({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const sortedList = [...tastingList].sort((a, b) => b.date.toISOString().localeCompare(a.date.toISOString()));
 
   const handleSearch = () => {
     console.log({ search });
@@ -46,18 +32,14 @@ export default function Tastings() {
       </Group>
 
       <section className={styles.list}>
-        {sortedList.map((tasting) => (
+        {viewable.map((tasting) => (
           <Card key={tasting.id} wine={tasting} url="tastings" showDate />
         ))}
       </section>
+
       <div className={styles["load-more-container"]}>
-        <Button
-          disabled={true}
-          loading={loading}
-          variant="outline"
-          onClick={() => handleNext(sortedList[sortedList.length - 1].id)}
-        >
-          Load More
+        <Button disabled={!moreAvailable} variant="outline" onClick={() => handleShowMore(viewable.length)}>
+          Show More
         </Button>
       </div>
 

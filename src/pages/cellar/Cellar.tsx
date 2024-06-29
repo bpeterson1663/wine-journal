@@ -2,17 +2,15 @@ import { Button, Group } from "@mantine/core";
 import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
-import { fetchWinesThunk } from "features/cellar/cellarSlice";
-import { useAppDispatch, useAppSelector } from "features/hooks";
+import { selectAllWines } from "features/cellar/cellarSelectors";
+import { useAppSelector } from "features/hooks";
+import { useViewMore } from "hooks/useViewMore";
 import styles from "pages/styles/pages.module.css";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Cellar() {
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const { wineList } = useAppSelector((state) => state.cellar);
-  const { currentUser } = useAppSelector((state) => state.auth);
+  const wineList = useAppSelector(selectAllWines);
+  const { viewable, handleShowMore, moreAvailable } = useViewMore(wineList);
 
   const navigate = useNavigate();
 
@@ -20,32 +18,16 @@ export default function Cellar() {
     navigate("/cellar/new");
   };
 
-  const handleNext = async (lastId: string) => {
-    setLoading(true);
-    try {
-      await dispatch(fetchWinesThunk({ userId: currentUser?.uid ?? "", previousDoc: lastId })).unwrap();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <PageContainer showBack title="Cellar">
       <section className={styles.list}>
-        {wineList.map((wine) => (
+        {viewable.map((wine) => (
           <Card key={wine.id} wine={wine} url="cellar" />
         ))}
       </section>
       <div className={styles["load-more-container"]}>
-        <Button
-          disabled={true}
-          loading={loading}
-          variant="outline"
-          onClick={() => handleNext(wineList[wineList.length - 1].id)}
-        >
-          Load More
+        <Button disabled={!moreAvailable} variant="outline" onClick={() => handleShowMore(viewable.length)}>
+          Show More
         </Button>
       </div>
       <Footer>

@@ -2,17 +2,18 @@ import { Button, Group, Stack, Title } from "@mantine/core";
 import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
+import { selectAllWines } from "features/cellar/cellarSelectors";
 import { useAppSelector } from "features/hooks";
+import { selectAllTastings } from "features/tasting/tastingSelectors";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { tastingList } = useAppSelector((state) => state.tasting);
+  const tastingList = useAppSelector(selectAllTastings);
   const { publicTastingList } = useAppSelector((state) => state.tasting);
-  const { wineList } = useAppSelector((state) => state.cellar);
+  const wineList = useAppSelector(selectAllWines);
 
-  const sortedTastingList = [...tastingList].sort((a, b) => b.date.toISOString().localeCompare(a.date.toISOString()));
   const sortedPublicList = [...publicTastingList].sort((a, b) =>
     b.date.toISOString().localeCompare(a.date.toISOString()),
   );
@@ -39,7 +40,7 @@ export default function Home() {
           </Group>
 
           <section className={styles["preview-list"]}>
-            {sortedTastingList.map((tasting) => (
+            {tastingList.slice(0, 10).map((tasting) => (
               <Card key={tasting.id} wine={tasting} url="tastings" showDate />
             ))}
           </section>
@@ -53,7 +54,7 @@ export default function Home() {
             </Button>
           </Group>
           <section className={styles["preview-list"]}>
-            {wineList.map((wine) => (
+            {wineList.slice(0, 10).map((wine) => (
               <Card key={wine.id} wine={wine} url="cellar" />
             ))}
           </section>

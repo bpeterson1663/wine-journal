@@ -7,8 +7,6 @@ export const selectTastingById = (id: string) => {
   return createSelector([tastings], (tastings) => tastings.find((tasting) => tasting.id === id));
 };
 
-export const selectAllTastings = () => {
-  return createSelector([tastings], (tastings) =>
-    tastings.sort((a, b) => b.date.toISOString().localeCompare(a.date.toISOString())),
-  );
-};
+export const selectAllTastings = createSelector(tastings, (tastings) => {
+  return [...tastings].sort((a, b) => b.date.toISOString().localeCompare(a.date.toISOString()));
+});
