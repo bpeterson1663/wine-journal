@@ -1,7 +1,5 @@
-import { getLabel } from "helpers";
-import { useTastingContext } from "pages/tastings/form-context";
-
-import { Box, Slider, Text } from "@mantine/core";
+import { Box, Group, Slider, Text, Tooltip } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
 import styles from "components/form-steps/form-steps.module.css";
 import {
   ALCOHOL_MARKS,
@@ -9,12 +7,19 @@ import {
   SWEET_MARKS,
   TANNIN_ACIDITY_MARKS,
 } from "components/form-tasting/form-tasting.constants";
+import { getLabel } from "helpers";
+import { useTastingContext } from "pages/tastings/form-context";
 export const Taste = () => {
   const form = useTastingContext();
 
   return (
     <Box mt={10}>
-      <Text className={styles["form-label"]}>Body</Text>
+      <Group>
+        <Text className={styles["form-label"]}>Body</Text>
+        <Tooltip label="How the wine feels in your mouth. The heavier the feel, the fuller the body.">
+          <IconInfoCircle />
+        </Tooltip>
+      </Group>
       <Slider
         classNames={{
           root: styles.slider,
@@ -28,8 +33,13 @@ export const Taste = () => {
         label={getLabel("BODY", form.values.body)}
         {...form.getInputProps("body")}
       />
+      <Group>
+        <Text className={styles["form-label"]}>Tannin</Text>
+        <Tooltip label="The drying out feeling you get in your mouth. The more dry your mouth feels, the higher the tannin.">
+          <IconInfoCircle />
+        </Tooltip>
+      </Group>
 
-      <Text className={styles["form-label"]}>Tannin</Text>
       <Slider
         classNames={{
           root: styles.slider,
@@ -43,8 +53,12 @@ export const Taste = () => {
         label={getLabel("TANNIN", form.values.tannin)}
         {...form.getInputProps("tannin")}
       />
-
-      <Text className={styles["form-label"]}>Acidity</Text>
+      <Group>
+        <Text className={styles["form-label"]}>Acidity</Text>
+        <Tooltip label="The more acidic the wine, the more it makes you salivate. Higher acidic wines are usually crisp and tart while a low acid whine is softer and rounder.">
+          <IconInfoCircle />
+        </Tooltip>
+      </Group>
       <Slider
         classNames={{
           root: styles.slider,
@@ -58,8 +72,12 @@ export const Taste = () => {
         label={getLabel("ACIDITY", form.values.acidity)}
         {...form.getInputProps("acidity")}
       />
-
-      <Text className={styles["form-label"]}>Alcohol(%)</Text>
+      <Group>
+        <Text className={styles["form-label"]}>Alcohol(%)</Text>
+        <Tooltip label="Alcohol contributes to the overall weight and physical sensation of the wine. Higher alcohol wines are usually bolder while lower alcohol wines are lighter in body.">
+          <IconInfoCircle />
+        </Tooltip>
+      </Group>
       <Slider
         classNames={{
           root: styles.slider,
@@ -73,8 +91,12 @@ export const Taste = () => {
         label={getLabel("ALCOHOL", form.values.alcohol)}
         {...form.getInputProps("alcohol")}
       />
-
-      <Text className={styles["form-label"]}>Sweetness</Text>
+      <Group>
+        <Text className={styles["form-label"]}>Sweetness</Text>
+        <Tooltip label="The amount of sugar in the wine. Sweetness contributes to the wines flavor profile.">
+          <IconInfoCircle />
+        </Tooltip>
+      </Group>
       <Slider
         classNames={{
           root: styles.slider,

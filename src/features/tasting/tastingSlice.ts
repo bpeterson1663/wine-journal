@@ -6,15 +6,15 @@ import type { FetchStatusT, MessageT } from "types";
 import type { RootState } from "../store";
 
 import {
+  type DeleteTastingVariables,
   type ListTastingsResponse,
   type ListTastingsVariables,
+  type UpdateTastingVariables,
   type User_Key,
   createTasting,
+  deleteTasting,
   listTastings,
   updateTasting,
-  type UpdateTastingVariables,
-  type DeleteTastingVariables,
-  deleteTasting
 } from "@firebasegen/somm-scribe-connector";
 interface InitialTastingState {
   message: MessageT;
@@ -215,7 +215,7 @@ export const editTastingThunk = createAsyncThunk<
     remarks,
   } = data;
   try {
-    delete data.imageBlob; 
+    delete data.imageBlob;
     const request: UpdateTastingVariables = {
       id,
       classification,
@@ -240,9 +240,9 @@ export const editTastingThunk = createAsyncThunk<
       sweet,
       body,
       rating,
-      remarks
-    }
-    await updateTasting(request)
+      remarks,
+    };
+    await updateTasting(request);
     return data;
   } catch (err) {
     return rejectWithValue(err);
@@ -258,9 +258,9 @@ export const deleteTastingThunk = createAsyncThunk<
 >("tasting/deleteTasting", async (id, { rejectWithValue }) => {
   try {
     const request: DeleteTastingVariables = {
-      id
-    }
-    await deleteTasting(request)
+      id,
+    };
+    await deleteTasting(request);
     return id;
   } catch (err) {
     return rejectWithValue(err);

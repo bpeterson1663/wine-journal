@@ -1,13 +1,13 @@
 import {
+  type DeleteWineVariables,
   type ListWinesResponse,
   type ListWinesVariables,
+  type UpdateWineVariables,
   type User_Key,
   createWine,
+  deleteWine,
   listWines,
   updateWine,
-  type UpdateWineVariables,
-  deleteWine,
-  type DeleteWineVariables,
 } from "@firebasegen/somm-scribe-connector";
 import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { dc } from "database";
@@ -42,7 +42,7 @@ export const cellarSlice = createSlice({
         const wineList = action.payload.wines.map((wine) => {
           const quantity = typeof wine.quantity === "string" ? Number.parseInt(wine.quantity) : wine.quantity;
           const price = typeof wine.price === "string" ? Number.parseFloat(wine.price) : wine.price;
-          
+
           const data = {
             ...wine,
             date: new Date(wine.date),
@@ -149,7 +149,8 @@ export const editWineThunk = createAsyncThunk<
 >("wine/editWine", async (data, { rejectWithValue }) => {
   const quantity = typeof data.quantity === "string" ? Number.parseInt(data.quantity) : data.quantity;
   const price = typeof data.price === "string" ? Number.parseFloat(data.price) : data.price;
-  const { id, classification, country, date, description, labelUri, producer, region, subregion, varietal, vintage} = data
+  const { id, classification, country, date, description, labelUri, producer, region, subregion, varietal, vintage } =
+    data;
 
   try {
     delete data.imageBlob;
@@ -166,13 +167,11 @@ export const editWineThunk = createAsyncThunk<
       varietal,
       vintage,
       quantity,
-      price
-    }
-    await updateWine(request)
-    debugger;
+      price,
+    };
+    await updateWine(request);
     return data;
   } catch (err) {
-    debugger;
     return rejectWithValue(err);
   }
 });
@@ -186,13 +185,11 @@ export const deleteWineThunk = createAsyncThunk<
 >("wine/deleteWine", async (id, { rejectWithValue }) => {
   try {
     const request: DeleteWineVariables = {
-      id
-    }
-    await deleteWine(request)
-    debugger;
+      id,
+    };
+    await deleteWine(request);
     return id;
   } catch (err) {
-    debugger;
     return rejectWithValue(err);
   }
 });
