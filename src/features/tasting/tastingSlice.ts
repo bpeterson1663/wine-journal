@@ -53,9 +53,11 @@ export const tastingSlice = createSlice({
 
           const data = {
             ...tasting,
-            quantity,
-            price,
+            quantity: typeof quantity === "number" ? quantity : 0,
+            price: typeof price === "number" ? price : 0.0,
             date: new Date(tasting.date),
+            labelUri: tasting.labelUri ?? "",
+            description: tasting.description ?? "",
             type: "tasting",
           } as unknown;
 

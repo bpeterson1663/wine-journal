@@ -1,4 +1,4 @@
-import { Box, FileInput, Group, Image, Pill, PillsInput, Select, TextInput, rem } from "@mantine/core";
+import { Autocomplete, Box, FileInput, Group, Image, Pill, PillsInput, TextInput, rem } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconUpload } from "@tabler/icons-react";
 import { countries } from "countries-list";
@@ -100,8 +100,7 @@ export const DetailsTasting = () => {
 
       <TextInput required mt="xs" label="Vintage" {...form.getInputProps("vintage")} />
 
-      <Select
-        searchable
+      <Autocomplete
         autoComplete="country"
         data={countryList}
         required

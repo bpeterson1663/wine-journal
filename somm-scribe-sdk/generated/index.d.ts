@@ -148,6 +148,7 @@ export interface ListPlansResponse {
 export interface ListTastingsResponse {
   tastings: ({
     id: UUIDString;
+    userId: UUIDString;
     classification?: string | null;
     country: string;
     date: TimestampString;
@@ -181,6 +182,7 @@ export interface ListTastingsVariables {
 export interface ListWinesResponse {
   wines: ({
     id: UUIDString;
+    userId: UUIDString;
     classification?: string | null;
     country: string;
     date: TimestampString;

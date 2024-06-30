@@ -61,7 +61,7 @@ const EditTasting = () => {
   };
 
   const disableSave = (): boolean => {
-    if (Object.keys(form.errors).length > 0) {
+    if (Object.keys(form.errors).length > 0 || !form.isDirty()) {
       return true;
     }
     return false;

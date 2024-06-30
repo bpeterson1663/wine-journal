@@ -19,6 +19,7 @@ query ListWines($userId: String) @auth(level: USER) {
     user: { userId: { eq: $userId}}
   }) {
     id,
+    userId,
     classification,
     country,
     date,
@@ -39,6 +40,7 @@ query ListTastings($userId: String) @auth(level: USER) {
     user: { userId: { eq: $userId}}
   }) {
     id,
+    userId,
     classification,
     country,
     date,
