@@ -13,10 +13,6 @@ export function BackButton({ label = "Back", showWarning }: Props) {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   function handleNavigate() {
-    if (label === "Back") {
-      navigate("/");
-      return;
-    }
     navigate(-1);
   }
 

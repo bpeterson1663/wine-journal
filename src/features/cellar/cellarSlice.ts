@@ -135,7 +135,7 @@ export const createWineThunk = createAsyncThunk<
 
     return wine as WineT;
   } catch (err) {
-    console.log({ err });
+    console.error({ err });
     return rejectWithValue(err);
   }
 });

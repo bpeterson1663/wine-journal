@@ -34,7 +34,7 @@ export default function Home() {
         <Group pl={20} pr={20}>
           <Group justify="space-between" w="100%">
             <Title order={4}>Your tastings</Title>
-            <Button variant="outline" size="xs" onClick={() => navigate("/Tastings")}>
+            <Button variant="outline" size="xs" onClick={() => navigate("/tastings")}>
               View All
             </Button>
           </Group>

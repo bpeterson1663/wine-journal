@@ -14,7 +14,7 @@ interface Props {
 
 export function Card({ wine, url, showDate = false }: Props) {
   const navigate = useNavigate();
-  const { id, labelUri, producer, vintage, region, varietal, date } = wine;
+  const { id, labelUri, producer, vintage, region, varietal, date, classification } = wine;
 
   return (
     <div
@@ -38,6 +38,7 @@ export function Card({ wine, url, showDate = false }: Props) {
         </div>
         <div className={styles.column}>
           <Title order={4}>{producer}</Title>
+          {classification && <Title order={5}>{classification}</Title>}
           <Text size="md">{varietal.join(", ")}</Text>
           <Text size="sm">{vintage}</Text>
           <Text size="sm">{region}</Text>
