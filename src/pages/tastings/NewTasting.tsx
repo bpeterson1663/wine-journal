@@ -31,7 +31,7 @@ const STEPS = [
 const NewTasting = () => {
   const dispatch = useAppDispatch();
   const { tastingOpen } = useAppSelector((state) => state.tasting);
-  const { currentUser } = useAppSelector((state) => state.auth);
+  const { userProfile } = useAppSelector((state) => state.user);
   const [activeStep, setActiveStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +40,7 @@ const NewTasting = () => {
     initialValues: {
       ...INITIAL_VALUES,
       ...tastingOpen,
-      userId: currentUser?.uid ?? "",
+      userId: userProfile?.id ?? "",
     },
     validate: zodResolver(TastingSchema),
   });
@@ -53,7 +53,7 @@ const NewTasting = () => {
         dispatch(editWineThunk({ ...tastingOpen, quantity })).unwrap();
       }
 
-      const { id } = await dispatch(createTastingThunk({ ...data, userId: currentUser?.uid ?? "" })).unwrap();
+      const { id } = await dispatch(createTastingThunk({ ...data, userId: userProfile?.id ?? "" })).unwrap();
 
       if (data.imageBlob) {
         const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);

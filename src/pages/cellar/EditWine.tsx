@@ -13,12 +13,15 @@ import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
 import { INITIAL_VALUES, WineSchema, type WineT } from "schemas/cellar";
+import { useCellarRedirect} from "hooks/useRedirect"
 
 export default function EditWine() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { wine } = useAppSelector((state) => state.cellar);
   const [loading, setLoading] = useState(false);
+
+  useCellarRedirect()
 
   useEffect(() => {
     if (!wine) {

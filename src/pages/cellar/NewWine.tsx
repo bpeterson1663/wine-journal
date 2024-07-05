@@ -7,6 +7,7 @@ import PageContainer from "components/page-container/page-container.component";
 import { uploadImage } from "database";
 import { createWineThunk, editWineThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
+import { useCellarRedirect } from "hooks/useRedirect";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
@@ -24,15 +25,16 @@ const STEPS = [
 export default function NewWine() {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector((state) => state.auth);
   const { userProfile } = useAppSelector((state) => state.user);
-
   const [loading, setLoading] = useState(false);
+
+  useCellarRedirect()
+
   const form = useWineForm({
     validateInputOnBlur: true,
     initialValues: {
       ...INITIAL_VALUES,
-      userId: currentUser?.uid ?? "",
+      userId: userProfile?.id ?? "",
     },
     validate: zodResolver(WineSchema),
   });
