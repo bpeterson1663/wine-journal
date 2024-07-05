@@ -2,6 +2,7 @@ import { Avatar, Burger, Button, Container, Group, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import styles from "components/nav-bar/nav-bar.module.css";
 import { useAppSelector } from "features/hooks";
+import { selectUserPlan } from "features/plan/planSelector";
 import { useMobile } from "hooks/useMobile";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -11,15 +12,12 @@ const NavBar = () => {
   const isMobile = useMobile();
   const { currentUser } = useAppSelector((state) => state.auth);
   const { userProfile } = useAppSelector((state) => state.user);
+  const currentPlan = useAppSelector(selectUserPlan)
 
   function getInitials() {
     const first = userProfile?.firstName[0] ?? "";
     const last = userProfile?.lastName[0] ?? "";
     return `${first}${last}`;
-  }
-
-  function handleNavigate(url: string) {
-    navigate(url);
   }
 
   function renderNavItems() {
@@ -39,11 +37,11 @@ const NavBar = () => {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item onClick={() => handleNavigate("/")}>Home</Menu.Item>
-              <Menu.Item onClick={() => handleNavigate("/tastings")}>Tastings</Menu.Item>
-              <Menu.Item onClick={() => handleNavigate("/cellar")}>Cellar</Menu.Item>
+              <Menu.Item onClick={() => navigate("/")}>Home</Menu.Item>
+              <Menu.Item onClick={() => navigate("/tastings")}>Tastings</Menu.Item>
+              {currentPlan.maxWine !== 0 && <Menu.Item onClick={() => navigate("/cellar")}>Cellar</Menu.Item>}
               <Menu.Divider />
-              <Menu.Item onClick={() => handleNavigate("/profile")}>Profile</Menu.Item>
+              <Menu.Item onClick={() => navigate("/profile")}>Profile</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>
@@ -54,9 +52,9 @@ const NavBar = () => {
       return (
         <Container className={styles.inner} fluid>
           <Group>
-            <Button onClick={() => handleNavigate("/")}>Home</Button>
-            <Button onClick={() => handleNavigate("/tastings")}>Tastings</Button>
-            <Button onClick={() => handleNavigate("/cellar")}>Cellar</Button>
+            <Button onClick={() => navigate("/")}>Home</Button>
+            <Button onClick={() => navigate("/tastings")}>Tastings</Button>
+            {currentPlan.maxWine !== 0 && <Button onClick={() => navigate("/cellar")}>Cellar</Button>}
           </Group>
           <Group justify="flex-end">
             <Avatar

@@ -4,6 +4,7 @@ import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
 import { selectAllWines } from "features/cellar/cellarSelectors";
 import { useAppSelector } from "features/hooks";
+import { selectUserPlan } from "features/plan/planSelector";
 import { selectAllTastings } from "features/tasting/tastingSelectors";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +14,7 @@ export default function Home() {
   const tastingList = useAppSelector(selectAllTastings);
   const { publicTastingList } = useAppSelector((state) => state.tasting);
   const wineList = useAppSelector(selectAllWines);
-
+  const currentPlan = useAppSelector(selectUserPlan)
   const sortedPublicList = [...publicTastingList].sort((a, b) =>
     b.date.toISOString().localeCompare(a.date.toISOString()),
   );
@@ -46,7 +47,7 @@ export default function Home() {
           </section>
         </Group>
 
-        <Group pl={20} pr={20}>
+        {currentPlan.maxWine !== 0 && <Group pl={20} pr={20}>
           <Group justify="space-between" w="100%">
             <Title order={4}>Your cellar</Title>
             <Button variant="outline" size="xs" onClick={() => navigate("/cellar")}>
@@ -58,12 +59,12 @@ export default function Home() {
               <Card key={wine.id} wine={wine} url="cellar" />
             ))}
           </section>
-        </Group>
+        </Group>}
       </Stack>
       <Footer>
         <Group justify="flex-end">
           <Button onClick={() => navigate("/tastings/new")}>Add Tasting</Button>
-          <Button onClick={() => navigate("/cellar/new")}>Add Wine</Button>
+          {currentPlan.maxWine !== 0 && <Button onClick={() => navigate("/cellar/new")}>Add Wine</Button>}
         </Group>
       </Footer>
     </PageContainer>

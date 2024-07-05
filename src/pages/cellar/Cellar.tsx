@@ -8,11 +8,14 @@ import { useAppSelector } from "features/hooks";
 import { useViewMore } from "hooks/useViewMore";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
+import { useCellarRedirect} from "hooks/useRedirect"
 
 export default function Cellar() {
   const wineList = useAppSelector(selectAllWines);
   const { viewable, handleShowMore, moreAvailable, setSearch, search } = useViewMore(wineList);
   const navigate = useNavigate();
+
+  useCellarRedirect();
 
   return (
     <PageContainer showBack title="Cellar">

@@ -3,6 +3,7 @@ import type { RootState } from "features/store";
 import type { PlanT } from "schemas/plans";
 
 const plans = (state: RootState) => state.plan.planList;
+const user = (state: RootState) => state.user.userProfile;
 
 const BEGINNER_PLAN_ID = "2241b29e996448ee8acd0a3bd84ca27a";
 
@@ -29,3 +30,10 @@ export const selectPlanById = (id: string) => {
     return plan ?? DEFAULT_PLAN;
   });
 };
+
+export const selectUserPlan = createSelector(
+  [plans, user], 
+  (plans, user) => {
+    const plan = plans.find((plan) => plan.id === user?.planId);
+    return plan ?? DEFAULT_PLAN;
+  })

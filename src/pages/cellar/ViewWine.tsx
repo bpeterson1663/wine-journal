@@ -9,6 +9,7 @@ import { deleteWineThunk, wineSetEdit } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { tastingSetOpen } from "features/tasting/tastingSlice";
 import { getWineImage } from "helpers";
+import { useCellarRedirect } from "hooks/useRedirect";
 import styles from "pages/styles/pages.module.css";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,7 +17,6 @@ import type { WineT } from "schemas/cellar";
 
 export default function ViewWine() {
   const [opened, { open, close }] = useDisclosure(false);
-
   const params = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ export default function ViewWine() {
   const [itemToDelete, setItemToDelete] = useState("");
   const [loading, setLoading] = useState(false);
   const [imageEnlarged, setImageEnlarged] = useState(false);
+
+  useCellarRedirect()
 
   if (!wine) {
     navigate("/cellar");
