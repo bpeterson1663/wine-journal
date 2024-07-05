@@ -43,6 +43,15 @@ exports.createTasting = function createTasting(dcOrVars, vars) {
   return executeMutation(createTastingRef(dcOrVars, vars));
 };
 
+function updateUserRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, 'UpdateUser', inputVars);
+}
+exports.updateUserRef = updateUserRef;
+exports.updateUser = function updateUser(dcOrVars, vars) {
+  return executeMutation(updateUserRef(dcOrVars, vars));
+};
+
 function updateWineRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
   return mutationRef(dcInstance, 'UpdateWine', inputVars);

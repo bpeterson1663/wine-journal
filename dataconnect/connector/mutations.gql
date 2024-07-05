@@ -74,6 +74,20 @@ mutation CreateTasting($user: User_Key, $classification: String, $country: Strin
     })
 }
 
+mutation UpdateUser($id: UUID, $avatar: String, $firstName: String, $lastName: String, $displayName: String, $userId: String, $email: String, $plan: Plan_Key, $trialExpires: Timestamp, $isPaid: Boolean) @auth(level: USER) {
+    user_update(id: $id, data: {
+        avatar: $avatar,
+        firstName: $firstName,
+        lastName: $lastName,
+        displayName: $displayName,
+        userId: $userId,
+        email: $email,
+        plan: $plan,
+        trialExpires: $trialExpires,
+        isPaid: $isPaid,
+    })
+}
+
 mutation UpdateWine($id: UUID, $classification: String, $country: String, $date: Timestamp, $description: String, $labelUri: String, $price: Float, $producer: String, $quantity: Int, $region: String, $subregion: String, $varietal: [String! ], $vintage: String) @auth(level: USER) {
   wine_update(id: $id, data: {
         classification: $classification,

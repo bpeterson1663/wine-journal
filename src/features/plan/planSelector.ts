@@ -34,6 +34,8 @@ export const selectPlanById = (id: string) => {
 export const selectUserPlan = createSelector(
   [plans, user], 
   (plans, user) => {
+
     const plan = plans.find((plan) => plan.id === user?.planId);
+    console.log({plan, plans, user})
     return plan ?? DEFAULT_PLAN;
   })

@@ -89,8 +89,19 @@ export const getUserProfileById = createAsyncThunk<
     const { data } = await getUserById(params);
 
     if (data.users.length === 1) {
-      const profile = data.users[0] as unknown;
-      return profile as UserProfileT;
+      const profile = data.users[0];
+      return {
+        id: profile.id,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        avatar: profile.avatar,
+        displayName: profile.displayName,
+        userId: profile.userId,
+        email: profile.email,
+        planId: profile.plan.id,
+        trialExpires: new Date(profile.trialExpires),
+        isPaid: profile.isPaid,
+      } as UserProfileT;
     }
 
     return null;

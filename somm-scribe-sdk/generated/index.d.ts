@@ -243,6 +243,23 @@ export interface UpdateTastingVariables {
   remarks?: string | null;
 }
 
+export interface UpdateUserResponse {
+  user_update?: User_Key | null;
+}
+
+export interface UpdateUserVariables {
+  id?: UUIDString | null;
+  avatar?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  displayName?: string | null;
+  userId?: string | null;
+  email?: string | null;
+  plan?: Plan_Key | null;
+  trialExpires?: TimestampString | null;
+  isPaid?: boolean | null;
+}
+
 export interface UpdateWineResponse {
   wine_update?: Wine_Key | null;
 }
@@ -309,6 +326,15 @@ export function createTastingRef(dc: DataConnect, vars?: CreateTastingVariables)
 
 export function createTasting(vars?: CreateTastingVariables): MutationPromise<CreateTastingResponse, CreateTastingVariables>;
 export function createTasting(dc: DataConnect, vars?: CreateTastingVariables): MutationPromise<CreateTastingResponse,CreateTastingVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function updateUserRef(vars?: UpdateUserVariables): MutationRef<UpdateUserResponse, UpdateUserVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function updateUserRef(dc: DataConnect, vars?: UpdateUserVariables): MutationRef<UpdateUserResponse,UpdateUserVariables>;
+
+export function updateUser(vars?: UpdateUserVariables): MutationPromise<UpdateUserResponse, UpdateUserVariables>;
+export function updateUser(dc: DataConnect, vars?: UpdateUserVariables): MutationPromise<UpdateUserResponse,UpdateUserVariables>;
 
 
 /* Allow users to create refs without passing in DataConnect */
