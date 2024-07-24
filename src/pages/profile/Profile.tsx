@@ -1,4 +1,18 @@
-import { ActionIcon, Avatar, Box, Button, FileInput, Group, TextInput, rem } from "@mantine/core";
+import {
+  ActionIcon,
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  Card,
+  FileInput,
+  Group,
+  List,
+  Text,
+  TextInput,
+  Title,
+  rem,
+} from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconTrash, IconUpload } from "@tabler/icons-react";
@@ -11,6 +25,8 @@ import { editUserProfile } from "features/user/userSlice";
 import { useFileInput } from "hooks/useFileInput";
 import { useMobile } from "hooks/useMobile";
 import styles from "pages/styles/pages.module.css";
+import "pages/profile/Profile.css";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserProfileSchema, type UserProfileT, defaultUserProfile } from "schemas/user";
@@ -23,6 +39,7 @@ export default function Profile() {
   const isMobile = useMobile();
   const { file, blob, handleFileChange, imgPreview } = useFileInput();
   const [loading, setLoading] = useState(false);
+  const { planList } = useAppSelector((state) => state.plan);
 
   const form = useForm({
     initialValues: {
@@ -78,7 +95,6 @@ export default function Profile() {
       }
 
       await dispatch(editUserProfile({ ...data, avatar }));
-
       notifications.show({
         message: "Your profile was saved.",
       });
@@ -91,6 +107,23 @@ export default function Profile() {
       setLoading(false);
     }
   };
+
+  async function upgradePlan(planId: string) {
+    setLoading(true);
+    try {
+      await dispatch(editUserProfile({ ...userProfile, planId })).unwrap();
+      notifications.show({
+        message: "Your plan has been upgraded.",
+      });
+    } catch (err) {
+      notifications.show({
+        color: "red",
+        message: "An error occurred trying to upgrade your plan. Please try again later.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <PageContainer title="Profile" showBack>
@@ -139,6 +172,42 @@ export default function Profile() {
             <IconTrash />
           </ActionIcon>
         </Box>
+      </Group>
+      <Title order={3}>Plans</Title>
+      <Group grow align="stretch" h="100%">
+        {planList.map((plan) => (
+          <Card
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            withBorder
+            maw={300}
+            key={plan.id}
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Group justify="space-between" mt="md" mb="xs">
+              <Text fw={500}>{plan.name}</Text>
+              <Badge color="secondary">${plan.price}</Badge>
+            </Group>
+            <Text size="sm" c="dimmed">
+              {plan.description}
+            </Text>
+            <List c="dimmed">
+              <List.Item>
+                {typeof plan.maxTasting === "number" ? `Save up to ${plan.maxTasting} tastings` : "Unlimited Tastings"}
+              </List.Item>
+              <List.Item>
+                {typeof plan.maxWine === "number"
+                  ? `Save up to ${plan.maxWine} wines in your cellar`
+                  : "Unlimited Wines"}
+              </List.Item>
+            </List>
+
+            <Button color="secondary" onClick={() => upgradePlan(plan.id)} fullWidth mt="md" radius="md">
+              Upgrade
+            </Button>
+          </Card>
+        ))}
       </Group>
     </PageContainer>
   );

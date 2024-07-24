@@ -57,11 +57,11 @@ export interface CreateTastingVariables {
   remarks?: string | null;
 }
 
-export interface CreateUserResponse {
+export interface CreateUserProfileResponse {
   user_insert: User_Key;
 }
 
-export interface CreateUserVariables {
+export interface CreateUserProfileVariables {
   avatar?: string | null;
   firstName?: string | null;
   lastName?: string | null;
@@ -243,11 +243,11 @@ export interface UpdateTastingVariables {
   remarks?: string | null;
 }
 
-export interface UpdateUserResponse {
+export interface UpdateUserProfileResponse {
   user_update?: User_Key | null;
 }
 
-export interface UpdateUserVariables {
+export interface UpdateUserProfileVariables {
   id?: UUIDString | null;
   avatar?: string | null;
   firstName?: string | null;
@@ -302,12 +302,12 @@ export function createPlan(dc: DataConnect, vars?: CreatePlanVariables): Mutatio
 
 
 /* Allow users to create refs without passing in DataConnect */
-export function createUserRef(vars?: CreateUserVariables): MutationRef<CreateUserResponse, CreateUserVariables>;
+export function createUserProfileRef(vars?: CreateUserProfileVariables): MutationRef<CreateUserProfileResponse, CreateUserProfileVariables>;
 /* Allow users to pass in custom DataConnect instances */
-export function createUserRef(dc: DataConnect, vars?: CreateUserVariables): MutationRef<CreateUserResponse,CreateUserVariables>;
+export function createUserProfileRef(dc: DataConnect, vars?: CreateUserProfileVariables): MutationRef<CreateUserProfileResponse,CreateUserProfileVariables>;
 
-export function createUser(vars?: CreateUserVariables): MutationPromise<CreateUserResponse, CreateUserVariables>;
-export function createUser(dc: DataConnect, vars?: CreateUserVariables): MutationPromise<CreateUserResponse,CreateUserVariables>;
+export function createUserProfile(vars?: CreateUserProfileVariables): MutationPromise<CreateUserProfileResponse, CreateUserProfileVariables>;
+export function createUserProfile(dc: DataConnect, vars?: CreateUserProfileVariables): MutationPromise<CreateUserProfileResponse,CreateUserProfileVariables>;
 
 
 /* Allow users to create refs without passing in DataConnect */
@@ -329,12 +329,12 @@ export function createTasting(dc: DataConnect, vars?: CreateTastingVariables): M
 
 
 /* Allow users to create refs without passing in DataConnect */
-export function updateUserRef(vars?: UpdateUserVariables): MutationRef<UpdateUserResponse, UpdateUserVariables>;
+export function updateUserProfileRef(vars?: UpdateUserProfileVariables): MutationRef<UpdateUserProfileResponse, UpdateUserProfileVariables>;
 /* Allow users to pass in custom DataConnect instances */
-export function updateUserRef(dc: DataConnect, vars?: UpdateUserVariables): MutationRef<UpdateUserResponse,UpdateUserVariables>;
+export function updateUserProfileRef(dc: DataConnect, vars?: UpdateUserProfileVariables): MutationRef<UpdateUserProfileResponse,UpdateUserProfileVariables>;
 
-export function updateUser(vars?: UpdateUserVariables): MutationPromise<UpdateUserResponse, UpdateUserVariables>;
-export function updateUser(dc: DataConnect, vars?: UpdateUserVariables): MutationPromise<UpdateUserResponse,UpdateUserVariables>;
+export function updateUserProfile(vars?: UpdateUserProfileVariables): MutationPromise<UpdateUserProfileResponse, UpdateUserProfileVariables>;
+export function updateUserProfile(dc: DataConnect, vars?: UpdateUserProfileVariables): MutationPromise<UpdateUserProfileResponse,UpdateUserProfileVariables>;
 
 
 /* Allow users to create refs without passing in DataConnect */

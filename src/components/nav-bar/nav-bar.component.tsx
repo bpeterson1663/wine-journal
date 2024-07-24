@@ -12,7 +12,7 @@ const NavBar = () => {
   const isMobile = useMobile();
   const { currentUser } = useAppSelector((state) => state.auth);
   const { userProfile } = useAppSelector((state) => state.user);
-  const currentPlan = useAppSelector(selectUserPlan)
+  const currentPlan = useAppSelector(selectUserPlan);
 
   function getInitials() {
     const first = userProfile?.firstName[0] ?? "";

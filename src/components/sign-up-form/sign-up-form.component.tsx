@@ -8,7 +8,7 @@ import { fetchSignUp } from "features/auth/authSlice";
 import { fetchSignInWithGoogle } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { selectBeginnerPlan } from "features/plan/planSelector";
-import { createUserProfile } from "features/user/userSlice";
+import { createUser } from "features/user/userSlice";
 import type { AuthError } from "firebase/auth";
 import { generateAuthErrorMessage } from "helpers";
 import { useEffect, useState } from "react";
@@ -46,7 +46,7 @@ const SignUpForm = () => {
     try {
       const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap();
       await dispatch(
-        createUserProfile({
+        createUser({
           firstName,
           lastName,
           userId: uid,

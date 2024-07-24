@@ -28,7 +28,7 @@ export default function NewWine() {
   const { userProfile } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
 
-  useCellarRedirect()
+  useCellarRedirect();
 
   const form = useWineForm({
     validateInputOnBlur: true,

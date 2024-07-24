@@ -4,6 +4,7 @@ import { Card } from "components/card/card.component";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
 import { useAppSelector } from "features/hooks";
+import { selectUserPlan } from "features/plan/planSelector";
 import { selectAllTastings } from "features/tasting/tastingSelectors";
 import { useViewMore } from "hooks/useViewMore";
 import styles from "pages/styles/pages.module.css";
@@ -13,6 +14,7 @@ export default function Tastings() {
   const tastingList = useAppSelector(selectAllTastings);
   const { viewable, handleShowMore, moreAvailable, setSearch, search } = useViewMore(tastingList);
   const navigate = useNavigate();
+  const currentPlan = useAppSelector(selectUserPlan);
 
   return (
     <PageContainer showBack title="Tastings">
@@ -26,15 +28,18 @@ export default function Tastings() {
         ))}
       </section>
 
-      {search === "" && <div className={styles["load-more-container"]}>
-        <Button disabled={!moreAvailable} variant="outline" onClick={() => handleShowMore(viewable.length)}>
-          Show More
-        </Button>
-      </div> }
+      {search === "" && (
+        <div className={styles["load-more-container"]}>
+          <Button disabled={!moreAvailable} variant="outline" onClick={() => handleShowMore(viewable.length)}>
+            Show More
+          </Button>
+        </div>
+      )}
       <Footer>
         <Group justify="flex-end">
           <Button
             style={{ margin: "0 5px " }}
+            disabled={typeof currentPlan.maxTasting === "number" && tastingList.length >= currentPlan.maxTasting}
             onClick={() => {
               navigate("/tastings/new");
             }}

@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@firebasegen/somm-scribe-connector':
     specifier: file:somm-scribe-sdk/generated
@@ -12381,14 +12385,9 @@ packages:
     resolution: {directory: somm-scribe-sdk/generated, type: directory}
     id: file:somm-scribe-sdk/generated
     name: '@firebasegen/somm-scribe-connector'
-    version: 1.0.0
     engines: {node: ' >=20.0'}
     peerDependencies:
       firebase: dataconnect-preview
     dependencies:
       firebase: 10.12.0-dataconnect-preview.388b61c7e
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

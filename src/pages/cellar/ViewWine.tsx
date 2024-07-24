@@ -26,7 +26,7 @@ export default function ViewWine() {
   const [loading, setLoading] = useState(false);
   const [imageEnlarged, setImageEnlarged] = useState(false);
 
-  useCellarRedirect()
+  useCellarRedirect();
 
   if (!wine) {
     navigate("/cellar");

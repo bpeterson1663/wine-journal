@@ -1,19 +1,25 @@
-import { type GetUserByIdVariables, type Plan_Key, createUser, getUserById } from "@firebasegen/somm-scribe-connector";
+import {
+  type GetUserByIdVariables,
+  type Plan_Key,
+  type UpdateUserProfileVariables,
+  createUserProfile,
+  getUserById,
+  updateUserProfile,
+} from "@firebasegen/somm-scribe-connector";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db, dc } from "database";
-import { doc, updateDoc } from "firebase/firestore/lite";
-import type { UserProfileT } from "schemas/user";
+import { dc } from "database";
+import { type UserProfileT, defaultUserProfile } from "schemas/user";
 import type { FetchStatusT, MessageT } from "types";
 import type { RootState } from "../store";
 
 interface InitialUserState {
-  userProfile: UserProfileT | null;
+  userProfile: UserProfileT;
   status: FetchStatusT;
   message: MessageT;
 }
 
 const initialState: InitialUserState = {
-  userProfile: null,
+  userProfile: defaultUserProfile,
   status: "idle",
   message: null,
 };
@@ -24,7 +30,7 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(createUserProfile.fulfilled, (state, action) => {
+      .addCase(createUser.fulfilled, (state, action) => {
         state.userProfile = action.payload;
       })
       .addCase(getUserProfileById.fulfilled, (state, action) => {
@@ -40,17 +46,14 @@ export const userSelector = (state: RootState) => state.user;
 
 export default userSlice.reducer;
 
-export const createUserProfile = createAsyncThunk<
+export const createUser = createAsyncThunk<
   UserProfileT,
   UserProfileT,
   {
     state: RootState;
   }
->("user/createUserProfile", async (request, { rejectWithValue }) => {
+>("user/createUser", async (request, { rejectWithValue }) => {
   try {
-    // const docData = await addDoc(collection(db, "users"), {
-    //   ...request,
-    // });
     const plan = request.planId as unknown;
     const profile = {
       firstName: request.firstName,
@@ -64,7 +67,7 @@ export const createUserProfile = createAsyncThunk<
       userId: request.userId,
     };
 
-    const { data } = await createUser(dc, profile);
+    const { data } = await createUserProfile(dc, profile);
 
     const userProfile = {
       ...request,
@@ -78,7 +81,7 @@ export const createUserProfile = createAsyncThunk<
 });
 
 export const getUserProfileById = createAsyncThunk<
-  UserProfileT | null,
+  UserProfileT,
   string,
   {
     state: RootState;
@@ -104,7 +107,7 @@ export const getUserProfileById = createAsyncThunk<
       } as UserProfileT;
     }
 
-    return null;
+    return defaultUserProfile;
   } catch (err) {
     return rejectWithValue(err);
   }
@@ -117,12 +120,26 @@ export const editUserProfile = createAsyncThunk<
     state: RootState;
   }
 >("user/editUserProfile", async (data, { rejectWithValue }) => {
-  const userRef = doc(db, "users", data.id);
   try {
-    delete data.imageBlob;
-    await updateDoc(userRef, { ...data });
+    const planId = data.planId as unknown;
+    const { id, firstName, lastName, avatar, displayName, userId, email, trialExpires, isPaid } = data;
+    const request: UpdateUserProfileVariables = {
+      firstName,
+      lastName,
+      id,
+      avatar,
+      displayName,
+      userId,
+      email,
+      isPaid,
+      trialExpires: trialExpires.toISOString(),
+      plan: planId as Plan_Key,
+    };
+
+    await updateUserProfile(request);
     return data;
   } catch (err) {
+    console.log({ err });
     return rejectWithValue(err);
   }
 });

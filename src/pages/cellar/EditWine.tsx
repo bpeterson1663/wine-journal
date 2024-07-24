@@ -9,11 +9,11 @@ import { DetailsWine, Quantity } from "components/form-steps";
 import { uploadImage } from "database";
 import { editWineThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
+import { useCellarRedirect } from "hooks/useRedirect";
 import { WineFormProvider, useWineForm } from "pages/cellar/form-context";
 import styles from "pages/styles/pages.module.css";
 import { useNavigate } from "react-router-dom";
 import { INITIAL_VALUES, WineSchema, type WineT } from "schemas/cellar";
-import { useCellarRedirect} from "hooks/useRedirect"
 
 export default function EditWine() {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ export default function EditWine() {
   const { wine } = useAppSelector((state) => state.cellar);
   const [loading, setLoading] = useState(false);
 
-  useCellarRedirect()
+  useCellarRedirect();
 
   useEffect(() => {
     if (!wine) {

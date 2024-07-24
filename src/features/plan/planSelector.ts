@@ -24,18 +24,7 @@ export const selectBeginnerPlan = () => {
   return createSelector([plans], (plans) => plans.find((plan) => plan.id === BEGINNER_PLAN_ID));
 };
 
-export const selectPlanById = (id: string) => {
-  return createSelector([plans], (plans) => {
-    const plan = plans.find((plan) => plan.id === id);
-    return plan ?? DEFAULT_PLAN;
-  });
-};
-
-export const selectUserPlan = createSelector(
-  [plans, user], 
-  (plans, user) => {
-
-    const plan = plans.find((plan) => plan.id === user?.planId);
-    console.log({plan, plans, user})
-    return plan ?? DEFAULT_PLAN;
-  })
+export const selectUserPlan = createSelector([plans, user], (plans, user) => {
+  const plan = plans.find((plan) => plan.id === user?.planId);
+  return plan ?? DEFAULT_PLAN;
+});

@@ -16,13 +16,13 @@ exports.createPlan = function createPlan(dcOrVars, vars) {
   return executeMutation(createPlanRef(dcOrVars, vars));
 };
 
-function createUserRef(dcOrVars, vars) {
+function createUserProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'CreateUser', inputVars);
+  return mutationRef(dcInstance, 'CreateUserProfile', inputVars);
 }
-exports.createUserRef = createUserRef;
-exports.createUser = function createUser(dcOrVars, vars) {
-  return executeMutation(createUserRef(dcOrVars, vars));
+exports.createUserProfileRef = createUserProfileRef;
+exports.createUserProfile = function createUserProfile(dcOrVars, vars) {
+  return executeMutation(createUserProfileRef(dcOrVars, vars));
 };
 
 function createWineRef(dcOrVars, vars) {
@@ -43,13 +43,13 @@ exports.createTasting = function createTasting(dcOrVars, vars) {
   return executeMutation(createTastingRef(dcOrVars, vars));
 };
 
-function updateUserRef(dcOrVars, vars) {
+function updateUserProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'UpdateUser', inputVars);
+  return mutationRef(dcInstance, 'UpdateUserProfile', inputVars);
 }
-exports.updateUserRef = updateUserRef;
-exports.updateUser = function updateUser(dcOrVars, vars) {
-  return executeMutation(updateUserRef(dcOrVars, vars));
+exports.updateUserProfileRef = updateUserProfileRef;
+exports.updateUserProfile = function updateUserProfile(dcOrVars, vars) {
+  return executeMutation(updateUserProfileRef(dcOrVars, vars));
 };
 
 function updateWineRef(dcOrVars, vars) {
