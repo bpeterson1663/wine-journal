@@ -35,15 +35,21 @@ export function useViewMore(list: TastingT[] | WineT[]) {
   }, [search, list, currentCount]);
 
   function handleShowMore(lastCount: number) {
-    const currentList = list
-      .slice(0, lastCount + VIEW_INCREMENT)
-      .filter(
-        (wine) =>
-          wine.classification.toLowerCase().includes(search.toLowerCase()) ||
-          wine.producer.toLowerCase().includes(search.toLowerCase()),
-      );
+    if (search !== "") {
+      const currentList = list
+        .slice(0, lastCount + VIEW_INCREMENT)
+        .filter(
+          (wine) =>
+            wine.classification.toLowerCase().includes(search.toLowerCase()) ||
+            wine.producer.toLowerCase().includes(search.toLowerCase()),
+        );
 
-    setViewable(currentList);
+      setViewable(currentList);
+    } else {
+      const currentList = list.slice(0, lastCount + VIEW_INCREMENT);
+      setViewable(currentList);
+    }
+
     setCurrentCount(lastCount + VIEW_INCREMENT);
     if (list.length < lastCount + VIEW_INCREMENT) {
       setMoreAvailable(false);

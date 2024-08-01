@@ -1,9 +1,9 @@
 import {
+  type Account_Key,
   type DeleteWineVariables,
   type ListWinesResponse,
   type ListWinesVariables,
   type UpdateWineVariables,
-  type User_Key,
   createWine,
   deleteWine,
   listWines,
@@ -77,7 +77,7 @@ export const wineListSelector = (state: RootState) => state.cellar;
 export default cellarSlice.reducer;
 
 interface FetchWinesParams {
-  userId: string;
+  accountId: string;
   previousDoc?: string;
 }
 
@@ -87,9 +87,9 @@ export const fetchWinesThunk = createAsyncThunk<
   {
     state: RootState;
   }
->("wine/fetchWines", async ({ userId, previousDoc }, { rejectWithValue }) => {
+>("wine/fetchWines", async ({ accountId, previousDoc }, { rejectWithValue }) => {
   try {
-    const params: ListWinesVariables = { userId };
+    const params: ListWinesVariables = { accountId };
     const { data } = await listWines(params);
     return data;
   } catch (err) {
@@ -107,12 +107,12 @@ export const createWineThunk = createAsyncThunk<
   const quantity = typeof request.quantity === "string" ? Number.parseInt(request.quantity) : request.quantity;
   const price = typeof request.price === "string" ? Number.parseFloat(request.price) : request.price;
   try {
-    const userId = request.userId as unknown;
+    const accountId = request.accountId as unknown;
     const { classification, country, date, description, labelUri, producer, region, subregion, varietal, vintage } =
       request;
 
     const wineData = {
-      user: userId as User_Key,
+      account: accountId as Account_Key,
       classification,
       country,
       date: date.toISOString(),

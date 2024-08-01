@@ -1,15 +1,15 @@
+extend type Account {
+  id: UUID! @default(expr: "uuidV4()")
+  planId: UUID!
+}
 extend type Plan {
   id: UUID! @default(expr: "uuidV4()")
 }
 extend type Tasting {
   id: UUID! @default(expr: "uuidV4()")
-  userId: UUID!
-}
-extend type User {
-  id: UUID! @default(expr: "uuidV4()")
-  planId: UUID!
+  accountId: UUID!
 }
 extend type Wine {
   id: UUID! @default(expr: "uuidV4()")
-  userId: UUID!
+  accountId: UUID!
 }

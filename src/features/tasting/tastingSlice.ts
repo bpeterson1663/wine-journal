@@ -6,11 +6,11 @@ import type { FetchStatusT, MessageT } from "types";
 import type { RootState } from "../store";
 
 import {
+  type Account_Key,
   type DeleteTastingVariables,
   type ListTastingsResponse,
   type ListTastingsVariables,
   type UpdateTastingVariables,
-  type User_Key,
   createTasting,
   deleteTasting,
   listTastings,
@@ -89,7 +89,7 @@ export const tastingListSelector = (state: RootState) => state.tasting;
 export default tastingSlice.reducer;
 
 interface FetchTastingsParams {
-  userId: string;
+  accountId: string;
   previousDoc?: string;
 }
 
@@ -99,9 +99,9 @@ export const fetchTastingsThunk = createAsyncThunk<
   {
     state: RootState;
   }
->("tasting/fetchTastings", async ({ userId }, { rejectWithValue }) => {
+>("tasting/fetchTastings", async ({ accountId }, { rejectWithValue }) => {
   try {
-    const params: ListTastingsVariables = { userId };
+    const params: ListTastingsVariables = { accountId };
     const { data } = await listTastings(params);
 
     return data;
@@ -121,7 +121,7 @@ export const createTastingThunk = createAsyncThunk<
   const quantity = typeof request.quantity === "string" ? Number.parseInt(request.quantity) : request.quantity;
   const price = typeof request.price === "string" ? Number.parseFloat(request.price) : request.price;
   try {
-    const userId = request.userId as unknown;
+    const accountId = request.accountId as unknown;
     const {
       classification,
       country,
@@ -146,7 +146,7 @@ export const createTastingThunk = createAsyncThunk<
       remarks,
     } = request;
     const tastingData = {
-      user: userId as User_Key,
+      account: accountId as Account_Key,
       classification,
       country,
       date: date.toISOString(),

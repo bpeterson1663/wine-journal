@@ -1,7 +1,64 @@
+scalar Account_Key
 scalar Plan_Key
 scalar Tasting_Key
-scalar User_Key
 scalar Wine_Key
+input Account_Data {
+  id: UUID
+  id_expr: UUID_Expr
+  planId: UUID
+  planId_expr: UUID_Expr
+  plan: Plan_Key
+  authId: String
+  authId_expr: String_Expr
+  avatar: String
+  avatar_expr: String_Expr
+  displayName: String
+  displayName_expr: String_Expr
+  email: String
+  email_expr: String_Expr
+  firstName: String
+  firstName_expr: String_Expr
+  isPaid: Boolean
+  lastName: String
+  lastName_expr: String_Expr
+  trialExpires: Timestamp
+  trialExpires_expr: Timestamp_Expr
+  trialExpires_time: Timestamp_Relative
+}
+input Account_Filter {
+  _and: [Account_Filter!]
+  _not: Account_Filter
+  _or: [Account_Filter!]
+  id: UUID_Filter
+  planId: UUID_Filter
+  plan: Plan_Filter
+  authId: String_Filter
+  avatar: String_Filter
+  displayName: String_Filter
+  email: String_Filter
+  firstName: String_Filter
+  isPaid: Boolean_Filter
+  lastName: String_Filter
+  trialExpires: Timestamp_Filter
+  tastings_on_account: Tasting_ListFilter
+  wines_on_account: Wine_ListFilter
+}
+input Account_ListFilter {
+  count: Int_Filter
+  exist: Account_Filter
+}
+input Account_Order {
+  id: OrderDirection
+  planId: OrderDirection
+  authId: OrderDirection
+  avatar: OrderDirection
+  displayName: OrderDirection
+  email: OrderDirection
+  firstName: OrderDirection
+  isPaid: OrderDirection
+  lastName: OrderDirection
+  trialExpires: OrderDirection
+}
 input Plan_Data {
   id: UUID
   id_expr: UUID_Expr
@@ -31,7 +88,7 @@ input Plan_Filter {
   price: Float_Filter
   trialLength: Int_Filter
   upgradablePlans: String_ListFilter
-  users_on_plan: User_ListFilter
+  accounts_on_plan: Account_ListFilter
 }
 input Plan_ListFilter {
   count: Int_Filter
@@ -50,9 +107,9 @@ input Plan_Order {
 input Tasting_Data {
   id: UUID
   id_expr: UUID_Expr
-  userId: UUID
-  userId_expr: UUID_Expr
-  user: User_Key
+  accountId: UUID
+  accountId_expr: UUID_Expr
+  account: Account_Key
   acidity: Int
   alcohol: Int
   body: Int
@@ -97,8 +154,8 @@ input Tasting_Filter {
   _not: Tasting_Filter
   _or: [Tasting_Filter!]
   id: UUID_Filter
-  userId: UUID_Filter
-  user: User_Filter
+  accountId: UUID_Filter
+  account: Account_Filter
   acidity: Int_Filter
   alcohol: Int_Filter
   body: Int_Filter
@@ -129,7 +186,7 @@ input Tasting_ListFilter {
 }
 input Tasting_Order {
   id: OrderDirection
-  userId: OrderDirection
+  accountId: OrderDirection
   acidity: OrderDirection
   alcohol: OrderDirection
   body: OrderDirection
@@ -153,69 +210,12 @@ input Tasting_Order {
   tannin: OrderDirection
   vintage: OrderDirection
 }
-input User_Data {
-  id: UUID
-  id_expr: UUID_Expr
-  planId: UUID
-  planId_expr: UUID_Expr
-  plan: Plan_Key
-  avatar: String
-  avatar_expr: String_Expr
-  displayName: String
-  displayName_expr: String_Expr
-  email: String
-  email_expr: String_Expr
-  firstName: String
-  firstName_expr: String_Expr
-  isPaid: Boolean
-  lastName: String
-  lastName_expr: String_Expr
-  trialExpires: Timestamp
-  trialExpires_expr: Timestamp_Expr
-  trialExpires_time: Timestamp_Relative
-  userId: String
-  userId_expr: String_Expr
-}
-input User_Filter {
-  _and: [User_Filter!]
-  _not: User_Filter
-  _or: [User_Filter!]
-  id: UUID_Filter
-  planId: UUID_Filter
-  plan: Plan_Filter
-  avatar: String_Filter
-  displayName: String_Filter
-  email: String_Filter
-  firstName: String_Filter
-  isPaid: Boolean_Filter
-  lastName: String_Filter
-  trialExpires: Timestamp_Filter
-  userId: String_Filter
-  tastings_on_user: Tasting_ListFilter
-  wines_on_user: Wine_ListFilter
-}
-input User_ListFilter {
-  count: Int_Filter
-  exist: User_Filter
-}
-input User_Order {
-  id: OrderDirection
-  planId: OrderDirection
-  avatar: OrderDirection
-  displayName: OrderDirection
-  email: OrderDirection
-  firstName: OrderDirection
-  isPaid: OrderDirection
-  lastName: OrderDirection
-  trialExpires: OrderDirection
-  userId: OrderDirection
-}
 input Wine_Data {
   id: UUID
   id_expr: UUID_Expr
-  userId: UUID
-  userId_expr: UUID_Expr
-  user: User_Key
+  accountId: UUID
+  accountId_expr: UUID_Expr
+  account: Account_Key
   classification: String
   classification_expr: String_Expr
   country: String
@@ -244,8 +244,8 @@ input Wine_Filter {
   _not: Wine_Filter
   _or: [Wine_Filter!]
   id: UUID_Filter
-  userId: UUID_Filter
-  user: User_Filter
+  accountId: UUID_Filter
+  account: Account_Filter
   classification: String_Filter
   country: String_Filter
   date: Timestamp_Filter
@@ -265,7 +265,7 @@ input Wine_ListFilter {
 }
 input Wine_Order {
   id: OrderDirection
-  userId: OrderDirection
+  accountId: OrderDirection
   classification: OrderDirection
   country: OrderDirection
   date: OrderDirection

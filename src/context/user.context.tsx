@@ -1,6 +1,6 @@
+import { getAccountByIdThunk } from "features/account/accountSlice";
 import { setAuth } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { getUserProfileById } from "features/user/userSlice";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { type Dispatch, type PropsWithChildren, createContext, useEffect, useState } from "react";
 import type { AuthUserT } from "types";
@@ -20,7 +20,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(true);
 
   const value = { currentUser, setCurrentUser, loading };
-  const { userProfile } = useAppSelector((state) => state.user);
+  const { account } = useAppSelector((state) => state.account);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -32,8 +32,8 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
             uid,
             email,
           });
-          if (!userProfile?.firstName) {
-            await dispatch(getUserProfileById(uid));
+          if (!account?.firstName) {
+            await dispatch(getAccountByIdThunk(uid));
           }
           setLoading(false);
         }
@@ -45,7 +45,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     return () => {
       unsubscribe();
     };
-  }, [auth, userProfile, dispatch]);
+  }, [auth, account, dispatch]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

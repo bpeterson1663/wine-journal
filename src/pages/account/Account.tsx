@@ -19,23 +19,23 @@ import { IconTrash, IconUpload } from "@tabler/icons-react";
 import Footer from "components/footer/footer.component";
 import PageContainer from "components/page-container/page-container.component";
 import { removeImage, uploadImage } from "database";
+import { editAccountThunk } from "features/account/accountSlice";
 import { fetchLogout } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
-import { editUserProfile } from "features/user/userSlice";
 import { useFileInput } from "hooks/useFileInput";
 import { useMobile } from "hooks/useMobile";
 import styles from "pages/styles/pages.module.css";
-import "pages/profile/Profile.css";
+import "pages/account/Account.css";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserProfileSchema, type UserProfileT, defaultUserProfile } from "schemas/user";
+import { AccountSchema, type AccountT, defaultAccount } from "schemas/account";
 
-export default function Profile() {
+export default function Account() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { currentUser } = useAppSelector((state) => state.auth);
-  const { userProfile } = useAppSelector((state) => state.user);
+  const { account } = useAppSelector((state) => state.account);
   const isMobile = useMobile();
   const { file, blob, handleFileChange, imgPreview } = useFileInput();
   const [loading, setLoading] = useState(false);
@@ -43,15 +43,15 @@ export default function Profile() {
 
   const form = useForm({
     initialValues: {
-      ...defaultUserProfile,
-      ...userProfile,
-      id: userProfile?.id ?? "",
-      userId: currentUser?.uid ?? "",
+      ...defaultAccount,
+      ...account,
+      id: account?.id ?? "",
+      authId: currentUser?.uid ?? "",
       email: currentUser?.email ?? "",
     },
     validateInputOnBlur: true,
     validateInputOnChange: true,
-    validate: zodResolver(UserProfileSchema),
+    validate: zodResolver(AccountSchema),
   });
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function Profile() {
     setLoading(true);
     try {
       await removeImage(form.values.avatar);
-      await dispatch(editUserProfile({ ...form.values, avatar: "" })).unwrap();
+      await dispatch(editAccountThunk({ ...form.values, avatar: "" })).unwrap();
       notifications.show({
         message: "Your avatar image has been removed.",
       });
@@ -82,19 +82,19 @@ export default function Profile() {
     }
   };
 
-  const onSubmitHandler = async (data: UserProfileT) => {
+  const onSubmitHandler = async (data: AccountT) => {
     setLoading(true);
 
     try {
       let avatar = data.avatar;
       if (data.imageBlob) {
-        const { error, photoUrl } = await uploadImage(data.imageBlob, "user", currentUser?.uid ?? "");
+        const { error, photoUrl } = await uploadImage(data.imageBlob, "account", currentUser?.uid ?? "");
         if (!error) {
           avatar = photoUrl;
         }
       }
 
-      await dispatch(editUserProfile({ ...data, avatar }));
+      await dispatch(editAccountThunk({ ...data, avatar }));
       notifications.show({
         message: "Your profile was saved.",
       });
@@ -111,7 +111,7 @@ export default function Profile() {
   async function upgradePlan(planId: string) {
     setLoading(true);
     try {
-      await dispatch(editUserProfile({ ...userProfile, planId })).unwrap();
+      await dispatch(editAccountThunk({ ...account, planId })).unwrap();
       notifications.show({
         message: "Your plan has been upgraded.",
       });
@@ -126,7 +126,7 @@ export default function Profile() {
   }
 
   return (
-    <PageContainer title="Profile" showBack>
+    <PageContainer title="Your Account" showBack>
       <Group justify="space-between" pl={10}>
         <Box w={400}>
           <form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -159,7 +159,7 @@ export default function Profile() {
             className={styles.avatar}
             radius="lg"
             size={isMobile ? 200 : 300}
-            src={imgPreview || userProfile?.avatar}
+            src={imgPreview || account?.avatar}
           />
           <ActionIcon
             variant="filled"

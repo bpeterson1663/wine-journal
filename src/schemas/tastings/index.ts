@@ -37,7 +37,7 @@ export type TastingT = z.infer<typeof TastingSchema>;
 export const INITIAL_VALUES: TastingT = {
   id: "",
   type: "tasting",
-  userId: "",
+  accountId: "",
   producer: "",
   classification: "",
   subregion: "",

@@ -10,12 +10,12 @@ type Plan @table {
     trialLength: Int!
 }
 
-type User @table {
+type Account @table {
     firstName: String!
     lastName: String!
     avatar: String
     displayName: String
-    userId: String!
+    authId: String!
     email: String!
     plan: Plan!
     trialExpires: Timestamp!
@@ -23,7 +23,7 @@ type User @table {
 }
 
 type Wine @table {
-    user: User!
+    account: Account!
     classification: String
     country: String!
     date: Timestamp!
@@ -39,7 +39,7 @@ type Wine @table {
 }
 
 type Tasting @table {
-    user: User!
+    account: Account!
     classification: String
     country: String!
     date: Timestamp!

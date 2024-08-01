@@ -1,33 +1,33 @@
-const { getDataConnect, queryRef, executeQuery, mutationRef, executeMutation } = require('firebase/data-connect');
+const { getDataConnect, queryRef, executeQuery, mutationRef, executeMutation } = require("firebase/data-connect");
 
 const connectorConfig = {
-  connector: 'somm-scribe-connector',
-  service: 'somm-scribe',
-  location: 'us-central1'
+  connector: "somm-scribe-connector",
+  service: "somm-scribe",
+  location: "us-central1",
 };
 exports.connectorConfig = connectorConfig;
 
 function createPlanRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'CreatePlan', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "CreatePlan", inputVars);
 }
 exports.createPlanRef = createPlanRef;
 exports.createPlan = function createPlan(dcOrVars, vars) {
   return executeMutation(createPlanRef(dcOrVars, vars));
 };
 
-function createUserProfileRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'CreateUserProfile', inputVars);
+function createAccountRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "CreateAccount", inputVars);
 }
-exports.createUserProfileRef = createUserProfileRef;
-exports.createUserProfile = function createUserProfile(dcOrVars, vars) {
-  return executeMutation(createUserProfileRef(dcOrVars, vars));
+exports.createAccountRef = createAccountRef;
+exports.createAccount = function createAccount(dcOrVars, vars) {
+  return executeMutation(createAccountRef(dcOrVars, vars));
 };
 
 function createWineRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'CreateWine', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "CreateWine", inputVars);
 }
 exports.createWineRef = createWineRef;
 exports.createWine = function createWine(dcOrVars, vars) {
@@ -35,26 +35,26 @@ exports.createWine = function createWine(dcOrVars, vars) {
 };
 
 function createTastingRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'CreateTasting', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "CreateTasting", inputVars);
 }
 exports.createTastingRef = createTastingRef;
 exports.createTasting = function createTasting(dcOrVars, vars) {
   return executeMutation(createTastingRef(dcOrVars, vars));
 };
 
-function updateUserProfileRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'UpdateUserProfile', inputVars);
+function updateAccountRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "UpdateAccount", inputVars);
 }
-exports.updateUserProfileRef = updateUserProfileRef;
-exports.updateUserProfile = function updateUserProfile(dcOrVars, vars) {
-  return executeMutation(updateUserProfileRef(dcOrVars, vars));
+exports.updateAccountRef = updateAccountRef;
+exports.updateAccount = function updateAccount(dcOrVars, vars) {
+  return executeMutation(updateAccountRef(dcOrVars, vars));
 };
 
 function updateWineRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'UpdateWine', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "UpdateWine", inputVars);
 }
 exports.updateWineRef = updateWineRef;
 exports.updateWine = function updateWine(dcOrVars, vars) {
@@ -62,8 +62,8 @@ exports.updateWine = function updateWine(dcOrVars, vars) {
 };
 
 function updateTastingRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return mutationRef(dcInstance, 'UpdateTasting', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return mutationRef(dcInstance, "UpdateTasting", inputVars);
 }
 exports.updateTastingRef = updateTastingRef;
 exports.updateTasting = function updateTasting(dcOrVars, vars) {
@@ -71,8 +71,8 @@ exports.updateTasting = function updateTasting(dcOrVars, vars) {
 };
 
 function deleteWineRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars, true);
-  return mutationRef(dcInstance, 'DeleteWine', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars, true);
+  return mutationRef(dcInstance, "DeleteWine", inputVars);
 }
 exports.deleteWineRef = deleteWineRef;
 exports.deleteWine = function deleteWine(dcOrVars, vars) {
@@ -80,8 +80,8 @@ exports.deleteWine = function deleteWine(dcOrVars, vars) {
 };
 
 function deleteTastingRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars, true);
-  return mutationRef(dcInstance, 'DeleteTasting', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars, true);
+  return mutationRef(dcInstance, "DeleteTasting", inputVars);
 }
 exports.deleteTastingRef = deleteTastingRef;
 exports.deleteTasting = function deleteTasting(dcOrVars, vars) {
@@ -89,8 +89,8 @@ exports.deleteTasting = function deleteTasting(dcOrVars, vars) {
 };
 
 function listPlansRef(dc) {
-  const { dc: dcInstance} = validateArgs(dc, undefined);
-  return queryRef(dcInstance, 'ListPlans');
+  const { dc: dcInstance } = validateArgs(dc, undefined);
+  return queryRef(dcInstance, "ListPlans");
 }
 exports.listPlansRef = listPlansRef;
 exports.listPlans = function listPlans(dc) {
@@ -98,8 +98,8 @@ exports.listPlans = function listPlans(dc) {
 };
 
 function listWinesRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return queryRef(dcInstance, 'ListWines', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return queryRef(dcInstance, "ListWines", inputVars);
 }
 exports.listWinesRef = listWinesRef;
 exports.listWines = function listWines(dcOrVars, vars) {
@@ -107,36 +107,36 @@ exports.listWines = function listWines(dcOrVars, vars) {
 };
 
 function listTastingsRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return queryRef(dcInstance, 'ListTastings', inputVars);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return queryRef(dcInstance, "ListTastings", inputVars);
 }
 exports.listTastingsRef = listTastingsRef;
 exports.listTastings = function listTastings(dcOrVars, vars) {
   return executeQuery(listTastingsRef(dcOrVars, vars));
 };
 
-function getUserByIdRef(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(dcOrVars, vars);
-  return queryRef(dcInstance, 'GetUserById', inputVars);
+function getAccountByIdRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(dcOrVars, vars);
+  return queryRef(dcInstance, "GetAccountById", inputVars);
 }
-exports.getUserByIdRef = getUserByIdRef;
-exports.getUserById = function getUserById(dcOrVars, vars) {
-  return executeQuery(getUserByIdRef(dcOrVars, vars));
+exports.getAccountByIdRef = getAccountByIdRef;
+exports.getAccountById = function getAccountById(dcOrVars, vars) {
+  return executeQuery(getAccountByIdRef(dcOrVars, vars));
 };
 
 function validateArgs(dcOrVars, vars, validateVars) {
   let dcInstance;
   let realVars;
   // TODO; Check what happens if this is undefined.
-  if(dcOrVars && 'dataConnectOptions' in dcOrVars) {
-      dcInstance = dcOrVars;
-      realVars = vars;
+  if (dcOrVars && "dataConnectOptions" in dcOrVars) {
+    dcInstance = dcOrVars;
+    realVars = vars;
   } else {
-      dcInstance = getDataConnect(connectorConfig);
-      realVars = dcOrVars;
+    dcInstance = getDataConnect(connectorConfig);
+    realVars = dcOrVars;
   }
-  if(!dcInstance || (!realVars && validateVars)) {
-      throw new Error('You didn\t pass in the vars!');
+  if (!dcInstance || (!realVars && validateVars)) {
+    throw new Error("You didn\t pass in the vars!");
   }
   return { dc: dcInstance, vars: realVars };
 }

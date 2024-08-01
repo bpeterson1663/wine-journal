@@ -18,7 +18,7 @@ const VintageSchema = z
 export const WineSchema = z.object({
   id: z.string().default(""),
   type: z.string().default("wine"),
-  userId: z.string().default(""),
+  accountId: z.string().default(""),
   date: z.date().default(new Date()),
   producer: z.string().min(1, { message: "Enter the producer of the wine" }),
   classification: z.string().default(""),
@@ -39,7 +39,7 @@ export type WineT = z.infer<typeof WineSchema>;
 export const INITIAL_VALUES: WineT = {
   type: "wine",
   id: "",
-  userId: "",
+  accountId: "",
   producer: "",
   classification: "",
   subregion: "",

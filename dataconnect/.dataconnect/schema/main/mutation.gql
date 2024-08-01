@@ -1,5 +1,9 @@
 extend type Mutation {
   """
+  Insert a single Account into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  account_insert(data: Account_Data!): Account_Key!
+  """
   Insert a single Plan into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   plan_insert(data: Plan_Data!): Plan_Key!
@@ -8,13 +12,13 @@ extend type Mutation {
   """
   tasting_insert(data: Tasting_Data!): Tasting_Key!
   """
-  Insert a single User into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
-  """
-  user_insert(data: User_Data!): User_Key!
-  """
   Insert a single Wine into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   wine_insert(data: Wine_Data!): Wine_Key!
+  """
+  Insert or update a single Account into the table, based on the primary key. Returns the key of the newly inserted Account.
+  """
+  account_upsert(data: Account_Data!): Account_Key!
   """
   Insert or update a single Plan into the table, based on the primary key. Returns the key of the newly inserted Plan.
   """
@@ -24,13 +28,13 @@ extend type Mutation {
   """
   tasting_upsert(data: Tasting_Data!): Tasting_Key!
   """
-  Insert or update a single User into the table, based on the primary key. Returns the key of the newly inserted User.
-  """
-  user_upsert(data: User_Data!): User_Key!
-  """
   Insert or update a single Wine into the table, based on the primary key. Returns the key of the newly inserted Wine.
   """
   wine_upsert(data: Wine_Data!): Wine_Key!
+  """
+  Update a single Account based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  account_update(id: UUID, key: Account_Key, data: Account_Data!): Account_Key
   """
   Update a single Plan based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
   """
@@ -40,13 +44,13 @@ extend type Mutation {
   """
   tasting_update(id: UUID, key: Tasting_Key, data: Tasting_Data!): Tasting_Key
   """
-  Update a single User based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
-  """
-  user_update(id: UUID, key: User_Key, data: User_Data!): User_Key
-  """
   Update a single Wine based on `id` or `key`, setting columns specified in `data`. Returns `null` if not found.
   """
   wine_update(id: UUID, key: Wine_Key, data: Wine_Data!): Wine_Key
+  """
+  Update Account entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  account_updateMany(where: Account_Filter, all: Boolean = false, data: Account_Data!): Int!
   """
   Update Plan entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -56,13 +60,13 @@ extend type Mutation {
   """
   tasting_updateMany(where: Tasting_Filter, all: Boolean = false, data: Tasting_Data!): Int!
   """
-  Update User entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
-  """
-  user_updateMany(where: User_Filter, all: Boolean = false, data: User_Data!): Int!
-  """
   Update Wine entries matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
   wine_updateMany(where: Wine_Filter, all: Boolean = false, data: Wine_Data!): Int!
+  """
+  Delete a single Account based on `id` or `key` and return its key (or `null` if not found).
+  """
+  account_delete(id: UUID, key: Account_Key): Account_Key
   """
   Delete a single Plan based on `id` or `key` and return its key (or `null` if not found).
   """
@@ -72,13 +76,13 @@ extend type Mutation {
   """
   tasting_delete(id: UUID, key: Tasting_Key): Tasting_Key
   """
-  Delete a single User based on `id` or `key` and return its key (or `null` if not found).
-  """
-  user_delete(id: UUID, key: User_Key): User_Key
-  """
   Delete a single Wine based on `id` or `key` and return its key (or `null` if not found).
   """
   wine_delete(id: UUID, key: Wine_Key): Wine_Key
+  """
+  Delete Account entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  account_deleteMany(where: Account_Filter, all: Boolean = false): Int!
   """
   Delete Plan entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
@@ -87,10 +91,6 @@ extend type Mutation {
   Delete Tasting entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
   tasting_deleteMany(where: Tasting_Filter, all: Boolean = false): Int!
-  """
-  Delete User entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
-  """
-  user_deleteMany(where: User_Filter, all: Boolean = false): Int!
   """
   Delete Wine entries matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """

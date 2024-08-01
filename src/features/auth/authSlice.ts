@@ -1,9 +1,9 @@
+import { type GetAccountByIdVariables, createAccount, getAccountById } from "@firebasegen/somm-scribe-connector";
 import { type PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { auth, db, signInWithGooglePopup } from "database";
+import { auth, dc, signInWithGooglePopup } from "database";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore/lite";
-import type { UserProfileT } from "schemas/user";
-import { defaultUserProfile } from "schemas/user";
+import type { AccountT } from "schemas/account";
+import { defaultAccount } from "schemas/account";
 import type { AuthUserT, CurrentUser, FetchStatusT, LoginT, MessageT, SignUpT } from "types";
 import type { RootState } from "../store";
 
@@ -102,7 +102,7 @@ export const fetchLogout = createAsyncThunk<
 });
 
 export const fetchSignInWithGoogle = createAsyncThunk<
-  UserProfileT | null,
+  AccountT | null,
   null,
   {
     state: RootState;
@@ -113,33 +113,40 @@ export const fetchSignInWithGoogle = createAsyncThunk<
     if (!user.email) {
       return null;
     }
+    //TODO: refactor
+    const params: GetAccountByIdVariables = { authId: user.uid };
 
-    const fbq = query(collection(db, "users"), where("userId", "==", user.uid));
-    const { docs } = await getDocs(fbq);
-    const profile = docs.map((doc) => {
-      const data = doc.data();
+    const responseById = await getAccountById(params);
+    if (responseById?.data?.accounts?.length === 1) {
+      const account = responseById.data.accounts[0];
       return {
-        ...data,
-        userId: data.userId,
-        id: doc.id,
-      };
-    });
-
-    if (profile.length === 1) {
-      return profile[0] as UserProfileT;
+        id: account.id,
+        firstName: account.firstName,
+        lastName: account.lastName,
+        avatar: account.avatar,
+        displayName: account.displayName,
+        authId: account.authId,
+        email: account.email,
+        planId: account.plan.id,
+        trialExpires: new Date(account.trialExpires),
+        isPaid: account.isPaid,
+      } as AccountT;
     }
-    // Create new user profile
-    await addDoc(collection(db, "users"), {
-      ...defaultUserProfile,
-      userId: user.uid,
+
+    // Create new account
+    const { data } = await createAccount(dc, {
+      ...defaultAccount,
+      trialExpires: defaultAccount.trialExpires.toISOString(),
       email: user.email,
     });
 
-    return {
-      ...defaultUserProfile,
+    const response = {
+      ...defaultAccount,
       email: user.email,
-      id: user.uid,
-    } as UserProfileT;
+      id: data.account_insert.id,
+    };
+
+    return response as AccountT;
   } catch (err) {
     return rejectWithValue(err);
   }

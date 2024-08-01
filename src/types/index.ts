@@ -1,11 +1,11 @@
 import type { DocumentData } from "firebase/firestore/lite";
 
-export interface UserProfileT {
+export interface AccountT {
   firstName: string;
   lastName: string;
   avatar?: string;
   displayName?: string;
-  userId: string;
+  authId: string;
 }
 
 export interface UserT {

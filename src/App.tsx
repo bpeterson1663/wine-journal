@@ -6,11 +6,11 @@ import { fetchWinesThunk } from "features/cellar/cellarSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { fetchPlans } from "features/plan/planSlice";
 import { fetchTastingsThunk } from "features/tasting/tastingSlice";
+import { Account } from "pages/account";
 import SignInUp from "pages/auth/SignInUp";
 import { Cellar, EditWine, NewWine, ViewWine } from "pages/cellar";
 import Home from "pages/home/Home";
 import NotFound from "pages/not-found/NotFound";
-import { Profile } from "pages/profile";
 import EditTasting from "pages/tastings/EditTasting";
 import NewTasting from "pages/tastings/NewTasting";
 import Tastings from "pages/tastings/Tastings";
@@ -21,15 +21,15 @@ import { Navigate, Route, Routes } from "react-router-dom";
 function App() {
   const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector((state) => state.auth);
-
+  const { account } = useAppSelector((state) => state.account);
   useEffect(() => {
     const onLoad = async () => {
       await dispatch(fetchPlans()).unwrap();
       if (currentUser?.uid) {
         try {
           await Promise.all([
-            dispatch(fetchTastingsThunk({ userId: currentUser.uid })),
-            dispatch(fetchWinesThunk({ userId: currentUser.uid })),
+            dispatch(fetchTastingsThunk({ accountId: account.id })),
+            dispatch(fetchWinesThunk({ accountId: account.id })),
           ]);
         } catch (err) {
           console.error(err);
@@ -41,7 +41,7 @@ function App() {
       }
     };
     onLoad();
-  }, [dispatch, currentUser]);
+  }, [dispatch, currentUser, account]);
 
   const ProtectedRoute = ({ component }: { component: ReactNode }) => {
     const { currentUser, loading } = useContext(UserContext);
@@ -83,8 +83,8 @@ function App() {
           <Route path="edit" element={<ProtectedRoute component={<EditWine />} />} />
         </Route>
 
-        <Route path="/profile">
-          <Route index element={<ProtectedRoute component={<Profile />} />} />
+        <Route path="/account">
+          <Route index element={<ProtectedRoute component={<Account />} />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

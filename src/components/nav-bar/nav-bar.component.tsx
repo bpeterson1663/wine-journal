@@ -11,12 +11,12 @@ const NavBar = () => {
   const navigate = useNavigate();
   const isMobile = useMobile();
   const { currentUser } = useAppSelector((state) => state.auth);
-  const { userProfile } = useAppSelector((state) => state.user);
+  const { account } = useAppSelector((state) => state.account);
   const currentPlan = useAppSelector(selectUserPlan);
 
   function getInitials() {
-    const first = userProfile?.firstName[0] ?? "";
-    const last = userProfile?.lastName[0] ?? "";
+    const first = account?.firstName[0] ?? "";
+    const last = account?.lastName[0] ?? "";
     return `${first}${last}`;
   }
 
@@ -41,7 +41,7 @@ const NavBar = () => {
               <Menu.Item onClick={() => navigate("/tastings")}>Tastings</Menu.Item>
               {currentPlan.maxWine !== 0 && <Menu.Item onClick={() => navigate("/cellar")}>Cellar</Menu.Item>}
               <Menu.Divider />
-              <Menu.Item onClick={() => navigate("/profile")}>Profile</Menu.Item>
+              <Menu.Item onClick={() => navigate("/account")}>Account</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>
@@ -61,7 +61,7 @@ const NavBar = () => {
               color="white"
               component={Link}
               to="/profile"
-              src={userProfile?.avatar}
+              src={account?.avatar}
               className={`${styles.icon} ${styles["nav-link"]}`}
               radius="xl"
             >

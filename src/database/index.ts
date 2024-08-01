@@ -6,7 +6,7 @@ import { getDataConnect } from "firebase/data-connect";
 import { getFirestore } from "firebase/firestore/lite";
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-type Prefix = "user" | "wine";
+type Prefix = "account" | "wine";
 
 interface UploadImageResponse {
   photoUrl: string;

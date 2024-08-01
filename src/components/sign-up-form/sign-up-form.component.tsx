@@ -4,11 +4,11 @@ import { notifications } from "@mantine/notifications";
 import { Schema, type SignUpFormT } from "components/sign-up-form/scehma";
 import styles from "components/sign-up-form/sign-up-form.module.css";
 import dayjs from "dayjs";
+import { createAccountThunk } from "features/account/accountSlice";
 import { fetchSignUp } from "features/auth/authSlice";
 import { fetchSignInWithGoogle } from "features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "features/hooks";
 import { selectBeginnerPlan } from "features/plan/planSelector";
-import { createUser } from "features/user/userSlice";
 import type { AuthError } from "firebase/auth";
 import { generateAuthErrorMessage } from "helpers";
 import { useEffect, useState } from "react";
@@ -46,10 +46,10 @@ const SignUpForm = () => {
     try {
       const { uid } = await dispatch(fetchSignUp({ email, password, firstName, lastName })).unwrap();
       await dispatch(
-        createUser({
+        createAccountThunk({
           firstName,
           lastName,
-          userId: uid,
+          authId: uid,
           email,
           displayName: "",
           avatar: "",

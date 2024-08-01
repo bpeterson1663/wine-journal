@@ -25,7 +25,7 @@ const STEPS = [
 export default function NewWine() {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
-  const { userProfile } = useAppSelector((state) => state.user);
+  const { account } = useAppSelector((state) => state.account);
   const [loading, setLoading] = useState(false);
 
   useCellarRedirect();
@@ -34,7 +34,7 @@ export default function NewWine() {
     validateInputOnBlur: true,
     initialValues: {
       ...INITIAL_VALUES,
-      userId: userProfile?.id ?? "",
+      accountId: account?.id ?? "",
     },
     validate: zodResolver(WineSchema),
   });
@@ -42,7 +42,7 @@ export default function NewWine() {
   const onSubmitHandler = async (data: WineT) => {
     setLoading(true);
     try {
-      const { id } = await dispatch(createWineThunk({ ...data, userId: userProfile?.id ?? "" })).unwrap();
+      const { id } = await dispatch(createWineThunk({ ...data, accountId: account?.id ?? "" })).unwrap();
 
       if (data.imageBlob) {
         const { error, photoUrl } = await uploadImage(data.imageBlob, "wine", id);

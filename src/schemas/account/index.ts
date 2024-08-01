@@ -1,13 +1,13 @@
 import { ImageSchema } from "schemas/image";
 import { z } from "zod";
 
-export const UserProfileSchema = z.object({
+export const AccountSchema = z.object({
   id: z.string().default(""),
   firstName: z.string().min(1, { message: "First name is required" }),
   lastName: z.string().min(1, { message: "Last name is required" }),
   avatar: z.string().default(""),
   displayName: z.string().default(""),
-  userId: z.string().default(""),
+  authId: z.string().default(""),
   email: z.string().email({ message: "Not a valid email" }),
   imageBlob: ImageSchema,
   planId: z.string().default(""),
@@ -15,13 +15,13 @@ export const UserProfileSchema = z.object({
   isPaid: z.boolean().default(false),
 });
 
-export const defaultUserProfile = {
+export const defaultAccount = {
   id: "",
   firstName: "",
   lastName: "",
   avatar: "",
   displayName: "",
-  userId: "",
+  authId: "",
   email: "",
   imageBlob: null,
   planId: "",
@@ -29,4 +29,4 @@ export const defaultUserProfile = {
   isPaid: false,
 };
 
-export type UserProfileT = z.infer<typeof UserProfileSchema>;
+export type AccountT = z.infer<typeof AccountSchema>;
