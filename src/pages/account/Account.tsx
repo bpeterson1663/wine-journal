@@ -25,11 +25,12 @@ import { useAppDispatch, useAppSelector } from "features/hooks";
 import { useFileInput } from "hooks/useFileInput";
 import { useMobile } from "hooks/useMobile";
 import styles from "pages/styles/pages.module.css";
-import "pages/account/Account.css";
 
+import { selectUserPlan } from "features/plan/planSelector";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AccountSchema, type AccountT, defaultAccount } from "schemas/account";
+import type { PlanT } from "schemas/plans";
 
 export default function Account() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ export default function Account() {
   const { file, blob, handleFileChange, imgPreview } = useFileInput();
   const [loading, setLoading] = useState(false);
   const { planList } = useAppSelector((state) => state.plan);
+  const currentPlan = useAppSelector(selectUserPlan);
 
   const form = useForm({
     initialValues: {
@@ -113,7 +115,7 @@ export default function Account() {
     try {
       await dispatch(editAccountThunk({ ...account, planId })).unwrap();
       notifications.show({
-        message: "Your plan has been upgraded.",
+        message: "Your plan has been updated.",
       });
     } catch (err) {
       notifications.show({
@@ -123,6 +125,29 @@ export default function Account() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function getActionLabel(plan: PlanT) {
+    if (account.planId === plan.id) {
+      return "Current Plan";
+    }
+
+    if (currentPlan.downgradablePlans.map((id) => id.replace(/-/g, "")).includes(plan.id)) {
+      return "Downgrade Plan";
+    }
+
+    if (currentPlan.upgradablePlans.map((id) => id.replace(/-/g, "")).includes(plan.id)) {
+      return "Upgrade Plan";
+    }
+
+    return "";
+  }
+
+  function disableSave() {
+    if (Object.keys(form.errors).length > 0 || !form.isDirty()) {
+      return true;
+    }
+    return false;
   }
 
   return (
@@ -146,7 +171,7 @@ export default function Account() {
             <Footer>
               <Group style={{ width: "100%" }} justify="space-between">
                 <Button onClick={handleLogout}>Sign Out</Button>
-                <Button type="submit" loading={loading}>
+                <Button type="submit" disabled={disableSave()} loading={loading}>
                   Save
                 </Button>
               </Group>
@@ -173,41 +198,55 @@ export default function Account() {
           </ActionIcon>
         </Box>
       </Group>
-      <Title order={3}>Plans</Title>
-      <Group grow align="stretch" h="100%">
-        {planList.map((plan) => (
-          <Card
-            shadow="sm"
-            padding="lg"
-            radius="md"
-            withBorder
-            maw={300}
-            key={plan.id}
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Group justify="space-between" mt="md" mb="xs">
-              <Text fw={500}>{plan.name}</Text>
-              <Badge color="secondary">${plan.price}</Badge>
-            </Group>
-            <Text size="sm" c="dimmed">
-              {plan.description}
-            </Text>
-            <List c="dimmed">
-              <List.Item>
-                {typeof plan.maxTasting === "number" ? `Save up to ${plan.maxTasting} tastings` : "Unlimited Tastings"}
-              </List.Item>
-              <List.Item>
-                {typeof plan.maxWine === "number"
-                  ? `Save up to ${plan.maxWine} wines in your cellar`
-                  : "Unlimited Wines"}
-              </List.Item>
-            </List>
+      <Group mt="30">
+        <Title order={3}>Plans</Title>
+        <Group grow align="stretch" h="100%">
+          {[...planList]
+            .sort((a, b) => a.price - b.price)
+            .map((plan) => (
+              <Card
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                withBorder
+                maw={300}
+                key={plan.id}
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Group justify="space-between" mt="md" mb="xs">
+                  <Text fw={500}>{plan.name}</Text>
+                  <Badge color="secondary">${plan.price}</Badge>
+                </Group>
+                <Text size="sm" c="dimmed">
+                  {plan.description}
+                </Text>
+                <List c="dimmed">
+                  <List.Item>
+                    {typeof plan.maxTasting === "number"
+                      ? `Save up to ${plan.maxTasting} tastings`
+                      : "Unlimited Tastings"}
+                  </List.Item>
+                  <List.Item>
+                    {typeof plan.maxWine === "number"
+                      ? `Save up to ${plan.maxWine} wines in your cellar`
+                      : "Unlimited Wines"}
+                  </List.Item>
+                </List>
 
-            <Button color="secondary" onClick={() => upgradePlan(plan.id)} fullWidth mt="md" radius="md">
-              Upgrade
-            </Button>
-          </Card>
-        ))}
+                <Button
+                  loading={loading}
+                  disabled={plan.id === account.planId}
+                  color="secondary"
+                  onClick={() => upgradePlan(plan.id)}
+                  fullWidth
+                  mt="md"
+                  radius="md"
+                >
+                  {getActionLabel(plan)}
+                </Button>
+              </Card>
+            ))}
+        </Group>
       </Group>
     </PageContainer>
   );
