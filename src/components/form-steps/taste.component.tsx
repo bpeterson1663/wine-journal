@@ -1,4 +1,5 @@
-import { Box, Group, Slider, Text, Tooltip } from "@mantine/core";
+import { Box, Group, Modal, Slider, Text } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import styles from "components/form-steps/form-steps.module.css";
 import {
@@ -9,16 +10,45 @@ import {
 } from "components/form-tasting/form-tasting.constants";
 import { getLabel } from "helpers";
 import { useTastingContext } from "pages/tastings/form-context";
+import { useState } from "react";
+
+type Tasting = "alcohol" | "body" | "tannin" | "acidity" | "sweetness"
+
 export const Taste = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const [description, setDescription] = useState("")
+  const [tasting, setTasting] = useState<Tasting>()
+
   const form = useTastingContext();
+
+  function openInfoModal(tasting: Tasting) {
+    setTasting(tasting)
+    switch(tasting) {
+      case "acidity":
+        setDescription("The more acidic the wine, the more it makes you salivate. Higher acidic wines are usually crisp and tart while a low acid whine is softer and rounder.")
+        break;
+      case "alcohol":
+        setDescription("Alcohol contributes to the overall weight and physical sensation of the wine. Higher alcohol wines are usually bolder while lower alcohol wines are lighter in body.")
+        break;
+      case "body":
+        setDescription("How the wine feels in your mouth. The heavier the feel, the fuller the body.")
+        break;
+      case "sweetness":
+        setDescription("The amount of sugar in the wine. Sweetness contributes to the wines flavor profile.")
+        break;
+      case "tannin":
+        setDescription("The drying out feeling you get in your mouth. The more dry your mouth feels, the higher the tannin.")
+        break;
+    }
+
+    open();
+  }
 
   return (
     <Box mt={10}>
       <Group>
         <Text className={styles["form-label"]}>Body</Text>
-        <Tooltip label="How the wine feels in your mouth. The heavier the feel, the fuller the body.">
-          <IconInfoCircle />
-        </Tooltip>
+        <IconInfoCircle onClick={() => openInfoModal("body")} />
       </Group>
       <Slider
         classNames={{
@@ -35,9 +65,7 @@ export const Taste = () => {
       />
       <Group>
         <Text className={styles["form-label"]}>Tannin</Text>
-        <Tooltip label="The drying out feeling you get in your mouth. The more dry your mouth feels, the higher the tannin.">
-          <IconInfoCircle />
-        </Tooltip>
+        <IconInfoCircle onClick={() => openInfoModal("tannin")} />
       </Group>
 
       <Slider
@@ -55,9 +83,7 @@ export const Taste = () => {
       />
       <Group>
         <Text className={styles["form-label"]}>Acidity</Text>
-        <Tooltip label="The more acidic the wine, the more it makes you salivate. Higher acidic wines are usually crisp and tart while a low acid whine is softer and rounder.">
-          <IconInfoCircle />
-        </Tooltip>
+        <IconInfoCircle onClick={() => openInfoModal("acidity")} />
       </Group>
       <Slider
         classNames={{
@@ -74,9 +100,7 @@ export const Taste = () => {
       />
       <Group>
         <Text className={styles["form-label"]}>Alcohol(%)</Text>
-        <Tooltip label="Alcohol contributes to the overall weight and physical sensation of the wine. Higher alcohol wines are usually bolder while lower alcohol wines are lighter in body.">
-          <IconInfoCircle />
-        </Tooltip>
+        <IconInfoCircle onClick={() => openInfoModal("alcohol")} />
       </Group>
       <Slider
         classNames={{
@@ -93,9 +117,7 @@ export const Taste = () => {
       />
       <Group>
         <Text className={styles["form-label"]}>Sweetness</Text>
-        <Tooltip label="The amount of sugar in the wine. Sweetness contributes to the wines flavor profile.">
-          <IconInfoCircle />
-        </Tooltip>
+        <IconInfoCircle onClick={() => openInfoModal("sweetness")} />
       </Group>
       <Slider
         classNames={{
@@ -110,6 +132,12 @@ export const Taste = () => {
         label={getLabel("SWEET", form.values.sweet)}
         {...form.getInputProps("sweet")}
       />
+
+      <Modal centered opened={opened} title={tasting?.toLocaleUpperCase()} onClose={close}>
+        <Modal.Body>
+          {description}
+        </Modal.Body>
+      </Modal>
     </Box>
   );
 };
